@@ -22,13 +22,14 @@ The value 0.113 and above on the ReverbPreset parameter is Custom. Yes. You can 
 # Building from source
 To build this effect from source, you will need:
 
-* Microsoft Visual Studio
-* The VST SDK.
+* Microsoft Visual Studio 2005 Express
+* Windows Server 2003 Platform SDK
+* VST SDK.
 
 To build:
 
 * Copy the VST SDK folder to the location of the source code.
-* Open a developer command prompt, make sure your paths are set correctly, and run compile.bat.
+* Open a command prompt and run compile.bat.
 * If everything goes well, you should have a DLL that you can load into your favorite VST host.
 
 # Extra notes
