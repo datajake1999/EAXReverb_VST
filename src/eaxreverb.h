@@ -8,11 +8,10 @@
 enum
 {
 	// Global
-	kNumPrograms = 1,
+	kNumPrograms = 113,
 
 	// Parameters Tags
-	kPreset = 0,
-	kInvertrev,
+	kInvertrev = 0,
 	kMonorev,
 	kOnlyrev,
 	kDgain,
@@ -33,12 +32,6 @@ public:
 	~eaxreverbProgram () {}
 
 private:	
-	float ReverbPreset;
-	float InvertReverb;
-	float MonoReverb;
-	float OnlyReverb;
-	float DryGain;
-	float WetGain;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
 	char name[24];
 };
@@ -107,12 +100,11 @@ protected:
 	void SetLFReference(float val);
 	void SetRoomRolloffFactor(float val);
 	void SetDecayHFLimit(float val);
+	void SetEAXParams(float Density, float Diffusion, float Gain, float GainHF, float GainLF, float DecayTime, float DecayHFRatio, float DecayLFRatio, float ReflectionsGain, float ReflectionsDelay, float ReflectionsPanX, float ReflectionsPanY, float ReflectionsPanZ, float LateReverbGain, float LateReverbDelay, float LateReverbPanX, float LateReverbPanY, float LateReverbPanZ, float EchoTime, float EchoDepth, float ModulationTime, float ModulationDepth, float AirAbsorptionGainHF, float HFReference, float LFReference, float RoomRolloffFactor, float DecayHFLimit);
 
 	ReverbEffect effect;
 	eaxreverbProgram* programs;
 	
-	int i_ReverbPreset;
-	float ReverbPreset;
 	float InvertReverb;
 	float MonoReverb;
 	float OnlyReverb;
