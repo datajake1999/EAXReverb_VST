@@ -15,7 +15,6 @@ enum
 	kMonorev,
 	kOnlyrev,
 	kDgain,
-	kWgain,
 	kDensity, kDiffusion, kGain, kGainHF, kGainLF, kDecayTime, kDecayHFRatio, kDecayLFRatio, kReflectionsGain, kReflectionsDelay, kReflectionsPanX, kReflectionsPanY, kReflectionsPanZ, kLateReverbGain, kLateReverbDelay, kLateReverbPanX, kLateReverbPanY, kLateReverbPanZ, kEchoTime, kEchoDepth, kModulationTime, kModulationDepth, kAirAbsorptionGainHF, kHFReference, kLFReference, kRoomRolloffFactor, kDecayHFLimit,
 
 	kNumParams
@@ -72,7 +71,6 @@ protected:
 	void SetMonoReverb(float val);
 	void SetOnlyReverb(float val);
 	void SetDryGain(float val);
-	void SetWetGain(float val);
 	void SetDensity(float val);
 	void SetDiffusion(float val);
 	void SetGain(float val);
@@ -109,7 +107,6 @@ protected:
 	float MonoReverb;
 	float OnlyReverb;
 	float DryGain;
-	float WetGain;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
 	int i_DecayHFLimit;
 	
