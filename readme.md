@@ -12,12 +12,9 @@ to use this plugin, any VST2 compatible host will work. Here's a list of some ho
 * pro tools
 * fl studio
 
-When you open the plugin, you will notice there is no UI, so you will have to use your DAW's method of setting effect parameters. There are no presets in your DAW's preset browser, but ReverbPreset is the first parameter that you should see if your DAW allows you to adjust effect parameters directly.
+When you open the plugin, you will notice there is no UI, so you will have to use your DAW's method of setting effect parameters.
 It is very easy to utilize this plugin. Lets use Reaper as an example.
 In your parameter window, you will see a list of parameters and their values. You can scroll with your mouse or use your keyboard to choose your parameter/value, and if you know which value you want right away, you can type it in the value edit field.
-
-## Customizing the reverb
-The value 0.113 and above on the ReverbPreset parameter is Custom. Yes. You can feel free to tweak around and customize the EAXReverb model to your hearts content.
 
 # Building from source
 To build this effect from source, you will need:
@@ -33,7 +30,7 @@ To build:
 * If everything goes well, you should have a DLL that you can load into your favorite VST host.
 
 # Extra notes
-* The parameters starting with Diffusion and ending with DecayHFLimit only take effect when the Custom preset is used.
+* The first 5 parameters are global, so they won't change if you change the preset.
 
 # License
 This library is free software; you can redistribute it and/or
