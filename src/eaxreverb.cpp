@@ -52,13 +52,9 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, kNumPrograms, kNumParams)
 {
 	// init
-	float samplerate = getSampleRate ();
-	size = getBlockSize();
-	rate = (int)samplerate;
+	rate = (int)sampleRate;
 	effect.Create(rate);
 	effect.Update(rate);
-	buffer = new float[size];
-	memset (buffer, 0, sizeof(buffer));
 	
 	programs = new eaxreverbProgram[numPrograms];
 
@@ -69,16 +65,12 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	setNumOutputs (2);	// stereo output
 	setUniqueID ('EAX');
 
-	open ();
 }
 
 
 eaxreverb::~eaxreverb ()
 {
-	close ();
 	effect.Destroy();
-	if (buffer)
-	delete[] buffer;
 	if (programs)
 	delete[] programs;
 }

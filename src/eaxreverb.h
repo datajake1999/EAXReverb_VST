@@ -111,7 +111,6 @@ protected:
 	ReverbEffect effect;
 	eaxreverbProgram* programs;
 	
-	float* buffer;
 	int i_ReverbPreset;
 	float ReverbPreset;
 	float InvertReverb;
@@ -123,7 +122,6 @@ protected:
 	int i_DecayHFLimit;
 	
 	int rate;
-	int size;
 };
 
 #endif
