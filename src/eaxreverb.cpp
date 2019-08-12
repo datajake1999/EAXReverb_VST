@@ -15,10 +15,6 @@ eaxreverbProgram::eaxreverbProgram ()
 eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, kNumPrograms, kNumParams)
 {
-	InvertReverb = 0;
-	MonoReverb = 0;
-	OnlyReverb = 0;
-	DryGain = 1;
 	// init
 	rate = (int)sampleRate;
 	effect.Create(rate);
@@ -981,30 +977,6 @@ char *eaxreverb::GetPresetName(int preset) {
 	return "GENERIC";
 }
 
-void eaxreverb::SetInvertReverb (float val)
-{
-	InvertReverb = val;
-}
-
-
-void eaxreverb::SetMonoReverb (float val)
-{
-	MonoReverb = val;
-}
-
-
-void eaxreverb::SetOnlyReverb (float val)
-{
-	OnlyReverb = val;
-}
-
-
-void eaxreverb::SetDryGain (float val)
-{
-	DryGain = val;
-}
-
-
 void eaxreverb::SetDensity (float val)
 {
 	if (val > EAXREVERB_MAX_DENSITY)
@@ -1476,10 +1448,6 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 
 	switch (index)
 	{
-	case kInvertrev :    SetInvertReverb (value);					break;
-	case kMonorev :    SetMonoReverb (value);					break;
-	case kOnlyrev :    SetOnlyReverb (value);					break;
-	case kDgain :    SetDryGain (value);					break;
 	case kDensity :    SetDensity (value*EAXREVERB_MAX_DENSITY);					break;
 	case kDiffusion :    SetDiffusion (value*EAXREVERB_MAX_DIFFUSION);					break;
 	case kGain :    SetGain (value*EAXREVERB_MAX_GAIN);					break;
@@ -1523,10 +1491,6 @@ float eaxreverb::getParameter (VstInt32 index)
 
 	switch (index)
 	{
-	case kInvertrev :    v = InvertReverb;	break;
-	case kMonorev :    v = MonoReverb;	break;
-	case kOnlyrev :    v = OnlyReverb;	break;
-	case kDgain :    v = DryGain;	break;
 	case kDensity :    v = Density/EAXREVERB_MAX_DENSITY;	break;
 	case kDiffusion :    v = Diffusion/EAXREVERB_MAX_DIFFUSION;	break;
 	case kGain :    v = Gain/EAXREVERB_MAX_GAIN;	break;
@@ -1563,7 +1527,6 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 {
 	switch (index)
 	{
-	case kDgain :    strcpy (label, "F");		break;
 	case kDensity :    strcpy (label, "F");		break;
 	case kDiffusion :    strcpy (label, "F");		break;
 	case kGain :    strcpy (label, "F");		break;
@@ -1598,10 +1561,6 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 {
 	switch (index)
 	{
-	case kInvertrev :    strcpy (text, "InvertReverb");		break;
-	case kMonorev :    strcpy (text, "MonoReverb");		break;
-	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
-	case kDgain :    strcpy (text, "DryGain");		break;
 	case kDensity :    strcpy (text, "Density");		break;
 	case kDiffusion :    strcpy (text, "Diffusion");		break;
 	case kGain :    strcpy (text, "Gain");		break;
@@ -1637,37 +1596,6 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 {
 	switch (index)
 	{
-	case kInvertrev :
-		if (InvertReverb >= 0.5)	
-		{
-			strcpy (text, "ON");					
-		}
-		else
-		{
-			strcpy (text, "OFF");					
-		}
-		break;
-	case kMonorev :
-		if (MonoReverb >= 0.5)	
-		{
-			strcpy (text, "ON");					
-		}
-		else
-		{
-			strcpy (text, "OFF");					
-		}
-		break;
-	case kOnlyrev :
-		if (OnlyReverb >= 0.5)	
-		{
-			strcpy (text, "ON");					
-		}
-		else
-		{
-			strcpy (text, "OFF");					
-		}
-		break;
-	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
 	case kDensity : float2string (Density, text, kVstMaxParamStrLen);	break;
 	case kDiffusion : float2string (Diffusion, text, kVstMaxParamStrLen);	break;
 	case kGain : float2string (Gain, text, kVstMaxParamStrLen);	break;
@@ -1765,51 +1693,11 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		}
 		//process the effect
 		effect.Process(workSamples, &floatSamplesIn[offset],  floatSamplesOut);
-		//invert the phase of the reverb if we set InvertReverb to true
-		if (InvertReverb >= 0.5)
-		{
-			for (i=0; i<workSamples; i++)
-			{
-				floatSamplesOut[i*2 + 0] = floatSamplesOut[i*2 + 0] * -1;
-				floatSamplesOut[i*2 + 1] = floatSamplesOut[i*2 + 1] * -1;
-			}
-		}
-		//mixdown the reverb to mono if we set MonoReverb to true
-		if (MonoReverb >= 0.5)
-		{
-			for (i=0; i<workSamples; i++)
-			{
-				float sample = (floatSamplesOut[i*2 + 0] + floatSamplesOut[i*2 + 1]) / 2;
-				floatSamplesOut[i*2 + 0] = sample;
-				floatSamplesOut[i*2 + 1] = sample;
-			}
-		}
-		//apply gain to dry samples
-		for (i=0; i<workSamples; i++)
-		{
-			*in1 = *in1 * DryGain;
-			*in2 = *in2 * DryGain;
-			*in1++;
-			*in2++;
-		}
-		in1 -= workSamples;
-		in2 -= workSamples;
 		//write to the audio buffer
 		for (i=0; i<workSamples; i++)
 		{
-			//check if we are only generating the reverb output
-			if (OnlyReverb >= 0.5)
-			{
-				*out1 = floatSamplesOut[i*2 + 0];
-				*out2 = floatSamplesOut[i*2 + 1];
-			}
-			else
-			{
-				*out1 = *in1 + floatSamplesOut[i*2 + 0];
-				*out2 = *in2 + floatSamplesOut[i*2 + 1];
-			}
-			*in1++;
-			*in2++;
+			*out1 = floatSamplesOut[i*2 + 0];
+			*out2 = floatSamplesOut[i*2 + 1];
 			*out1++;
 			*out2++;
 		}
