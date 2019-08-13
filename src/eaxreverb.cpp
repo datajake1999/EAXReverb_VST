@@ -58,8 +58,6 @@ VstInt32 eaxreverb::getProgram ()
 
 void eaxreverb::setProgram (VstInt32 program)
 {
-	eaxreverbProgram* ap = &programs[program];
-
 	curProgram = program;
 	SetReverbPreset(program);
 }
@@ -1427,8 +1425,6 @@ bool eaxreverb::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* 
 
 void eaxreverb::setParameter (VstInt32 index, float value)
 {
-	eaxreverbProgram* ap = &programs[curProgram];
-
 	switch (index)
 	{
 	case kInvertrev :    SetInvertReverb (value);					break;
