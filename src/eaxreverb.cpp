@@ -15,11 +15,6 @@ eaxreverbProgram::eaxreverbProgram ()
 eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, kNumPrograms, kNumParams)
 {
-	InvertReverb = 0;
-	MonoReverb = 0;
-	OnlyReverb = 0;
-	DryGain = 1;
-	WetGain = 1;
 	// init
 	rate = (int)sampleRate;
 	effect.Create(rate);
@@ -34,6 +29,12 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 		setProgramName(GetPresetName(i));
 	}
 	setProgram (0);
+
+	SetInvertReverb (0);
+	SetMonoReverb (0);
+	SetOnlyReverb (0);
+	SetDryGain (1);
+	SetWetGain (1);
 
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
