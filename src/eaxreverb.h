@@ -11,7 +11,12 @@ enum
 	kNumPrograms = 113,
 
 	// Parameters Tags
-	kDensity = 0, kDiffusion, kGain, kGainHF, kGainLF, kDecayTime, kDecayHFRatio, kDecayLFRatio, kReflectionsGain, kReflectionsDelay, kReflectionsPanX, kReflectionsPanY, kReflectionsPanZ, kLateReverbGain, kLateReverbDelay, kLateReverbPanX, kLateReverbPanY, kLateReverbPanZ, kEchoTime, kEchoDepth, kModulationTime, kModulationDepth, kAirAbsorptionGainHF, kHFReference, kLFReference, kRoomRolloffFactor, kDecayHFLimit,
+	kInvertrev = 0,
+	kMonorev,
+	kOnlyrev,
+	kDgain,
+	kWgain,
+	kDensity, kDiffusion, kGain, kGainHF, kGainLF, kDecayTime, kDecayHFRatio, kDecayLFRatio, kReflectionsGain, kReflectionsDelay, kReflectionsPanX, kReflectionsPanY, kReflectionsPanZ, kLateReverbGain, kLateReverbDelay, kLateReverbPanX, kLateReverbPanY, kLateReverbPanZ, kEchoTime, kEchoDepth, kModulationTime, kModulationDepth, kAirAbsorptionGainHF, kHFReference, kLFReference, kRoomRolloffFactor, kDecayHFLimit,
 
 	kNumParams
 };
@@ -63,6 +68,11 @@ public:
 protected:
 	void SetReverbPreset(int preset);
 	char *GetPresetName(int preset);
+	void SetInvertReverb(float val);
+	void SetMonoReverb(float val);
+	void SetOnlyReverb(float val);
+	void SetDryGain(float val);
+	void SetWetGain(float val);
 	void SetDensity(float val);
 	void SetDiffusion(float val);
 	void SetGain(float val);
@@ -95,6 +105,11 @@ protected:
 	ReverbEffect effect;
 	eaxreverbProgram* programs;
 	
+	float InvertReverb;
+	float MonoReverb;
+	float OnlyReverb;
+	float DryGain;
+	float WetGain;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
 	int i_DecayHFLimit;
 	
