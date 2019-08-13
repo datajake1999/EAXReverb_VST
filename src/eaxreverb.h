@@ -65,7 +65,7 @@ public:
 	
 	virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
 
-protected:
+private:
 	void SetReverbPreset(int preset);
 	char *GetPresetName(int preset);
 	void SetInvertReverb(float val);
