@@ -1024,8 +1024,6 @@ void eaxreverb::SetDensity (float val)
 	}
 	Density = val;
 	programs[curProgram].Density = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1041,8 +1039,6 @@ void eaxreverb::SetDiffusion (float val)
 	}
 	Diffusion = val;
 	programs[curProgram].Diffusion = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1058,8 +1054,6 @@ void eaxreverb::SetGain (float val)
 	}
 	Gain = val;
 	programs[curProgram].Gain = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1075,8 +1069,6 @@ void eaxreverb::SetGainHF (float val)
 	}
 	GainHF = val;
 	programs[curProgram].GainHF = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1092,8 +1084,6 @@ void eaxreverb::SetGainLF (float val)
 	}
 	GainLF = val;
 	programs[curProgram].GainLF = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1109,8 +1099,6 @@ void eaxreverb::SetDecayTime (float val)
 	}
 	DecayTime = val;
 	programs[curProgram].DecayTime = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1126,8 +1114,6 @@ void eaxreverb::SetDecayHFRatio (float val)
 	}
 	DecayHFRatio = val;
 	programs[curProgram].DecayHFRatio = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1143,8 +1129,6 @@ void eaxreverb::SetDecayLFRatio (float val)
 	}
 	DecayLFRatio = val;
 	programs[curProgram].DecayLFRatio = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1160,8 +1144,6 @@ void eaxreverb::SetReflectionsGain (float val)
 	}
 	ReflectionsGain = val;
 	programs[curProgram].ReflectionsGain = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1177,8 +1159,6 @@ void eaxreverb::SetReflectionsDelay (float val)
 	}
 	ReflectionsDelay = val;
 	programs[curProgram].ReflectionsDelay = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1186,8 +1166,6 @@ void eaxreverb::SetReflectionsPanX (float val)
 {
 	ReflectionsPanX = val;
 	programs[curProgram].ReflectionsPanX = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1195,8 +1173,6 @@ void eaxreverb::SetReflectionsPanY (float val)
 {
 	ReflectionsPanY = val;
 	programs[curProgram].ReflectionsPanY = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1204,8 +1180,6 @@ void eaxreverb::SetReflectionsPanZ (float val)
 {
 	ReflectionsPanZ = val;
 	programs[curProgram].ReflectionsPanZ = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1221,8 +1195,6 @@ void eaxreverb::SetLateReverbGain (float val)
 	}
 	LateReverbGain = val;
 	programs[curProgram].LateReverbGain = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1238,8 +1210,6 @@ void eaxreverb::SetLateReverbDelay (float val)
 	}
 	LateReverbDelay = val;
 	programs[curProgram].LateReverbDelay = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1247,8 +1217,6 @@ void eaxreverb::SetLateReverbPanX (float val)
 {
 	LateReverbPanX = val;
 	programs[curProgram].LateReverbPanX = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1256,8 +1224,6 @@ void eaxreverb::SetLateReverbPanY (float val)
 {
 	LateReverbPanY = val;
 	programs[curProgram].LateReverbPanY = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1265,8 +1231,6 @@ void eaxreverb::SetLateReverbPanZ (float val)
 {
 	LateReverbPanZ = val;
 	programs[curProgram].LateReverbPanZ = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1282,8 +1246,6 @@ void eaxreverb::SetEchoTime (float val)
 	}
 	EchoTime = val;
 	programs[curProgram].EchoTime = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1299,8 +1261,6 @@ void eaxreverb::SetEchoDepth (float val)
 	}
 	EchoDepth = val;
 	programs[curProgram].EchoDepth = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1316,8 +1276,6 @@ void eaxreverb::SetModulationTime (float val)
 	}
 	ModulationTime = val;
 	programs[curProgram].ModulationTime = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1333,8 +1291,6 @@ void eaxreverb::SetModulationDepth (float val)
 	}
 	ModulationDepth = val;
 	programs[curProgram].ModulationDepth = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1350,8 +1306,6 @@ void eaxreverb::SetAirAbsorptionGainHF (float val)
 	}
 	AirAbsorptionGainHF = val;
 	programs[curProgram].AirAbsorptionGainHF = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1367,8 +1321,6 @@ void eaxreverb::SetHFReference (float val)
 	}
 	HFReference = val;
 	programs[curProgram].HFReference = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1384,8 +1336,6 @@ void eaxreverb::SetLFReference (float val)
 	}
 	LFReference = val;
 	programs[curProgram].LFReference = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1401,8 +1351,6 @@ void eaxreverb::SetRoomRolloffFactor (float val)
 	}
 	RoomRolloffFactor = val;
 	programs[curProgram].RoomRolloffFactor = val;
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1418,8 +1366,6 @@ void eaxreverb::SetDecayHFLimit (float val)
 	{
 		i_DecayHFLimit = 0;
 	}
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
@@ -1452,6 +1398,8 @@ void eaxreverb::SetEAXParams(float Density, float Diffusion, float Gain, float G
 	SetLFReference(LFReference);
 	SetRoomRolloffFactor(RoomRolloffFactor);
 	SetDecayHFLimit(DecayHFLimit);
+	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+	effect.Update(rate);
 }
 
 
@@ -1515,6 +1463,11 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kLFReference :    SetLFReference (value*EAXREVERB_MAX_LFREFERENCE);					break;
 	case kRoomRolloffFactor :    SetRoomRolloffFactor (value*EAXREVERB_MAX_ROOM_ROLLOFF_FACTOR);					break;
 	case kDecayHFLimit :    SetDecayHFLimit (value);					break;
+	}
+	if (index > kWgain && index < kNumParams)
+	{
+		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effect.Update(rate);
 	}
 }
 
