@@ -30,8 +30,11 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	}
 	setProgram (0);
 
+	SetInvertOriginal (0);
 	SetInvertReverb (0);
+	SetSwapOriginal (0);
 	SetSwapReverb (0);
+	SetMonoOriginal (0);
 	SetMonoReverb (0);
 	SetOnlyOriginal (0);
 	SetOnlyReverb (0);
@@ -984,15 +987,33 @@ char *eaxreverb::GetPresetName(int preset) {
 	return "GENERIC";
 }
 
+void eaxreverb::SetInvertOriginal (float val)
+{
+	InvertOriginal = val;
+}
+
+
 void eaxreverb::SetInvertReverb (float val)
 {
 	InvertReverb = val;
 }
 
 
+void eaxreverb::SetSwapOriginal (float val)
+{
+	SwapOriginal = val;
+}
+
+
 void eaxreverb::SetSwapReverb (float val)
 {
 	SwapReverb = val;
+}
+
+
+void eaxreverb::SetMonoOriginal (float val)
+{
+	MonoOriginal = val;
 }
 
 
@@ -1416,8 +1437,11 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 {
 	switch (index)
 	{
+	case kInvertorig :    SetInvertOriginal (value);					break;
 	case kInvertrev :    SetInvertReverb (value);					break;
+	case kSwaporig :    SetSwapOriginal (value);					break;
 	case kSwaprev :    SetSwapReverb (value);					break;
+	case kMonoorig :    SetMonoOriginal (value);					break;
 	case kMonorev :    SetMonoReverb (value);					break;
 	case kOnlyorig :    SetOnlyOriginal (value);					break;
 	case kOnlyrev :    SetOnlyReverb (value);					break;
@@ -1472,8 +1496,11 @@ float eaxreverb::getParameter (VstInt32 index)
 
 	switch (index)
 	{
+	case kInvertorig :    v = InvertOriginal;	break;
 	case kInvertrev :    v = InvertReverb;	break;
+	case kSwaporig :    v = SwapOriginal;	break;
 	case kSwaprev :    v = SwapReverb;	break;
+	case kMonoorig :    v = MonoOriginal;	break;
 	case kMonorev :    v = MonoReverb;	break;
 	case kOnlyorig :    v = OnlyOriginal;	break;
 	case kOnlyrev :    v = OnlyReverb;	break;
@@ -1552,8 +1579,11 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 {
 	switch (index)
 	{
+	case kInvertorig :    strcpy (text, "InvertOriginal");		break;
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
+	case kSwaporig :    strcpy (text, "SwapOriginal");		break;
 	case kSwaprev :    strcpy (text, "SwapReverb");		break;
+	case kMonoorig :    strcpy (text, "MonoOriginal");		break;
 	case kMonorev :    strcpy (text, "MonoReverb");		break;
 	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
@@ -1595,6 +1625,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 {
 	switch (index)
 	{
+	case kInvertorig :
+		if (InvertOriginal >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
 	case kInvertrev :
 		if (InvertReverb >= 0.5)	
 		{
@@ -1605,8 +1645,28 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "OFF");					
 		}
 		break;
+	case kSwaporig :
+		if (SwapOriginal >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
 	case kSwaprev :
 		if (SwapReverb >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kMonoorig :
+		if (MonoOriginal >= 0.5)	
 		{
 			strcpy (text, "ON");					
 		}
@@ -1745,6 +1805,19 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		}
 		//process the effect
 		effect.Process(workSamples, &floatSamplesIn[offset],  floatSamplesOut);
+		//invert the phase of the original signal if we set InvertOriginal to true
+		if (InvertOriginal >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				*in1 = *in1 * -1;
+				*in2 = *in2 * -1;
+				*in1++;
+				*in2++;
+			}
+			in1 -= workSamples;
+			in2 -= workSamples;
+		}
 		//invert the phase of the reverb if we set InvertReverb to true
 		if (InvertReverb >= 0.5)
 		{
@@ -1753,6 +1826,22 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 				floatSamplesOut[i*2 + 0] = floatSamplesOut[i*2 + 0] * -1;
 				floatSamplesOut[i*2 + 1] = floatSamplesOut[i*2 + 1] * -1;
 			}
+		}
+		//swap the channels of the original signal if we set SwapOriginal to true
+		if (SwapOriginal >= 0.5)
+		{
+			float swap[2];
+			for (i=0; i<workSamples; i++)
+			{
+				swap[0] = *in2;
+				swap[1] = *in1;
+				*in1 = swap[0];
+				*in2 = swap[1];
+				*in1++;
+				*in2++;
+			}
+			in1 -= workSamples;
+			in2 -= workSamples;
 		}
 		//swap the channels of the reverb if we set SwapReverb to true
 		if (SwapReverb >= 0.5)
@@ -1765,6 +1854,20 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 				floatSamplesOut[i*2 + 0] = swap[0];
 				floatSamplesOut[i*2 + 1] = swap[1];
 			}
+		}
+		//mixdown the original signal to mono if we set MonoOriginal to true
+		if (MonoOriginal >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				float sample = (*in1 + *in2) / 2;
+				*in1 = sample;
+				*in2 = sample;
+				*in1++;
+				*in2++;
+			}
+			in1 -= workSamples;
+			in2 -= workSamples;
 		}
 		//mixdown the reverb to mono if we set MonoReverb to true
 		if (MonoReverb >= 0.5)
