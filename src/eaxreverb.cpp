@@ -65,6 +65,7 @@ void eaxreverb::setProgram (VstInt32 program)
 
 
 void eaxreverb::SetReverbPreset(int preset) {
+	ReverbPreset = float(preset);
 	//set a preset
 	if (preset == 0)
 	{
@@ -1406,6 +1407,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kOnlyrev :    SetOnlyReverb (value);					break;
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
+	case kPreset :    SetReverbPreset (int(value*1000));					break;
 	case kDensity :    SetDensity (value*EAXREVERB_MAX_DENSITY);					break;
 	case kDiffusion :    SetDiffusion (value*EAXREVERB_MAX_DIFFUSION);					break;
 	case kGain :    SetGain (value*EAXREVERB_MAX_GAIN);					break;
@@ -1434,7 +1436,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kRoomRolloffFactor :    SetRoomRolloffFactor (value*EAXREVERB_MAX_ROOM_ROLLOFF_FACTOR);					break;
 	case kDecayHFLimit :    SetDecayHFLimit (value);					break;
 	}
-	if (index > kWgain && index < kNumParams)
+	if (index > kPreset && index < kNumParams)
 	{
 		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 		effect.Update(rate);
@@ -1459,6 +1461,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kOnlyrev :    v = OnlyReverb;	break;
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
+	case kPreset :    v = ReverbPreset/1000;	break;
 	case kDensity :    v = Density/EAXREVERB_MAX_DENSITY;	break;
 	case kDiffusion :    v = Diffusion/EAXREVERB_MAX_DIFFUSION;	break;
 	case kGain :    v = Gain/EAXREVERB_MAX_GAIN;	break;
@@ -1536,6 +1539,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
 	case kDgain :    strcpy (text, "DryGain");		break;
 	case kWgain :    strcpy (text, "WetGain");		break;
+	case kPreset :    strcpy (text, "ReverbPreset");		break;
 	case kDensity :    strcpy (text, "Density");		break;
 	case kDiffusion :    strcpy (text, "Diffusion");		break;
 	case kGain :    strcpy (text, "Gain");		break;
@@ -1603,6 +1607,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		break;
 	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
 	case kWgain : float2string (WetGain, text, kVstMaxParamStrLen);	break;
+	case kPreset : strcpy (text, GetPresetName (int(ReverbPreset)));	break;
 	case kDensity : float2string (Density, text, kVstMaxParamStrLen);	break;
 	case kDiffusion : float2string (Diffusion, text, kVstMaxParamStrLen);	break;
 	case kGain : float2string (Gain, text, kVstMaxParamStrLen);	break;

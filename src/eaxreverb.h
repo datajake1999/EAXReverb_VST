@@ -16,6 +16,7 @@ enum
 	kOnlyrev,
 	kDgain,
 	kWgain,
+	kPreset,
 	kDensity, kDiffusion, kGain, kGainHF, kGainLF, kDecayTime, kDecayHFRatio, kDecayLFRatio, kReflectionsGain, kReflectionsDelay, kReflectionsPanX, kReflectionsPanY, kReflectionsPanZ, kLateReverbGain, kLateReverbDelay, kLateReverbPanX, kLateReverbPanY, kLateReverbPanZ, kEchoTime, kEchoDepth, kModulationTime, kModulationDepth, kAirAbsorptionGainHF, kHFReference, kLFReference, kRoomRolloffFactor, kDecayHFLimit,
 
 	kNumParams
@@ -104,6 +105,7 @@ private:
 	ReverbEffect effect;
 	eaxreverbProgram* programs;
 	
+	float ReverbPreset;
 	float InvertReverb;
 	float MonoReverb;
 	float OnlyReverb;
