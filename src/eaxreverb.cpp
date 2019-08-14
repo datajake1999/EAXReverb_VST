@@ -32,6 +32,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 
 	SetInvertReverb (0);
 	SetMonoReverb (0);
+	SetOnlyOriginal (0);
 	SetOnlyReverb (0);
 	SetDryGain (1);
 	SetWetGain (1);
@@ -994,6 +995,12 @@ void eaxreverb::SetMonoReverb (float val)
 }
 
 
+void eaxreverb::SetOnlyOriginal (float val)
+{
+	OnlyOriginal = val;
+}
+
+
 void eaxreverb::SetOnlyReverb (float val)
 {
 	OnlyReverb = val;
@@ -1404,6 +1411,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	{
 	case kInvertrev :    SetInvertReverb (value);					break;
 	case kMonorev :    SetMonoReverb (value);					break;
+	case kOnlyorig :    SetOnlyOriginal (value);					break;
 	case kOnlyrev :    SetOnlyReverb (value);					break;
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
@@ -1458,6 +1466,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	{
 	case kInvertrev :    v = InvertReverb;	break;
 	case kMonorev :    v = MonoReverb;	break;
+	case kOnlyorig :    v = OnlyOriginal;	break;
 	case kOnlyrev :    v = OnlyReverb;	break;
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
@@ -1536,6 +1545,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	{
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
 	case kMonorev :    strcpy (text, "MonoReverb");		break;
+	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
 	case kDgain :    strcpy (text, "DryGain");		break;
 	case kWgain :    strcpy (text, "WetGain");		break;
@@ -1587,6 +1597,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		break;
 	case kMonorev :
 		if (MonoReverb >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kOnlyorig :
+		if (OnlyOriginal >= 0.5)	
 		{
 			strcpy (text, "ON");					
 		}
@@ -1743,8 +1763,13 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		//write to the audio buffer
 		for (i=0; i<workSamples; i++)
 		{
-			//check if we are only generating the reverb output
-			if (OnlyReverb >= 0.5)
+			//check if we are only generating the original signal, the reverb output, or both
+			if (OnlyOriginal >= 0.5)
+			{
+				*out1 = *in1;
+				*out2 = *in2;
+			}
+			else if (OnlyReverb >= 0.5)
 			{
 				*out1 = floatSamplesOut[i*2 + 0];
 				*out2 = floatSamplesOut[i*2 + 1];
