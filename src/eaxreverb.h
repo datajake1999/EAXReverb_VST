@@ -12,6 +12,7 @@ enum
 
 	// Parameters Tags
 	kInvertrev = 0,
+	kSwaprev,
 	kMonorev,
 	kOnlyorig,
 	kOnlyrev,
@@ -70,6 +71,7 @@ private:
 	void SetReverbPreset(int preset);
 	char *GetPresetName(int preset);
 	void SetInvertReverb(float val);
+	void SetSwapReverb(float val);
 	void SetMonoReverb(float val);
 	void SetOnlyOriginal(float val);
 	void SetOnlyReverb(float val);
@@ -109,6 +111,7 @@ private:
 	
 	float ReverbPreset;
 	float InvertReverb;
+	float SwapReverb;
 	float MonoReverb;
 	float OnlyReverb;
 	float OnlyOriginal;

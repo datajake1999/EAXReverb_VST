@@ -31,6 +31,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	setProgram (0);
 
 	SetInvertReverb (0);
+	SetSwapReverb (0);
 	SetMonoReverb (0);
 	SetOnlyOriginal (0);
 	SetOnlyReverb (0);
@@ -989,6 +990,12 @@ void eaxreverb::SetInvertReverb (float val)
 }
 
 
+void eaxreverb::SetSwapReverb (float val)
+{
+	SwapReverb = val;
+}
+
+
 void eaxreverb::SetMonoReverb (float val)
 {
 	MonoReverb = val;
@@ -1410,6 +1417,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	switch (index)
 	{
 	case kInvertrev :    SetInvertReverb (value);					break;
+	case kSwaprev :    SetSwapReverb (value);					break;
 	case kMonorev :    SetMonoReverb (value);					break;
 	case kOnlyorig :    SetOnlyOriginal (value);					break;
 	case kOnlyrev :    SetOnlyReverb (value);					break;
@@ -1465,6 +1473,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	switch (index)
 	{
 	case kInvertrev :    v = InvertReverb;	break;
+	case kSwaprev :    v = SwapReverb;	break;
 	case kMonorev :    v = MonoReverb;	break;
 	case kOnlyorig :    v = OnlyOriginal;	break;
 	case kOnlyrev :    v = OnlyReverb;	break;
@@ -1544,6 +1553,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	switch (index)
 	{
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
+	case kSwaprev :    strcpy (text, "SwapReverb");		break;
 	case kMonorev :    strcpy (text, "MonoReverb");		break;
 	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
@@ -1587,6 +1597,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	{
 	case kInvertrev :
 		if (InvertReverb >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kSwaprev :
+		if (SwapReverb >= 0.5)	
 		{
 			strcpy (text, "ON");					
 		}
@@ -1732,6 +1752,18 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			{
 				floatSamplesOut[i*2 + 0] = floatSamplesOut[i*2 + 0] * -1;
 				floatSamplesOut[i*2 + 1] = floatSamplesOut[i*2 + 1] * -1;
+			}
+		}
+		//swap the channels of the reverb if we set SwapReverb to true
+		if (SwapReverb >= 0.5)
+		{
+			float swap[2];
+			for (i=0; i<workSamples; i++)
+			{
+				swap[0] = floatSamplesOut[i*2 + 1];
+				swap[1] = floatSamplesOut[i*2 + 0];
+				floatSamplesOut[i*2 + 0] = swap[0];
+				floatSamplesOut[i*2 + 1] = swap[1];
 			}
 		}
 		//mixdown the reverb to mono if we set MonoReverb to true
