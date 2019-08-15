@@ -11,7 +11,8 @@ enum
 	kNumPrograms = 113,
 
 	// Parameters Tags
-	kInvertorig = 0,
+	kDisable = 0,
+	kInvertorig,
 	kInvertrev,
 	kSwaporig,
 	kSwaprev,
@@ -73,6 +74,7 @@ public:
 private:
 	void SetReverbPreset(int preset);
 	char *GetPresetName(int preset);
+	void SetDisableEffect(float val);
 	void SetInvertOriginal(float val);
 	void SetInvertReverb(float val);
 	void SetSwapOriginal(float val);
@@ -116,6 +118,7 @@ private:
 	eaxreverbProgram* programs;
 	
 	float ReverbPreset;
+	float DisableEffect;
 	float InvertOriginal;
 	float InvertReverb;
 	float SwapOriginal;

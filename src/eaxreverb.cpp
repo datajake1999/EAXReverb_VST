@@ -30,6 +30,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	}
 	setProgram (0);
 
+	SetDisableEffect (0);
 	SetInvertOriginal (0);
 	SetInvertReverb (0);
 	SetSwapOriginal (0);
@@ -987,6 +988,12 @@ char *eaxreverb::GetPresetName(int preset) {
 	return "GENERIC";
 }
 
+void eaxreverb::SetDisableEffect (float val)
+{
+	DisableEffect = val;
+}
+
+
 void eaxreverb::SetInvertOriginal (float val)
 {
 	InvertOriginal = val;
@@ -1437,6 +1444,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 {
 	switch (index)
 	{
+	case kDisable :    SetDisableEffect (value);					break;
 	case kInvertorig :    SetInvertOriginal (value);					break;
 	case kInvertrev :    SetInvertReverb (value);					break;
 	case kSwaporig :    SetSwapOriginal (value);					break;
@@ -1496,6 +1504,7 @@ float eaxreverb::getParameter (VstInt32 index)
 
 	switch (index)
 	{
+	case kDisable :    v = DisableEffect;	break;
 	case kInvertorig :    v = InvertOriginal;	break;
 	case kInvertrev :    v = InvertReverb;	break;
 	case kSwaporig :    v = SwapOriginal;	break;
@@ -1579,6 +1588,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 {
 	switch (index)
 	{
+	case kDisable :    strcpy (text, "DisableEffect");		break;
 	case kInvertorig :    strcpy (text, "InvertOriginal");		break;
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
 	case kSwaporig :    strcpy (text, "SwapOriginal");		break;
@@ -1625,6 +1635,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 {
 	switch (index)
 	{
+	case kDisable :
+		if (DisableEffect >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
 	case kInvertorig :
 		if (InvertOriginal >= 0.5)	
 		{
@@ -1775,6 +1795,21 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 	float* in2 = inputs[1];
 	float* out1 = outputs[0];
 	float* out2 = outputs[1];
+	int i;
+	//check if we are disabling the effect
+	if (DisableEffect >= 0.5)
+	{
+		for (i=0; i<sampleFrames; i++)
+		{
+			*out1 = *in1;
+			*out2 = *in2;
+			*in1++;
+			*in2++;
+			*out1++;
+			*out2++;
+		}
+		return;
+	}
 	//check the sample rate, since the effect has issues when working with sample rates below 10000 HZ
 	if (rate < 10000)
 	{
@@ -1782,7 +1817,6 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 	}
 	//allocate memory for mono samples
 	float *floatSamplesIn =  new float[sampleFrames];
-	int i;
 	//convert stereo samples into mono
 	for (i=0; i<sampleFrames; i++)
 	{
