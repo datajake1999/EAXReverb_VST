@@ -118,6 +118,7 @@ private:
 	eaxreverbProgram* programs;
 	
 	float ReverbPreset;
+	int i_ReverbPreset;
 	float DisableEffect;
 	float InvertOriginal;
 	float InvertReverb;

@@ -71,6 +71,7 @@ void eaxreverb::setProgram (VstInt32 program)
 
 void eaxreverb::SetReverbPreset(int preset) {
 	ReverbPreset = float(preset);
+	i_ReverbPreset = preset;
 	//set a preset
 	if (preset == 0)
 	{
@@ -1726,7 +1727,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		break;
 	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
 	case kWgain : float2string (WetGain, text, kVstMaxParamStrLen);	break;
-	case kPreset : strcpy (text, GetPresetName (int(ReverbPreset)));	break;
+	case kPreset : strcpy (text, GetPresetName (i_ReverbPreset));	break;
 	case kDensity : float2string (Density, text, kVstMaxParamStrLen);	break;
 	case kDiffusion : float2string (Diffusion, text, kVstMaxParamStrLen);	break;
 	case kGain : float2string (Gain, text, kVstMaxParamStrLen);	break;
