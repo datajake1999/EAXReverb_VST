@@ -30,7 +30,7 @@ To build:
 * If everything goes well, you should have a DLL that you can load into your favorite VST host.
 
 # Extra notes
-* The first 10 parameters are global, so they won't change if you change the preset.
+* The first 11 parameters are global, so they won't change if you change the preset.
 
 # License
 This library is free software; you can redistribute it and/or
