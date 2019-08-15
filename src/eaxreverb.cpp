@@ -23,10 +23,9 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	programs = new eaxreverbProgram[numPrograms];
 
 	if (programs)
-	for (unsigned int i = 0; i < kNumPrograms; i++)
+	for (int i = 0; i < kNumPrograms; i++)
 	{
-		setProgram(i);
-		setProgramName(GetPresetName(i));
+		strcpy (programs[i].name, GetPresetName(i));
 	}
 	setProgram (0);
 
