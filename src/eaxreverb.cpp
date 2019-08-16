@@ -1820,6 +1820,15 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 	//check the sample rate, since the effect has issues when working with sample rates below 10000 HZ
 	if (rate < 10000)
 	{
+		for (i=0; i<sampleFrames; i++)
+		{
+			*out1 = *in1;
+			*out2 = *in2;
+			*in1++;
+			*in2++;
+			*out1++;
+			*out2++;
+		}
 		return;
 	}
 	//allocate memory for mono samples
