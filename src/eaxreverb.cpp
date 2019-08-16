@@ -9,6 +9,18 @@
 
 eaxreverbProgram::eaxreverbProgram ()
 {
+	// default Program Values
+	DisableEffect = 0;
+	InvertOriginal = 0;
+	InvertReverb = 0;
+	SwapOriginal = 0;
+	SwapReverb = 0;
+	MonoOriginal = 0;
+	MonoReverb = 0;
+	OnlyOriginal = 0;
+	OnlyReverb = 0;
+	DryGain = 1;
+	WetGain = 1;
 }
 
 
@@ -62,13 +74,54 @@ VstInt32 eaxreverb::getProgram ()
 
 void eaxreverb::setProgram (VstInt32 program)
 {
+	eaxreverbProgram* ap = &programs[program];
+
 	curProgram = program;
 	SetReverbPreset(program);
+	setParameter (kDisable, ap->DisableEffect);	
+	setParameter (kInvertorig, ap->InvertOriginal);	
+	setParameter (kInvertrev, ap->InvertReverb);	
+	setParameter (kSwaporig, ap->SwapOriginal);	
+	setParameter (kSwaprev, ap->SwapReverb);	
+	setParameter (kMonoorig, ap->MonoOriginal);	
+	setParameter (kMonorev, ap->MonoReverb);	
+	setParameter (kOnlyorig, ap->OnlyOriginal);	
+	setParameter (kOnlyrev, ap->OnlyReverb);	
+	setParameter (kDgain, ap->DryGain);	
+	setParameter (kWgain, ap->WetGain);	
+	setParameter (kDensity, ap->Density/EAXREVERB_MAX_DENSITY);	
+	setParameter (kDiffusion, ap->Diffusion/EAXREVERB_MAX_DIFFUSION);	
+	setParameter (kGain, ap->Gain/EAXREVERB_MAX_GAIN);	
+	setParameter (kGainHF, ap->GainHF/EAXREVERB_MAX_GAINHF);	
+	setParameter (kGainLF, ap->GainLF/EAXREVERB_MAX_GAINLF);	
+	setParameter (kDecayTime, ap->DecayTime/EAXREVERB_MAX_DECAY_TIME);	
+	setParameter (kDecayHFRatio, ap->DecayHFRatio/EAXREVERB_MAX_DECAY_HFRATIO);	
+	setParameter (kDecayLFRatio, ap->DecayLFRatio/EAXREVERB_MAX_DECAY_LFRATIO);	
+	setParameter (kReflectionsGain, ap->ReflectionsGain/EAXREVERB_MAX_REFLECTIONS_GAIN);	
+	setParameter (kReflectionsDelay, ap->ReflectionsDelay/EAXREVERB_MAX_REFLECTIONS_DELAY);	
+	setParameter (kReflectionsPanX, ap->ReflectionsPanX);	
+	setParameter (kReflectionsPanY, ap->ReflectionsPanY);	
+	setParameter (kReflectionsPanZ, ap->ReflectionsPanZ);	
+	setParameter (kLateReverbGain, ap->LateReverbGain/EAXREVERB_MAX_LATE_REVERB_GAIN);	
+	setParameter (kLateReverbDelay, ap->LateReverbDelay/EAXREVERB_MAX_LATE_REVERB_DELAY);	
+	setParameter (kLateReverbPanX, ap->LateReverbPanX);	
+	setParameter (kLateReverbPanY, ap->LateReverbPanY);	
+	setParameter (kLateReverbPanZ, ap->LateReverbPanZ);	
+	setParameter (kEchoTime, ap->EchoTime/EAXREVERB_MAX_ECHO_TIME);	
+	setParameter (kEchoDepth, ap->EchoDepth/EAXREVERB_MAX_ECHO_DEPTH);	
+	setParameter (kModulationTime, ap->ModulationTime/EAXREVERB_MAX_MODULATION_TIME);	
+	setParameter (kModulationDepth, ap->ModulationDepth/EAXREVERB_MAX_MODULATION_DEPTH);	
+	setParameter (kAirAbsorptionGainHF, ap->AirAbsorptionGainHF/EAXREVERB_MAX_AIR_ABSORPTION_GAINHF);	
+	setParameter (kHFReference, ap->HFReference/EAXREVERB_MAX_HFREFERENCE);	
+	setParameter (kLFReference, ap->LFReference/EAXREVERB_MAX_LFREFERENCE);	
+	setParameter (kRoomRolloffFactor, ap->RoomRolloffFactor/EAXREVERB_MAX_ROOM_ROLLOFF_FACTOR);	
+	setParameter (kDecayHFLimit, ap->DecayHFLimit);	
 }
 
 
 void eaxreverb::SetReverbPreset(int preset) {
 	ReverbPreset = float(preset);
+	programs[curProgram].ReverbPreset = float(preset);
 	i_ReverbPreset = preset;
 	//set a preset
 	if (preset == 0)
@@ -989,66 +1042,77 @@ char *eaxreverb::GetPresetName(int preset) {
 void eaxreverb::SetDisableEffect (float val)
 {
 	DisableEffect = val;
+	programs[curProgram].DisableEffect = val;
 }
 
 
 void eaxreverb::SetInvertOriginal (float val)
 {
 	InvertOriginal = val;
+	programs[curProgram].InvertOriginal = val;
 }
 
 
 void eaxreverb::SetInvertReverb (float val)
 {
 	InvertReverb = val;
+	programs[curProgram].InvertReverb = val;
 }
 
 
 void eaxreverb::SetSwapOriginal (float val)
 {
 	SwapOriginal = val;
+	programs[curProgram].SwapOriginal = val;
 }
 
 
 void eaxreverb::SetSwapReverb (float val)
 {
 	SwapReverb = val;
+	programs[curProgram].SwapReverb = val;
 }
 
 
 void eaxreverb::SetMonoOriginal (float val)
 {
 	MonoOriginal = val;
+	programs[curProgram].MonoOriginal = val;
 }
 
 
 void eaxreverb::SetMonoReverb (float val)
 {
 	MonoReverb = val;
+	programs[curProgram].MonoReverb = val;
 }
 
 
 void eaxreverb::SetOnlyOriginal (float val)
 {
 	OnlyOriginal = val;
+	programs[curProgram].OnlyOriginal = val;
 }
 
 
 void eaxreverb::SetOnlyReverb (float val)
 {
 	OnlyReverb = val;
+	programs[curProgram].OnlyReverb = val;
 }
 
 
 void eaxreverb::SetDryGain (float val)
 {
 	DryGain = val;
+	programs[curProgram].DryGain = val;
 }
 
 
 void eaxreverb::SetWetGain (float val)
 {
 	WetGain = val;
+	programs[curProgram].WetGain = val;
 }
 
 
@@ -1063,6 +1127,7 @@ void eaxreverb::SetDensity (float val)
 		val = EAXREVERB_MIN_DENSITY;
 	}
 	Density = val;
+	programs[curProgram].Density = val;
 }
 
 
@@ -1077,6 +1142,7 @@ void eaxreverb::SetDiffusion (float val)
 		val = EAXREVERB_MIN_DIFFUSION;
 	}
 	Diffusion = val;
+	programs[curProgram].Diffusion = val;
 }
 
 
@@ -1091,6 +1157,7 @@ void eaxreverb::SetGain (float val)
 		val = EAXREVERB_MIN_GAIN;
 	}
 	Gain = val;
+	programs[curProgram].Gain = val;
 }
 
 
@@ -1105,6 +1172,7 @@ void eaxreverb::SetGainHF (float val)
 		val = EAXREVERB_MIN_GAINHF;
 	}
 	GainHF = val;
+	programs[curProgram].GainHF = val;
 }
 
 
@@ -1119,6 +1187,7 @@ void eaxreverb::SetGainLF (float val)
 		val = EAXREVERB_MIN_GAINLF;
 	}
 	GainLF = val;
+	programs[curProgram].GainLF = val;
 }
 
 
@@ -1133,6 +1202,7 @@ void eaxreverb::SetDecayTime (float val)
 		val = EAXREVERB_MIN_DECAY_TIME;
 	}
 	DecayTime = val;
+	programs[curProgram].DecayTime = val;
 }
 
 
@@ -1147,6 +1217,7 @@ void eaxreverb::SetDecayHFRatio (float val)
 		val = EAXREVERB_MIN_DECAY_HFRATIO;
 	}
 	DecayHFRatio = val;
+	programs[curProgram].DecayHFRatio = val;
 }
 
 
@@ -1161,6 +1232,7 @@ void eaxreverb::SetDecayLFRatio (float val)
 		val = EAXREVERB_MIN_DECAY_LFRATIO;
 	}
 	DecayLFRatio = val;
+	programs[curProgram].DecayLFRatio = val;
 }
 
 
@@ -1175,6 +1247,7 @@ void eaxreverb::SetReflectionsGain (float val)
 		val = EAXREVERB_MIN_REFLECTIONS_GAIN;
 	}
 	ReflectionsGain = val;
+	programs[curProgram].ReflectionsGain = val;
 }
 
 
@@ -1189,24 +1262,28 @@ void eaxreverb::SetReflectionsDelay (float val)
 		val = EAXREVERB_MIN_REFLECTIONS_DELAY;
 	}
 	ReflectionsDelay = val;
+	programs[curProgram].ReflectionsDelay = val;
 }
 
 
 void eaxreverb::SetReflectionsPanX (float val)
 {
 	ReflectionsPanX = val;
+	programs[curProgram].ReflectionsPanX = val;
 }
 
 
 void eaxreverb::SetReflectionsPanY (float val)
 {
 	ReflectionsPanY = val;
+	programs[curProgram].ReflectionsPanY = val;
 }
 
 
 void eaxreverb::SetReflectionsPanZ (float val)
 {
 	ReflectionsPanZ = val;
+	programs[curProgram].ReflectionsPanZ = val;
 }
 
 
@@ -1221,6 +1298,7 @@ void eaxreverb::SetLateReverbGain (float val)
 		val = EAXREVERB_MIN_LATE_REVERB_GAIN;
 	}
 	LateReverbGain = val;
+	programs[curProgram].LateReverbGain = val;
 }
 
 
@@ -1235,24 +1313,28 @@ void eaxreverb::SetLateReverbDelay (float val)
 		val = EAXREVERB_MIN_LATE_REVERB_DELAY;
 	}
 	LateReverbDelay = val;
+	programs[curProgram].LateReverbDelay = val;
 }
 
 
 void eaxreverb::SetLateReverbPanX (float val)
 {
 	LateReverbPanX = val;
+	programs[curProgram].LateReverbPanX = val;
 }
 
 
 void eaxreverb::SetLateReverbPanY (float val)
 {
 	LateReverbPanY = val;
+	programs[curProgram].LateReverbPanY = val;
 }
 
 
 void eaxreverb::SetLateReverbPanZ (float val)
 {
 	LateReverbPanZ = val;
+	programs[curProgram].LateReverbPanZ = val;
 }
 
 
@@ -1267,6 +1349,7 @@ void eaxreverb::SetEchoTime (float val)
 		val = EAXREVERB_MIN_ECHO_TIME;
 	}
 	EchoTime = val;
+	programs[curProgram].EchoTime = val;
 }
 
 
@@ -1281,6 +1364,7 @@ void eaxreverb::SetEchoDepth (float val)
 		val = EAXREVERB_MIN_ECHO_DEPTH;
 	}
 	EchoDepth = val;
+	programs[curProgram].EchoDepth = val;
 }
 
 
@@ -1295,6 +1379,7 @@ void eaxreverb::SetModulationTime (float val)
 		val = EAXREVERB_MIN_MODULATION_TIME;
 	}
 	ModulationTime = val;
+	programs[curProgram].ModulationTime = val;
 }
 
 
@@ -1309,6 +1394,7 @@ void eaxreverb::SetModulationDepth (float val)
 		val = EAXREVERB_MIN_MODULATION_DEPTH;
 	}
 	ModulationDepth = val;
+	programs[curProgram].ModulationDepth = val;
 }
 
 
@@ -1323,6 +1409,7 @@ void eaxreverb::SetAirAbsorptionGainHF (float val)
 		val = EAXREVERB_MIN_AIR_ABSORPTION_GAINHF;
 	}
 	AirAbsorptionGainHF = val;
+	programs[curProgram].AirAbsorptionGainHF = val;
 }
 
 
@@ -1337,6 +1424,7 @@ void eaxreverb::SetHFReference (float val)
 		val = EAXREVERB_MIN_HFREFERENCE;
 	}
 	HFReference = val;
+	programs[curProgram].HFReference = val;
 }
 
 
@@ -1351,6 +1439,7 @@ void eaxreverb::SetLFReference (float val)
 		val = EAXREVERB_MIN_LFREFERENCE;
 	}
 	LFReference = val;
+	programs[curProgram].LFReference = val;
 }
 
 
@@ -1365,12 +1454,14 @@ void eaxreverb::SetRoomRolloffFactor (float val)
 		val = EAXREVERB_MIN_ROOM_ROLLOFF_FACTOR;
 	}
 	RoomRolloffFactor = val;
+	programs[curProgram].RoomRolloffFactor = val;
 }
 
 
 void eaxreverb::SetDecayHFLimit (float val)
 {
 	DecayHFLimit = val;
+	programs[curProgram].DecayHFLimit = val;
 	if (DecayHFLimit >= 0.5)
 	{
 		i_DecayHFLimit = 1;

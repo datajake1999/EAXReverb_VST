@@ -39,6 +39,19 @@ public:
 	~eaxreverbProgram () {}
 
 private:	
+	float ReverbPreset;
+	float DisableEffect;
+	float InvertOriginal;
+	float InvertReverb;
+	float SwapOriginal;
+	float SwapReverb;
+	float MonoOriginal;
+	float MonoReverb;
+	float OnlyReverb;
+	float OnlyOriginal;
+	float DryGain;
+	float WetGain;
+	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
 	char name[24];
 };
 
