@@ -16,9 +16,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, kNumPrograms, kNumParams)
 {
 	// init
-	rate = (int)sampleRate;
-	effect.Create(rate);
-	effect.Update(rate);
+	resume ();
 	
 	programs = new eaxreverbProgram[numPrograms];
 
@@ -1437,6 +1435,15 @@ bool eaxreverb::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* 
 		return true;
 	}
 	return false;
+}
+
+
+void eaxreverb::resume ()
+{
+	rate = int(AudioEffectX::updateSampleRate());
+	effect.Create(rate);
+	effect.Update(rate);
+	AudioEffectX::resume();
 }
 
 

@@ -57,6 +57,8 @@ public:
 	virtual void getProgramName (char* name);
 	virtual bool getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text);
 	
+	virtual void resume ();
+	
 	virtual void setParameter (VstInt32 index, float value);
 	virtual void setParameterAutomated (VstInt32 index, float value);
 	virtual float getParameter (VstInt32 index);
