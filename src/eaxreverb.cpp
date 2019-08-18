@@ -35,7 +35,9 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	if (programs)
 	for (int i = 0; i < kNumPrograms; i++)
 	{
-		strcpy (programs[i].name, GetPresetName(i));
+		setProgram (i);
+		SetReverbPreset (i);
+		setProgramName (GetPresetName(i));
 	}
 	setProgram (0);
 
@@ -77,7 +79,6 @@ void eaxreverb::setProgram (VstInt32 program)
 	eaxreverbProgram* ap = &programs[program];
 
 	curProgram = program;
-	SetReverbPreset(program);
 	setParameter (kDisable, ap->DisableEffect);	
 	setParameter (kInvertorig, ap->InvertOriginal);	
 	setParameter (kInvertrev, ap->InvertReverb);	
@@ -89,6 +90,9 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kOnlyrev, ap->OnlyReverb);	
 	setParameter (kDgain, ap->DryGain);	
 	setParameter (kWgain, ap->WetGain);	
+	ReverbPreset = ap->ReverbPreset;
+	programs[curProgram].ReverbPreset = ap->ReverbPreset;
+	i_ReverbPreset = int(ap->ReverbPreset);
 	setParameter (kDensity, ap->Density/EAXREVERB_MAX_DENSITY);	
 	setParameter (kDiffusion, ap->Diffusion/EAXREVERB_MAX_DIFFUSION);	
 	setParameter (kGain, ap->Gain/EAXREVERB_MAX_GAIN);	
