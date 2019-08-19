@@ -584,6 +584,8 @@ void eaxreverb::SetReverbPreset(int preset) {
 	{
 		SetEAXParams(EFX_REVERB_PRESET_GENERIC);
 	}
+	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+	effect.Update(rate);
 }
 
 char *eaxreverb::GetPresetName(int preset) {
@@ -1506,8 +1508,6 @@ void eaxreverb::SetEAXParams(float Density, float Diffusion, float Gain, float G
 	SetLFReference(LFReference);
 	SetRoomRolloffFactor(RoomRolloffFactor);
 	SetDecayHFLimit(DecayHFLimit);
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
 }
 
 
