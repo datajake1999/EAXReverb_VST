@@ -36,7 +36,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	for (int i = 0; i < kNumPrograms; i++)
 	{
 		setProgram (i);
-		SetReverbPreset (i);
+		SetReverbPreset (i, false);
 		setProgramName (GetPresetName(i));
 	}
 	setProgram (0);
@@ -123,7 +123,7 @@ void eaxreverb::setProgram (VstInt32 program)
 }
 
 
-void eaxreverb::SetReverbPreset(int preset) {
+void eaxreverb::SetReverbPreset(int preset, bool update) {
 	ReverbPreset = float(preset);
 	programs[curProgram].ReverbPreset = float(preset);
 	i_ReverbPreset = preset;
@@ -584,8 +584,11 @@ void eaxreverb::SetReverbPreset(int preset) {
 	{
 		SetEAXParams(EFX_REVERB_PRESET_GENERIC);
 	}
-	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-	effect.Update(rate);
+	if (update == true)
+	{
+		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effect.Update(rate);
+	}
 }
 
 char *eaxreverb::GetPresetName(int preset) {
@@ -1557,7 +1560,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kOnlyrev :    SetOnlyReverb (value);					break;
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
-	case kPreset :    SetReverbPreset (int(value*1000));					break;
+	case kPreset :    SetReverbPreset (int(value*1000), true);					break;
 	case kDensity :    SetDensity (value*EAXREVERB_MAX_DENSITY);					break;
 	case kDiffusion :    SetDiffusion (value*EAXREVERB_MAX_DIFFUSION);					break;
 	case kGain :    SetGain (value*EAXREVERB_MAX_GAIN);					break;

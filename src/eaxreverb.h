@@ -87,7 +87,7 @@ public:
 	virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
 
 private:
-	void SetReverbPreset(int preset);
+	void SetReverbPreset(int preset, bool update);
 	char *GetPresetName(int preset);
 	void SetDisableEffect(float val);
 	void SetInvertOriginal(float val);
