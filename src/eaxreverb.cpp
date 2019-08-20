@@ -43,18 +43,6 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	}
 	setProgram (0);
 
-	SetDisableEffect (0);
-	SetInvertOriginal (0);
-	SetInvertReverb (0);
-	SetSwapOriginal (0);
-	SetSwapReverb (0);
-	SetMonoOriginal (0);
-	SetMonoReverb (0);
-	SetOnlyOriginal (0);
-	SetOnlyReverb (0);
-	SetDryGain (1);
-	SetWetGain (1);
-
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
 	setUniqueID ('EAX');
