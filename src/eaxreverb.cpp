@@ -29,6 +29,8 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 {
 	// init
 	resume ();
+	effect.Create(rate);
+	effect.Update(rate);
 	
 	programs = new eaxreverbProgram[numPrograms];
 
@@ -1539,8 +1541,6 @@ bool eaxreverb::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* 
 void eaxreverb::resume ()
 {
 	rate = int(AudioEffectX::updateSampleRate());
-	effect.Create(rate);
-	effect.Update(rate);
 	AudioEffectX::resume();
 }
 
