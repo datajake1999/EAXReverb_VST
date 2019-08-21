@@ -23,6 +23,7 @@ To build this effect from source, you will need:
 * Windows Server 2003 Platform SDK
 * VST SDK.
 * InnoSetup
+* 7-Zip
 
 To build:
 
