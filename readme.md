@@ -17,6 +17,8 @@ It is very easy to utilize this plugin. Lets use Reaper as an example.
 In your parameter window, you will see a list of parameters and their values. You can scroll with your mouse or use your keyboard to choose your parameter/value, and if you know which value you want right away, you can type it in the value edit field.
 
 # Building from source
+
+## on Windows
 To build this effect from source, you will need:
 
 * Microsoft Visual Studio 2005 Express
@@ -28,8 +30,22 @@ To build this effect from source, you will need:
 To build:
 
 * Copy the VST SDK folder to the location of the source code.
-* Open a command prompt and run compile.bat.
-* If everything goes well, you should have a DLL that you can load into your favorite VST host.
+* Open a command prompt and run compile_msvc.bat.
+* If everything goes well, you should have DLL's that you can load into your favorite VST host, and an installer that you can use to install the plugin to the standard location for VST plugins.
+
+## on Linux
+To build this effect from source, you will need:
+
+* g++
+* make
+* VST SDK.
+
+To build:
+
+* Copy the VST SDK folder to the location of the source code.
+* Open a terminal window and cd to the directory that contains the source.
+* Type "make" to build the library.
+* type "make install" to install the library onto the system.
 
 # License
 This library is free software; you can redistribute it and/or
