@@ -7,12 +7,12 @@ OBJS = audioeffect.o audioeffectx.o eaxreverb.o main.o ReverbEffect.o vstplugmai
 TARGET = EAXReverb.so
 INSTDIR = /usr/lib/vst
 
-all: eaxreverb_compile eaxreverb_link
+all: compile link
 
-eaxreverb_compile: $(SRCS)
+compile: $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS)
 
-eaxreverb_link: $(OBJS)
+link: $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS)
 
 install: $(TARGET)
