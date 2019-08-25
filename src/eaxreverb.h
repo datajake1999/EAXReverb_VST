@@ -47,8 +47,8 @@ private:
 	float SwapReverb;
 	float MonoOriginal;
 	float MonoReverb;
-	float OnlyReverb;
 	float OnlyOriginal;
+	float OnlyReverb;
 	float DryGain;
 	float WetGain;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
@@ -141,8 +141,8 @@ private:
 	float SwapReverb;
 	float MonoOriginal;
 	float MonoReverb;
-	float OnlyReverb;
 	float OnlyOriginal;
+	float OnlyReverb;
 	float DryGain;
 	float WetGain;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
