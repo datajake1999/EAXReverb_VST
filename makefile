@@ -19,6 +19,9 @@ install: $(TARGET)
 	mkdir $(INSTDIR)
 	cp $(TARGET) $(INSTDIR)
 
+uninstall: $(INSTDIR)/$(TARGET)
+	rm $(INSTDIR)/$(TARGET)
+
 .PHONY: clean
 
 clean:
