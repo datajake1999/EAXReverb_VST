@@ -16,6 +16,10 @@ enum
 	kInvertrev,
 	kSwaporig,
 	kSwaprev,
+	kBalancelorig,
+	kBalancerorig,
+	kBalancelrev,
+	kBalancerrev,
 	kMonoorig,
 	kMonorev,
 	kStereoorig,
@@ -47,6 +51,10 @@ private:
 	float InvertReverb;
 	float SwapOriginal;
 	float SwapReverb;
+	float BalanceLOriginal;
+	float BalanceROriginal;
+	float BalanceLReverb;
+	float BalanceRReverb;
 	float MonoOriginal;
 	float MonoReverb;
 	float StereoWidthOriginal;
@@ -98,6 +106,10 @@ private:
 	void SetInvertReverb(float val);
 	void SetSwapOriginal(float val);
 	void SetSwapReverb(float val);
+	void SetBalanceLOriginal(float val);
+	void SetBalanceROriginal(float val);
+	void SetBalanceLReverb(float val);
+	void SetBalanceRReverb(float val);
 	void SetMonoOriginal(float val);
 	void SetMonoReverb(float val);
 	void SetStereoWidthOriginal(float val);
@@ -145,6 +157,10 @@ private:
 	float InvertReverb;
 	float SwapOriginal;
 	float SwapReverb;
+	float BalanceLOriginal;
+	float BalanceROriginal;
+	float BalanceLReverb;
+	float BalanceRReverb;
 	float MonoOriginal;
 	float MonoReverb;
 	float StereoWidthOriginal;
