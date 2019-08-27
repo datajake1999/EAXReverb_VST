@@ -18,6 +18,8 @@ enum
 	kSwaprev,
 	kMonoorig,
 	kMonorev,
+	kStereoorig,
+	kStereorev,
 	kOnlyorig,
 	kOnlyrev,
 	kDgain,
@@ -47,6 +49,8 @@ private:
 	float SwapReverb;
 	float MonoOriginal;
 	float MonoReverb;
+	float StereoWidthOriginal;
+	float StereoWidthReverb;
 	float OnlyOriginal;
 	float OnlyReverb;
 	float DryGain;
@@ -96,6 +100,8 @@ private:
 	void SetSwapReverb(float val);
 	void SetMonoOriginal(float val);
 	void SetMonoReverb(float val);
+	void SetStereoWidthOriginal(float val);
+	void SetStereoWidthReverb(float val);
 	void SetOnlyOriginal(float val);
 	void SetOnlyReverb(float val);
 	void SetDryGain(float val);
@@ -141,6 +147,8 @@ private:
 	float SwapReverb;
 	float MonoOriginal;
 	float MonoReverb;
+	float StereoWidthOriginal;
+	float StereoWidthReverb;
 	float OnlyOriginal;
 	float OnlyReverb;
 	float DryGain;

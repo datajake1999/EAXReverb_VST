@@ -17,6 +17,8 @@ eaxreverbProgram::eaxreverbProgram ()
 	SwapReverb = 0;
 	MonoOriginal = 0;
 	MonoReverb = 0;
+	StereoWidthOriginal = 1;
+	StereoWidthReverb = 1;
 	OnlyOriginal = 0;
 	OnlyReverb = 0;
 	DryGain = 1;
@@ -74,6 +76,8 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kSwaprev, ap->SwapReverb);	
 	setParameter (kMonoorig, ap->MonoOriginal);	
 	setParameter (kMonorev, ap->MonoReverb);	
+	setParameter (kStereoorig, ap->StereoWidthOriginal);	
+	setParameter (kStereorev, ap->StereoWidthReverb);	
 	setParameter (kOnlyorig, ap->OnlyOriginal);	
 	setParameter (kOnlyrev, ap->OnlyReverb);	
 	setParameter (kDgain, ap->DryGain);	
@@ -1085,6 +1089,20 @@ void eaxreverb::SetMonoReverb (float val)
 }
 
 
+void eaxreverb::SetStereoWidthOriginal (float val)
+{
+	StereoWidthOriginal = val;
+	programs[curProgram].StereoWidthOriginal = val;
+}
+
+
+void eaxreverb::SetStereoWidthReverb (float val)
+{
+	StereoWidthReverb = val;
+	programs[curProgram].StereoWidthReverb = val;
+}
+
+
 void eaxreverb::SetOnlyOriginal (float val)
 {
 	OnlyOriginal = val;
@@ -1546,6 +1564,8 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kSwaprev :    SetSwapReverb (value);					break;
 	case kMonoorig :    SetMonoOriginal (value);					break;
 	case kMonorev :    SetMonoReverb (value);					break;
+	case kStereoorig :    SetStereoWidthOriginal (value);					break;
+	case kStereorev :    SetStereoWidthReverb (value);					break;
 	case kOnlyorig :    SetOnlyOriginal (value);					break;
 	case kOnlyrev :    SetOnlyReverb (value);					break;
 	case kDgain :    SetDryGain (value);					break;
@@ -1606,6 +1626,8 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kSwaprev :    v = SwapReverb;	break;
 	case kMonoorig :    v = MonoOriginal;	break;
 	case kMonorev :    v = MonoReverb;	break;
+	case kStereoorig :    v = StereoWidthOriginal;	break;
+	case kStereorev :    v = StereoWidthReverb;	break;
 	case kOnlyorig :    v = OnlyOriginal;	break;
 	case kOnlyrev :    v = OnlyReverb;	break;
 	case kDgain :    v = DryGain;	break;
@@ -1647,6 +1669,8 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 {
 	switch (index)
 	{
+	case kStereoorig :    strcpy (label, "F");		break;
+	case kStereorev :    strcpy (label, "F");		break;
 	case kDgain :    strcpy (label, "F");		break;
 	case kWgain :    strcpy (label, "F");		break;
 	case kDensity :    strcpy (label, "F");		break;
@@ -1690,6 +1714,8 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kSwaprev :    strcpy (text, "SwapReverb");		break;
 	case kMonoorig :    strcpy (text, "MonoOriginal");		break;
 	case kMonorev :    strcpy (text, "MonoReverb");		break;
+	case kStereoorig :    strcpy (text, "StereoWidthOriginal");		break;
+	case kStereorev :    strcpy (text, "StereoWidthReverb");		break;
 	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
 	case kDgain :    strcpy (text, "DryGain");		break;
@@ -1800,6 +1826,8 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "OFF");					
 		}
 		break;
+	case kStereoorig : float2string (StereoWidthOriginal, text, kVstMaxParamStrLen);	break;
+	case kStereorev : float2string (StereoWidthReverb, text, kVstMaxParamStrLen);	break;
 	case kOnlyorig :
 		if (OnlyOriginal >= 0.5)	
 		{
@@ -2002,6 +2030,36 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 				floatSamplesOut[i*2 + 0] = sample;
 				floatSamplesOut[i*2 + 1] = sample;
 			}
+		}
+		//adjust the stereo width of dry samples
+		float Temp = 1/(1.0f + StereoWidthOriginal);
+		float CoefficientM = 1.0f * Temp;
+		float CoefficientS = StereoWidthOriginal * 0.5f;
+		float ValueM = 0.0;
+		float ValueS = 0.0;
+		for(i = 0; i < workSamples; i++)
+		{
+			ValueM = (*in1 + *in2) * CoefficientM;
+			ValueS = (*in2 - *in1) * CoefficientS;
+			*in1 = ValueM - ValueS;
+			*in2 = ValueM + ValueS;
+			*in1++;
+			*in2++;
+		}
+		in1 -= workSamples;
+		in2 -= workSamples;
+		//adjust the stereo width of wet samples
+		Temp = 1/(1.0f + StereoWidthReverb);
+		CoefficientM = 1.0f * Temp;
+		CoefficientS = StereoWidthReverb * 0.5f;
+		ValueM = 0.0;
+		ValueS = 0.0;
+		for(i = 0; i < workSamples; i++)
+		{
+			ValueM = (floatSamplesOut[i*2 + 0] + floatSamplesOut[i*2 + 1]) * CoefficientM;
+			ValueS = (floatSamplesOut[i*2 + 1] - floatSamplesOut[i*2 + 0]) * CoefficientS;
+			floatSamplesOut[i*2 + 0] = ValueM - ValueS;
+			floatSamplesOut[i*2 + 1] = ValueM + ValueS;
 		}
 		//apply gain to dry samples
 		for (i=0; i<workSamples; i++)
