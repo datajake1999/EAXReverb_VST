@@ -19,6 +19,8 @@ eaxreverbProgram::eaxreverbProgram ()
 	BalanceROriginal = 1;
 	BalanceLReverb = 1;
 	BalanceRReverb = 1;
+	BalanceL = 1;
+	BalanceR = 1;
 	StereoWidthOriginal = 1;
 	StereoWidthReverb = 1;
 	MonoOriginal = 0;
@@ -83,6 +85,8 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kBalancerorig, ap->BalanceROriginal);	
 	setParameter (kBalancelrev, ap->BalanceLReverb);	
 	setParameter (kBalancerrev, ap->BalanceRReverb);	
+	setParameter (kBalancel, ap->BalanceL);	
+	setParameter (kBalancer, ap->BalanceR);	
 	setParameter (kStereoorig, ap->StereoWidthOriginal);	
 	setParameter (kStereorev, ap->StereoWidthReverb);	
 	setParameter (kMonoorig, ap->MonoOriginal);	
@@ -1113,6 +1117,20 @@ void eaxreverb::SetBalanceRReverb (float val)
 }
 
 
+void eaxreverb::SetBalanceL (float val)
+{
+	BalanceL = val;
+	programs[curProgram].BalanceL = val;
+}
+
+
+void eaxreverb::SetBalanceR (float val)
+{
+	BalanceR = val;
+	programs[curProgram].BalanceR = val;
+}
+
+
 void eaxreverb::SetStereoWidthOriginal (float val)
 {
 	StereoWidthOriginal = val;
@@ -1611,6 +1629,8 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kBalancerorig :    SetBalanceROriginal (value);					break;
 	case kBalancelrev :    SetBalanceLReverb (value);					break;
 	case kBalancerrev :    SetBalanceRReverb (value);					break;
+	case kBalancel :    SetBalanceL (value);					break;
+	case kBalancer :    SetBalanceR (value);					break;
 	case kStereoorig :    SetStereoWidthOriginal (value);					break;
 	case kStereorev :    SetStereoWidthReverb (value);					break;
 	case kMonoorig :    SetMonoOriginal (value);					break;
@@ -1678,6 +1698,8 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kBalancerorig :    v = BalanceROriginal;	break;
 	case kBalancelrev :    v = BalanceLReverb;	break;
 	case kBalancerrev :    v = BalanceRReverb;	break;
+	case kBalancel :    v = BalanceL;	break;
+	case kBalancer :    v = BalanceR;	break;
 	case kStereoorig :    v = StereoWidthOriginal;	break;
 	case kStereorev :    v = StereoWidthReverb;	break;
 	case kMonoorig :    v = MonoOriginal;	break;
@@ -1728,6 +1750,8 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kBalancerorig :    strcpy (label, "F");		break;
 	case kBalancelrev :    strcpy (label, "F");		break;
 	case kBalancerrev :    strcpy (label, "F");		break;
+	case kBalancel :    strcpy (label, "F");		break;
+	case kBalancer :    strcpy (label, "F");		break;
 	case kStereoorig :    strcpy (label, "F");		break;
 	case kStereorev :    strcpy (label, "F");		break;
 	case kDgain :    strcpy (label, "F");		break;
@@ -1776,6 +1800,8 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kBalancerorig :    strcpy (text, "BalanceROriginal");		break;
 	case kBalancelrev :    strcpy (text, "BalanceLReverb");		break;
 	case kBalancerrev :    strcpy (text, "BalanceRReverb");		break;
+	case kBalancel :    strcpy (text, "BalanceL");		break;
+	case kBalancer :    strcpy (text, "BalanceR");		break;
 	case kStereoorig :    strcpy (text, "StereoWidthOriginal");		break;
 	case kStereorev :    strcpy (text, "StereoWidthReverb");		break;
 	case kMonoorig :    strcpy (text, "MonoOriginal");		break;
@@ -1875,6 +1901,8 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	case kBalancerorig : float2string (BalanceROriginal, text, kVstMaxParamStrLen);	break;
 	case kBalancelrev : float2string (BalanceLReverb, text, kVstMaxParamStrLen);	break;
 	case kBalancerrev : float2string (BalanceRReverb, text, kVstMaxParamStrLen);	break;
+	case kBalancel : float2string (BalanceL, text, kVstMaxParamStrLen);	break;
+	case kBalancer : float2string (BalanceR, text, kVstMaxParamStrLen);	break;
 	case kStereoorig : float2string (StereoWidthOriginal, text, kVstMaxParamStrLen);	break;
 	case kStereorev : float2string (StereoWidthReverb, text, kVstMaxParamStrLen);	break;
 	case kMonoorig :
@@ -2184,6 +2212,16 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			}
 			*in1++;
 			*in2++;
+			*out1++;
+			*out2++;
+		}
+		out1 -= workSamples;
+		out2 -= workSamples;
+		//adjust balance of final output
+		for (i=0; i<workSamples; i++)
+		{
+			*out1 = *out1 * BalanceL;
+			*out2 = *out2 * BalanceR;
 			*out1++;
 			*out2++;
 		}
