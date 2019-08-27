@@ -20,10 +20,10 @@ enum
 	kBalancerorig,
 	kBalancelrev,
 	kBalancerrev,
-	kMonoorig,
-	kMonorev,
 	kStereoorig,
 	kStereorev,
+	kMonoorig,
+	kMonorev,
 	kOnlyorig,
 	kOnlyrev,
 	kDgain,
@@ -55,10 +55,10 @@ private:
 	float BalanceROriginal;
 	float BalanceLReverb;
 	float BalanceRReverb;
-	float MonoOriginal;
-	float MonoReverb;
 	float StereoWidthOriginal;
 	float StereoWidthReverb;
+	float MonoOriginal;
+	float MonoReverb;
 	float OnlyOriginal;
 	float OnlyReverb;
 	float DryGain;
@@ -110,10 +110,10 @@ private:
 	void SetBalanceROriginal(float val);
 	void SetBalanceLReverb(float val);
 	void SetBalanceRReverb(float val);
-	void SetMonoOriginal(float val);
-	void SetMonoReverb(float val);
 	void SetStereoWidthOriginal(float val);
 	void SetStereoWidthReverb(float val);
+	void SetMonoOriginal(float val);
+	void SetMonoReverb(float val);
 	void SetOnlyOriginal(float val);
 	void SetOnlyReverb(float val);
 	void SetDryGain(float val);
@@ -161,10 +161,10 @@ private:
 	float BalanceROriginal;
 	float BalanceLReverb;
 	float BalanceRReverb;
-	float MonoOriginal;
-	float MonoReverb;
 	float StereoWidthOriginal;
 	float StereoWidthReverb;
+	float MonoOriginal;
+	float MonoReverb;
 	float OnlyOriginal;
 	float OnlyReverb;
 	float DryGain;

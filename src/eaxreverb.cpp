@@ -19,10 +19,10 @@ eaxreverbProgram::eaxreverbProgram ()
 	BalanceROriginal = 1;
 	BalanceLReverb = 1;
 	BalanceRReverb = 1;
-	MonoOriginal = 0;
-	MonoReverb = 0;
 	StereoWidthOriginal = 1;
 	StereoWidthReverb = 1;
+	MonoOriginal = 0;
+	MonoReverb = 0;
 	OnlyOriginal = 0;
 	OnlyReverb = 0;
 	DryGain = 1;
@@ -82,10 +82,10 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kBalancerorig, ap->BalanceROriginal);	
 	setParameter (kBalancelrev, ap->BalanceLReverb);	
 	setParameter (kBalancerrev, ap->BalanceRReverb);	
-	setParameter (kMonoorig, ap->MonoOriginal);	
-	setParameter (kMonorev, ap->MonoReverb);	
 	setParameter (kStereoorig, ap->StereoWidthOriginal);	
 	setParameter (kStereorev, ap->StereoWidthReverb);	
+	setParameter (kMonoorig, ap->MonoOriginal);	
+	setParameter (kMonorev, ap->MonoReverb);	
 	setParameter (kOnlyorig, ap->OnlyOriginal);	
 	setParameter (kOnlyrev, ap->OnlyReverb);	
 	setParameter (kDgain, ap->DryGain);	
@@ -1111,20 +1111,6 @@ void eaxreverb::SetBalanceRReverb (float val)
 }
 
 
-void eaxreverb::SetMonoOriginal (float val)
-{
-	MonoOriginal = val;
-	programs[curProgram].MonoOriginal = val;
-}
-
-
-void eaxreverb::SetMonoReverb (float val)
-{
-	MonoReverb = val;
-	programs[curProgram].MonoReverb = val;
-}
-
-
 void eaxreverb::SetStereoWidthOriginal (float val)
 {
 	StereoWidthOriginal = val;
@@ -1136,6 +1122,20 @@ void eaxreverb::SetStereoWidthReverb (float val)
 {
 	StereoWidthReverb = val;
 	programs[curProgram].StereoWidthReverb = val;
+}
+
+
+void eaxreverb::SetMonoOriginal (float val)
+{
+	MonoOriginal = val;
+	programs[curProgram].MonoOriginal = val;
+}
+
+
+void eaxreverb::SetMonoReverb (float val)
+{
+	MonoReverb = val;
+	programs[curProgram].MonoReverb = val;
 }
 
 
@@ -1602,10 +1602,10 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kBalancerorig :    SetBalanceROriginal (value);					break;
 	case kBalancelrev :    SetBalanceLReverb (value);					break;
 	case kBalancerrev :    SetBalanceRReverb (value);					break;
-	case kMonoorig :    SetMonoOriginal (value);					break;
-	case kMonorev :    SetMonoReverb (value);					break;
 	case kStereoorig :    SetStereoWidthOriginal (value);					break;
 	case kStereorev :    SetStereoWidthReverb (value);					break;
+	case kMonoorig :    SetMonoOriginal (value);					break;
+	case kMonorev :    SetMonoReverb (value);					break;
 	case kOnlyorig :    SetOnlyOriginal (value);					break;
 	case kOnlyrev :    SetOnlyReverb (value);					break;
 	case kDgain :    SetDryGain (value);					break;
@@ -1668,10 +1668,10 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kBalancerorig :    v = BalanceROriginal;	break;
 	case kBalancelrev :    v = BalanceLReverb;	break;
 	case kBalancerrev :    v = BalanceRReverb;	break;
-	case kMonoorig :    v = MonoOriginal;	break;
-	case kMonorev :    v = MonoReverb;	break;
 	case kStereoorig :    v = StereoWidthOriginal;	break;
 	case kStereorev :    v = StereoWidthReverb;	break;
+	case kMonoorig :    v = MonoOriginal;	break;
+	case kMonorev :    v = MonoReverb;	break;
 	case kOnlyorig :    v = OnlyOriginal;	break;
 	case kOnlyrev :    v = OnlyReverb;	break;
 	case kDgain :    v = DryGain;	break;
@@ -1764,10 +1764,10 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kBalancerorig :    strcpy (text, "BalanceROriginal");		break;
 	case kBalancelrev :    strcpy (text, "BalanceLReverb");		break;
 	case kBalancerrev :    strcpy (text, "BalanceRReverb");		break;
-	case kMonoorig :    strcpy (text, "MonoOriginal");		break;
-	case kMonorev :    strcpy (text, "MonoReverb");		break;
 	case kStereoorig :    strcpy (text, "StereoWidthOriginal");		break;
 	case kStereorev :    strcpy (text, "StereoWidthReverb");		break;
+	case kMonoorig :    strcpy (text, "MonoOriginal");		break;
+	case kMonorev :    strcpy (text, "MonoReverb");		break;
 	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
 	case kDgain :    strcpy (text, "DryGain");		break;
@@ -1862,6 +1862,8 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	case kBalancerorig : float2string (BalanceROriginal, text, kVstMaxParamStrLen);	break;
 	case kBalancelrev : float2string (BalanceLReverb, text, kVstMaxParamStrLen);	break;
 	case kBalancerrev : float2string (BalanceRReverb, text, kVstMaxParamStrLen);	break;
+	case kStereoorig : float2string (StereoWidthOriginal, text, kVstMaxParamStrLen);	break;
+	case kStereorev : float2string (StereoWidthReverb, text, kVstMaxParamStrLen);	break;
 	case kMonoorig :
 		if (MonoOriginal >= 0.5)	
 		{
@@ -1882,8 +1884,6 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "OFF");					
 		}
 		break;
-	case kStereoorig : float2string (StereoWidthOriginal, text, kVstMaxParamStrLen);	break;
-	case kStereorev : float2string (StereoWidthReverb, text, kVstMaxParamStrLen);	break;
 	case kOnlyorig :
 		if (OnlyOriginal >= 0.5)	
 		{
@@ -2079,30 +2079,6 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			floatSamplesOut[i*2 + 0] = floatSamplesOut[i*2 + 0] * BalanceLReverb;
 			floatSamplesOut[i*2 + 1] = floatSamplesOut[i*2 + 1] * BalanceRReverb;
 		}
-		//mixdown the original signal to mono if we set MonoOriginal to true
-		if (MonoOriginal >= 0.5)
-		{
-			for (i=0; i<workSamples; i++)
-			{
-				float sample = (*in1 + *in2) / 2;
-				*in1 = sample;
-				*in2 = sample;
-				*in1++;
-				*in2++;
-			}
-			in1 -= workSamples;
-			in2 -= workSamples;
-		}
-		//mixdown the reverb to mono if we set MonoReverb to true
-		if (MonoReverb >= 0.5)
-		{
-			for (i=0; i<workSamples; i++)
-			{
-				float sample = (floatSamplesOut[i*2 + 0] + floatSamplesOut[i*2 + 1]) / 2;
-				floatSamplesOut[i*2 + 0] = sample;
-				floatSamplesOut[i*2 + 1] = sample;
-			}
-		}
 		//adjust the stereo width of dry samples
 		float Temp = 1/(1.0f + StereoWidthOriginal);
 		float CoefficientM = 1.0f * Temp;
@@ -2132,6 +2108,30 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			ValueS = (floatSamplesOut[i*2 + 1] - floatSamplesOut[i*2 + 0]) * CoefficientS;
 			floatSamplesOut[i*2 + 0] = ValueM - ValueS;
 			floatSamplesOut[i*2 + 1] = ValueM + ValueS;
+		}
+		//mixdown the original signal to mono if we set MonoOriginal to true
+		if (MonoOriginal >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				float sample = (*in1 + *in2) / 2;
+				*in1 = sample;
+				*in2 = sample;
+				*in1++;
+				*in2++;
+			}
+			in1 -= workSamples;
+			in2 -= workSamples;
+		}
+		//mixdown the reverb to mono if we set MonoReverb to true
+		if (MonoReverb >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				float sample = (floatSamplesOut[i*2 + 0] + floatSamplesOut[i*2 + 1]) / 2;
+				floatSamplesOut[i*2 + 0] = sample;
+				floatSamplesOut[i*2 + 1] = sample;
+			}
 		}
 		//apply gain to dry samples
 		for (i=0; i<workSamples; i++)
