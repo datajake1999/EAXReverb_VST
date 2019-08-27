@@ -27,6 +27,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	OnlyReverb = 0;
 	DryGain = 1;
 	WetGain = 1;
+	MasterGain = 1;
 }
 
 
@@ -90,6 +91,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kOnlyrev, ap->OnlyReverb);	
 	setParameter (kDgain, ap->DryGain);	
 	setParameter (kWgain, ap->WetGain);	
+	setParameter (kMgain, ap->MasterGain);	
 	ReverbPreset = ap->ReverbPreset;
 	programs[curProgram].ReverbPreset = ap->ReverbPreset;
 	i_ReverbPreset = int(ap->ReverbPreset);
@@ -1167,6 +1169,13 @@ void eaxreverb::SetWetGain (float val)
 }
 
 
+void eaxreverb::SetMasterGain (float val)
+{
+	MasterGain = val;
+	programs[curProgram].MasterGain = val;
+}
+
+
 void eaxreverb::SetDensity (float val)
 {
 	if (val > EAXREVERB_MAX_DENSITY)
@@ -1610,6 +1619,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kOnlyrev :    SetOnlyReverb (value);					break;
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
+	case kMgain :    SetMasterGain (value);					break;
 	case kPreset :    SetReverbPreset (int(value*1000), true);					break;
 	case kDensity :    SetDensity (value*EAXREVERB_MAX_DENSITY);					break;
 	case kDiffusion :    SetDiffusion (value*EAXREVERB_MAX_DIFFUSION);					break;
@@ -1676,6 +1686,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kOnlyrev :    v = OnlyReverb;	break;
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
+	case kMgain :    v = MasterGain;	break;
 	case kPreset :    v = ReverbPreset/1000;	break;
 	case kDensity :    v = Density/EAXREVERB_MAX_DENSITY;	break;
 	case kDiffusion :    v = Diffusion/EAXREVERB_MAX_DIFFUSION;	break;
@@ -1721,6 +1732,7 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kStereorev :    strcpy (label, "F");		break;
 	case kDgain :    strcpy (label, "F");		break;
 	case kWgain :    strcpy (label, "F");		break;
+	case kMgain :    strcpy (label, "F");		break;
 	case kDensity :    strcpy (label, "F");		break;
 	case kDiffusion :    strcpy (label, "F");		break;
 	case kGain :    strcpy (label, "F");		break;
@@ -1772,6 +1784,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
 	case kDgain :    strcpy (text, "DryGain");		break;
 	case kWgain :    strcpy (text, "WetGain");		break;
+	case kMgain :    strcpy (text, "MasterGain");		break;
 	case kPreset :    strcpy (text, "ReverbPreset");		break;
 	case kDensity :    strcpy (text, "Density");		break;
 	case kDiffusion :    strcpy (text, "Diffusion");		break;
@@ -1906,6 +1919,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		break;
 	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
 	case kWgain : float2string (WetGain, text, kVstMaxParamStrLen);	break;
+	case kMgain : float2string (MasterGain, text, kVstMaxParamStrLen);	break;
 	case kPreset : strcpy (text, GetPresetName (i_ReverbPreset));	break;
 	case kDensity : float2string (Density, text, kVstMaxParamStrLen);	break;
 	case kDiffusion : float2string (Diffusion, text, kVstMaxParamStrLen);	break;
@@ -2170,6 +2184,16 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			}
 			*in1++;
 			*in2++;
+			*out1++;
+			*out2++;
+		}
+		out1 -= workSamples;
+		out2 -= workSamples;
+		//apply gain to final output
+		for (i=0; i<workSamples; i++)
+		{
+			*out1 = *out1 * MasterGain;
+			*out2 = *out2 * MasterGain;
 			*out1++;
 			*out2++;
 		}
