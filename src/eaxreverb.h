@@ -14,8 +14,10 @@ enum
 	kDisable = 0,
 	kInvertorig,
 	kInvertrev,
+	kInvert,
 	kSwaporig,
 	kSwaprev,
+	kSwap,
 	kBalancelorig,
 	kBalancerorig,
 	kBalancelrev,
@@ -27,6 +29,7 @@ enum
 	kStereo,
 	kMonoorig,
 	kMonorev,
+	kMono,
 	kOnlyorig,
 	kOnlyrev,
 	kDgain,
@@ -53,8 +56,10 @@ private:
 	float DisableEffect;
 	float InvertOriginal;
 	float InvertReverb;
+	float Invert;
 	float SwapOriginal;
 	float SwapReverb;
+	float Swap;
 	float BalanceLOriginal;
 	float BalanceROriginal;
 	float BalanceLReverb;
@@ -66,6 +71,7 @@ private:
 	float StereoWidth;
 	float MonoOriginal;
 	float MonoReverb;
+	float Mono;
 	float OnlyOriginal;
 	float OnlyReverb;
 	float DryGain;
@@ -112,8 +118,10 @@ private:
 	void SetDisableEffect(float val);
 	void SetInvertOriginal(float val);
 	void SetInvertReverb(float val);
+	void SetInvert(float val);
 	void SetSwapOriginal(float val);
 	void SetSwapReverb(float val);
+	void SetSwap(float val);
 	void SetBalanceLOriginal(float val);
 	void SetBalanceROriginal(float val);
 	void SetBalanceLReverb(float val);
@@ -125,6 +133,7 @@ private:
 	void SetStereoWidth(float val);
 	void SetMonoOriginal(float val);
 	void SetMonoReverb(float val);
+	void SetMono(float val);
 	void SetOnlyOriginal(float val);
 	void SetOnlyReverb(float val);
 	void SetDryGain(float val);
@@ -167,8 +176,10 @@ private:
 	float DisableEffect;
 	float InvertOriginal;
 	float InvertReverb;
+	float Invert;
 	float SwapOriginal;
 	float SwapReverb;
+	float Swap;
 	float BalanceLOriginal;
 	float BalanceROriginal;
 	float BalanceLReverb;
@@ -180,6 +191,7 @@ private:
 	float StereoWidth;
 	float MonoOriginal;
 	float MonoReverb;
+	float Mono;
 	float OnlyOriginal;
 	float OnlyReverb;
 	float DryGain;

@@ -13,8 +13,10 @@ eaxreverbProgram::eaxreverbProgram ()
 	DisableEffect = 0;
 	InvertOriginal = 0;
 	InvertReverb = 0;
+	Invert = 0;
 	SwapOriginal = 0;
 	SwapReverb = 0;
+	Swap = 0;
 	BalanceLOriginal = 1;
 	BalanceROriginal = 1;
 	BalanceLReverb = 1;
@@ -26,6 +28,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	StereoWidth = 1;
 	MonoOriginal = 0;
 	MonoReverb = 0;
+	Mono = 0;
 	OnlyOriginal = 0;
 	OnlyReverb = 0;
 	DryGain = 1;
@@ -80,8 +83,10 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kDisable, ap->DisableEffect);	
 	setParameter (kInvertorig, ap->InvertOriginal);	
 	setParameter (kInvertrev, ap->InvertReverb);	
+	setParameter (kInvert, ap->Invert);	
 	setParameter (kSwaporig, ap->SwapOriginal);	
 	setParameter (kSwaprev, ap->SwapReverb);	
+	setParameter (kSwap, ap->Swap);	
 	setParameter (kBalancelorig, ap->BalanceLOriginal);	
 	setParameter (kBalancerorig, ap->BalanceROriginal);	
 	setParameter (kBalancelrev, ap->BalanceLReverb);	
@@ -93,6 +98,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kStereo, ap->StereoWidth);	
 	setParameter (kMonoorig, ap->MonoOriginal);	
 	setParameter (kMonorev, ap->MonoReverb);	
+	setParameter (kMono, ap->Mono);	
 	setParameter (kOnlyorig, ap->OnlyOriginal);	
 	setParameter (kOnlyrev, ap->OnlyReverb);	
 	setParameter (kDgain, ap->DryGain);	
@@ -1077,6 +1083,13 @@ void eaxreverb::SetInvertReverb (float val)
 }
 
 
+void eaxreverb::SetInvert (float val)
+{
+	Invert = val;
+	programs[curProgram].Invert = val;
+}
+
+
 void eaxreverb::SetSwapOriginal (float val)
 {
 	SwapOriginal = val;
@@ -1088,6 +1101,13 @@ void eaxreverb::SetSwapReverb (float val)
 {
 	SwapReverb = val;
 	programs[curProgram].SwapReverb = val;
+}
+
+
+void eaxreverb::SetSwap (float val)
+{
+	Swap = val;
+	programs[curProgram].Swap = val;
 }
 
 
@@ -1165,6 +1185,13 @@ void eaxreverb::SetMonoReverb (float val)
 {
 	MonoReverb = val;
 	programs[curProgram].MonoReverb = val;
+}
+
+
+void eaxreverb::SetMono (float val)
+{
+	Mono = val;
+	programs[curProgram].Mono = val;
 }
 
 
@@ -1632,8 +1659,10 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kDisable :    SetDisableEffect (value);					break;
 	case kInvertorig :    SetInvertOriginal (value);					break;
 	case kInvertrev :    SetInvertReverb (value);					break;
+	case kInvert :    SetInvert (value);					break;
 	case kSwaporig :    SetSwapOriginal (value);					break;
 	case kSwaprev :    SetSwapReverb (value);					break;
+	case kSwap :    SetSwap (value);					break;
 	case kBalancelorig :    SetBalanceLOriginal (value);					break;
 	case kBalancerorig :    SetBalanceROriginal (value);					break;
 	case kBalancelrev :    SetBalanceLReverb (value);					break;
@@ -1645,6 +1674,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kStereo :    SetStereoWidth (value);					break;
 	case kMonoorig :    SetMonoOriginal (value);					break;
 	case kMonorev :    SetMonoReverb (value);					break;
+	case kMono :    SetMono (value);					break;
 	case kOnlyorig :    SetOnlyOriginal (value);					break;
 	case kOnlyrev :    SetOnlyReverb (value);					break;
 	case kDgain :    SetDryGain (value);					break;
@@ -1702,8 +1732,10 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kDisable :    v = DisableEffect;	break;
 	case kInvertorig :    v = InvertOriginal;	break;
 	case kInvertrev :    v = InvertReverb;	break;
+	case kInvert :    v = Invert;	break;
 	case kSwaporig :    v = SwapOriginal;	break;
 	case kSwaprev :    v = SwapReverb;	break;
+	case kSwap :    v = Swap;	break;
 	case kBalancelorig :    v = BalanceLOriginal;	break;
 	case kBalancerorig :    v = BalanceROriginal;	break;
 	case kBalancelrev :    v = BalanceLReverb;	break;
@@ -1715,6 +1747,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kStereo :    v = StereoWidth;	break;
 	case kMonoorig :    v = MonoOriginal;	break;
 	case kMonorev :    v = MonoReverb;	break;
+	case kMono :    v = Mono;	break;
 	case kOnlyorig :    v = OnlyOriginal;	break;
 	case kOnlyrev :    v = OnlyReverb;	break;
 	case kDgain :    v = DryGain;	break;
@@ -1806,8 +1839,10 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kDisable :    strcpy (text, "DisableEffect");		break;
 	case kInvertorig :    strcpy (text, "InvertOriginal");		break;
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
+	case kInvert :    strcpy (text, "Invert");		break;
 	case kSwaporig :    strcpy (text, "SwapOriginal");		break;
 	case kSwaprev :    strcpy (text, "SwapReverb");		break;
+	case kSwap :    strcpy (text, "Swap");		break;
 	case kBalancelorig :    strcpy (text, "BalanceLOriginal");		break;
 	case kBalancerorig :    strcpy (text, "BalanceROriginal");		break;
 	case kBalancelrev :    strcpy (text, "BalanceLReverb");		break;
@@ -1819,6 +1854,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kStereo :    strcpy (text, "StereoWidth");		break;
 	case kMonoorig :    strcpy (text, "MonoOriginal");		break;
 	case kMonorev :    strcpy (text, "MonoReverb");		break;
+	case kMono :    strcpy (text, "Mono");		break;
 	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
 	case kDgain :    strcpy (text, "DryGain");		break;
@@ -1890,6 +1926,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "OFF");					
 		}
 		break;
+	case kInvert :
+		if (Invert >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
 	case kSwaporig :
 		if (SwapOriginal >= 0.5)	
 		{
@@ -1902,6 +1948,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		break;
 	case kSwaprev :
 		if (SwapReverb >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kSwap :
+		if (Swap >= 0.5)	
 		{
 			strcpy (text, "ON");					
 		}
@@ -1931,6 +1987,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		break;
 	case kMonorev :
 		if (MonoReverb >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kMono :
+		if (Mono >= 0.5)	
 		{
 			strcpy (text, "ON");					
 		}
@@ -2231,6 +2297,35 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		}
 		out1 -= workSamples;
 		out2 -= workSamples;
+		//invert the phase of the final output if we set Invert to true
+		if (Invert >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				*out1 = *out1 * -1;
+				*out2 = *out2 * -1;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+		}
+		//swap the channels of the final output if we set Swap to true
+		if (Swap >= 0.5)
+		{
+			float swap[2];
+			for (i=0; i<workSamples; i++)
+			{
+				swap[0] = *out2;
+				swap[1] = *out1;
+				*out1 = swap[0];
+				*out2 = swap[1];
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+		}
 		//adjust balance of final output
 		for (i=0; i<workSamples; i++)
 		{
@@ -2258,6 +2353,20 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		}
 		out1 -= workSamples;
 		out2 -= workSamples;
+		//mixdown the final output to mono if we set Mono to true
+		if (Mono >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				float sample = (*out1 + *out2) / 2;
+				*out1 = sample;
+				*out2 = sample;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+		}
 		//apply gain to final output
 		for (i=0; i<workSamples; i++)
 		{
