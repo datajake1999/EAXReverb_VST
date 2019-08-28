@@ -24,6 +24,7 @@ enum
 	kBalancer,
 	kStereoorig,
 	kStereorev,
+	kStereo,
 	kMonoorig,
 	kMonorev,
 	kOnlyorig,
@@ -62,6 +63,7 @@ private:
 	float BalanceR;
 	float StereoWidthOriginal;
 	float StereoWidthReverb;
+	float StereoWidth;
 	float MonoOriginal;
 	float MonoReverb;
 	float OnlyOriginal;
@@ -120,6 +122,7 @@ private:
 	void SetBalanceR(float val);
 	void SetStereoWidthOriginal(float val);
 	void SetStereoWidthReverb(float val);
+	void SetStereoWidth(float val);
 	void SetMonoOriginal(float val);
 	void SetMonoReverb(float val);
 	void SetOnlyOriginal(float val);
@@ -174,6 +177,7 @@ private:
 	float BalanceR;
 	float StereoWidthOriginal;
 	float StereoWidthReverb;
+	float StereoWidth;
 	float MonoOriginal;
 	float MonoReverb;
 	float OnlyOriginal;

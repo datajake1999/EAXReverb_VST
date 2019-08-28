@@ -23,6 +23,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	BalanceR = 1;
 	StereoWidthOriginal = 1;
 	StereoWidthReverb = 1;
+	StereoWidth = 1;
 	MonoOriginal = 0;
 	MonoReverb = 0;
 	OnlyOriginal = 0;
@@ -89,6 +90,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kBalancer, ap->BalanceR);	
 	setParameter (kStereoorig, ap->StereoWidthOriginal);	
 	setParameter (kStereorev, ap->StereoWidthReverb);	
+	setParameter (kStereo, ap->StereoWidth);	
 	setParameter (kMonoorig, ap->MonoOriginal);	
 	setParameter (kMonorev, ap->MonoReverb);	
 	setParameter (kOnlyorig, ap->OnlyOriginal);	
@@ -1145,6 +1147,13 @@ void eaxreverb::SetStereoWidthReverb (float val)
 }
 
 
+void eaxreverb::SetStereoWidth (float val)
+{
+	StereoWidth = val;
+	programs[curProgram].StereoWidth = val;
+}
+
+
 void eaxreverb::SetMonoOriginal (float val)
 {
 	MonoOriginal = val;
@@ -1633,6 +1642,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kBalancer :    SetBalanceR (value);					break;
 	case kStereoorig :    SetStereoWidthOriginal (value);					break;
 	case kStereorev :    SetStereoWidthReverb (value);					break;
+	case kStereo :    SetStereoWidth (value);					break;
 	case kMonoorig :    SetMonoOriginal (value);					break;
 	case kMonorev :    SetMonoReverb (value);					break;
 	case kOnlyorig :    SetOnlyOriginal (value);					break;
@@ -1702,6 +1712,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kBalancer :    v = BalanceR;	break;
 	case kStereoorig :    v = StereoWidthOriginal;	break;
 	case kStereorev :    v = StereoWidthReverb;	break;
+	case kStereo :    v = StereoWidth;	break;
 	case kMonoorig :    v = MonoOriginal;	break;
 	case kMonorev :    v = MonoReverb;	break;
 	case kOnlyorig :    v = OnlyOriginal;	break;
@@ -1754,6 +1765,7 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kBalancer :    strcpy (label, "F");		break;
 	case kStereoorig :    strcpy (label, "F");		break;
 	case kStereorev :    strcpy (label, "F");		break;
+	case kStereo :    strcpy (label, "F");		break;
 	case kDgain :    strcpy (label, "F");		break;
 	case kWgain :    strcpy (label, "F");		break;
 	case kMgain :    strcpy (label, "F");		break;
@@ -1804,6 +1816,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kBalancer :    strcpy (text, "BalanceR");		break;
 	case kStereoorig :    strcpy (text, "StereoWidthOriginal");		break;
 	case kStereorev :    strcpy (text, "StereoWidthReverb");		break;
+	case kStereo :    strcpy (text, "StereoWidth");		break;
 	case kMonoorig :    strcpy (text, "MonoOriginal");		break;
 	case kMonorev :    strcpy (text, "MonoReverb");		break;
 	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
@@ -1905,6 +1918,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	case kBalancer : float2string (BalanceR, text, kVstMaxParamStrLen);	break;
 	case kStereoorig : float2string (StereoWidthOriginal, text, kVstMaxParamStrLen);	break;
 	case kStereorev : float2string (StereoWidthReverb, text, kVstMaxParamStrLen);	break;
+	case kStereo : float2string (StereoWidth, text, kVstMaxParamStrLen);	break;
 	case kMonoorig :
 		if (MonoOriginal >= 0.5)	
 		{
@@ -2222,6 +2236,23 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		{
 			*out1 = *out1 * BalanceL;
 			*out2 = *out2 * BalanceR;
+			*out1++;
+			*out2++;
+		}
+		out1 -= workSamples;
+		out2 -= workSamples;
+		//adjust the stereo width of final output
+		Temp = 1/(1.0f + StereoWidth);
+		CoefficientM = 1.0f * Temp;
+		CoefficientS = StereoWidth * 0.5f;
+		ValueM = 0.0;
+		ValueS = 0.0;
+		for(i = 0; i < workSamples; i++)
+		{
+			ValueM = (*out1 + *out2) * CoefficientM;
+			ValueS = (*out2 - *out1) * CoefficientS;
+			*out1 = ValueM - ValueS;
+			*out2 = ValueM + ValueS;
 			*out1++;
 			*out2++;
 		}
