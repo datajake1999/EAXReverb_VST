@@ -12,6 +12,7 @@ enum
 
 	// Parameters Tags
 	kDisable = 0,
+	kMute,
 	kInvertorig,
 	kInvertrev,
 	kInvert,
@@ -54,6 +55,7 @@ public:
 private:	
 	float ReverbPreset;
 	float DisableEffect;
+	float MuteEffect;
 	float InvertOriginal;
 	float InvertReverb;
 	float Invert;
@@ -116,6 +118,7 @@ private:
 	void SetReverbPreset(int preset, bool update);
 	char *GetPresetName(int preset);
 	void SetDisableEffect(float val);
+	void SetMuteEffect(float val);
 	void SetInvertOriginal(float val);
 	void SetInvertReverb(float val);
 	void SetInvert(float val);
@@ -174,6 +177,7 @@ private:
 	float ReverbPreset;
 	int i_ReverbPreset;
 	float DisableEffect;
+	float MuteEffect;
 	float InvertOriginal;
 	float InvertReverb;
 	float Invert;

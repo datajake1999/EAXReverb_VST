@@ -11,6 +11,7 @@ eaxreverbProgram::eaxreverbProgram ()
 {
 	// default Program Values
 	DisableEffect = 0;
+	MuteEffect = 0;
 	InvertOriginal = 0;
 	InvertReverb = 0;
 	Invert = 0;
@@ -81,6 +82,7 @@ void eaxreverb::setProgram (VstInt32 program)
 
 	curProgram = program;
 	setParameter (kDisable, ap->DisableEffect);	
+	setParameter (kMute, ap->MuteEffect);	
 	setParameter (kInvertorig, ap->InvertOriginal);	
 	setParameter (kInvertrev, ap->InvertReverb);	
 	setParameter (kInvert, ap->Invert);	
@@ -1069,6 +1071,13 @@ void eaxreverb::SetDisableEffect (float val)
 }
 
 
+void eaxreverb::SetMuteEffect (float val)
+{
+	MuteEffect = val;
+	programs[curProgram].MuteEffect = val;
+}
+
+
 void eaxreverb::SetInvertOriginal (float val)
 {
 	InvertOriginal = val;
@@ -1657,6 +1666,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	switch (index)
 	{
 	case kDisable :    SetDisableEffect (value);					break;
+	case kMute :    SetMuteEffect (value);					break;
 	case kInvertorig :    SetInvertOriginal (value);					break;
 	case kInvertrev :    SetInvertReverb (value);					break;
 	case kInvert :    SetInvert (value);					break;
@@ -1730,6 +1740,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	switch (index)
 	{
 	case kDisable :    v = DisableEffect;	break;
+	case kMute :    v = MuteEffect;	break;
 	case kInvertorig :    v = InvertOriginal;	break;
 	case kInvertrev :    v = InvertReverb;	break;
 	case kInvert :    v = Invert;	break;
@@ -1837,6 +1848,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	switch (index)
 	{
 	case kDisable :    strcpy (text, "DisableEffect");		break;
+	case kMute :    strcpy (text, "MuteEffect");		break;
 	case kInvertorig :    strcpy (text, "InvertOriginal");		break;
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
 	case kInvert :    strcpy (text, "Invert");		break;
@@ -1898,6 +1910,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	{
 	case kDisable :
 		if (DisableEffect >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kMute :
+		if (MuteEffect >= 0.5)	
 		{
 			strcpy (text, "ON");					
 		}
@@ -2106,6 +2128,18 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			*out2 = *in2;
 			*in1++;
 			*in2++;
+			*out1++;
+			*out2++;
+		}
+		return;
+	}
+	//check if we are muting the effect
+	if (MuteEffect >= 0.5)
+	{
+		for (i=0; i<sampleFrames; i++)
+		{
+			*out1 = 0;
+			*out2 = 0;
 			*out1++;
 			*out2++;
 		}
