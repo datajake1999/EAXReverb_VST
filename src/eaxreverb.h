@@ -33,6 +33,7 @@ enum
 	kMono,
 	kOnlyorig,
 	kOnlyrev,
+	kMix,
 	kDgain,
 	kWgain,
 	kMgain,
@@ -76,6 +77,7 @@ private:
 	float Mono;
 	float OnlyOriginal;
 	float OnlyReverb;
+	float MixMode;
 	float DryGain;
 	float WetGain;
 	float MasterGain;
@@ -139,6 +141,7 @@ private:
 	void SetMono(float val);
 	void SetOnlyOriginal(float val);
 	void SetOnlyReverb(float val);
+	void SetMixMode(float val);
 	void SetDryGain(float val);
 	void SetWetGain(float val);
 	void SetMasterGain(float val);
@@ -198,6 +201,7 @@ private:
 	float Mono;
 	float OnlyOriginal;
 	float OnlyReverb;
+	float MixMode;
 	float DryGain;
 	float WetGain;
 	float MasterGain;

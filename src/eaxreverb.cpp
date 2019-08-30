@@ -32,6 +32,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	Mono = 0;
 	OnlyOriginal = 0;
 	OnlyReverb = 0;
+	MixMode = 0;
 	DryGain = 1;
 	WetGain = 1;
 	MasterGain = 1;
@@ -103,6 +104,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kMono, ap->Mono);	
 	setParameter (kOnlyorig, ap->OnlyOriginal);	
 	setParameter (kOnlyrev, ap->OnlyReverb);	
+	setParameter (kMix, ap->MixMode);	
 	setParameter (kDgain, ap->DryGain);	
 	setParameter (kWgain, ap->WetGain);	
 	setParameter (kMgain, ap->MasterGain);	
@@ -1218,6 +1220,13 @@ void eaxreverb::SetOnlyReverb (float val)
 }
 
 
+void eaxreverb::SetMixMode (float val)
+{
+	MixMode = val;
+	programs[curProgram].MixMode = val;
+}
+
+
 void eaxreverb::SetDryGain (float val)
 {
 	DryGain = val;
@@ -1687,6 +1696,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kMono :    SetMono (value);					break;
 	case kOnlyorig :    SetOnlyOriginal (value);					break;
 	case kOnlyrev :    SetOnlyReverb (value);					break;
+	case kMix :    SetMixMode (value);					break;
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
 	case kMgain :    SetMasterGain (value);					break;
@@ -1761,6 +1771,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kMono :    v = Mono;	break;
 	case kOnlyorig :    v = OnlyOriginal;	break;
 	case kOnlyrev :    v = OnlyReverb;	break;
+	case kMix :    v = MixMode;	break;
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
 	case kMgain :    v = MasterGain;	break;
@@ -1869,6 +1880,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kMono :    strcpy (text, "Mono");		break;
 	case kOnlyorig :    strcpy (text, "OnlyOriginal");		break;
 	case kOnlyrev :    strcpy (text, "OnlyReverb");		break;
+	case kMix :    strcpy (text, "MixMode");		break;
 	case kDgain :    strcpy (text, "DryGain");		break;
 	case kWgain :    strcpy (text, "WetGain");		break;
 	case kMgain :    strcpy (text, "MasterGain");		break;
@@ -2045,6 +2057,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		else
 		{
 			strcpy (text, "OFF");					
+		}
+		break;
+	case kMix :
+		if (MixMode >= 0.5)	
+		{
+			strcpy (text, "MULTIPLY");					
+		}
+		else
+		{
+			strcpy (text, "ADD");					
 		}
 		break;
 	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
@@ -2321,8 +2343,17 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			}
 			else
 			{
-				*out1 = *in1 + floatSamplesOut[i*2 + 0];
-				*out2 = *in2 + floatSamplesOut[i*2 + 1];
+				//check if we are adding or multiplying the dry and wet signals
+				if (MixMode >= 0.5)
+				{
+					*out1 = *in1 * floatSamplesOut[i*2 + 0];
+					*out2 = *in2 * floatSamplesOut[i*2 + 1];
+				}
+				else
+				{
+					*out1 = *in1 + floatSamplesOut[i*2 + 0];
+					*out2 = *in2 + floatSamplesOut[i*2 + 1];
+				}
 			}
 			*in1++;
 			*in2++;
