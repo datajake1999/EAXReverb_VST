@@ -1700,7 +1700,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
 	case kMgain :    SetMasterGain (value);					break;
-	case kPreset :    SetReverbPreset (int(value*1000), true);					break;
+	case kPreset :    SetReverbPreset (int(value*1000.f+0.0005f), true);					break;
 	case kDensity :    SetDensity (value*EAXREVERB_MAX_DENSITY);					break;
 	case kDiffusion :    SetDiffusion (value*EAXREVERB_MAX_DIFFUSION);					break;
 	case kGain :    SetGain (value*EAXREVERB_MAX_GAIN);					break;
@@ -1775,7 +1775,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
 	case kMgain :    v = MasterGain;	break;
-	case kPreset :    v = ReverbPreset/1000;	break;
+	case kPreset :    v = ReverbPreset/1000.f+0.0005f;	break;
 	case kDensity :    v = Density/EAXREVERB_MAX_DENSITY;	break;
 	case kDiffusion :    v = Diffusion/EAXREVERB_MAX_DIFFUSION;	break;
 	case kGain :    v = Gain/EAXREVERB_MAX_GAIN;	break;
