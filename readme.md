@@ -23,7 +23,7 @@ To build this effect from source, you will need:
 
 * Microsoft Visual Studio 2005 Express
 * Windows Server 2003 Platform SDK
-* VST SDK.
+* VST SDK
 * InnoSetup
 * 7-Zip
 
@@ -38,7 +38,8 @@ To build this effect from source, you will need:
 
 * g++
 * make
-* VST SDK.
+* VST SDK
+* gzip (optional)
 
 To build:
 
