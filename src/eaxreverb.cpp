@@ -141,6 +141,188 @@ void eaxreverb::setProgram (VstInt32 program)
 }
 
 
+void eaxreverb::SetDisableEffect (float val)
+{
+	DisableEffect = val;
+	programs[curProgram].DisableEffect = val;
+}
+
+
+void eaxreverb::SetMuteEffect (float val)
+{
+	MuteEffect = val;
+	programs[curProgram].MuteEffect = val;
+}
+
+
+void eaxreverb::SetInvertOriginal (float val)
+{
+	InvertOriginal = val;
+	programs[curProgram].InvertOriginal = val;
+}
+
+
+void eaxreverb::SetInvertReverb (float val)
+{
+	InvertReverb = val;
+	programs[curProgram].InvertReverb = val;
+}
+
+
+void eaxreverb::SetInvert (float val)
+{
+	Invert = val;
+	programs[curProgram].Invert = val;
+}
+
+
+void eaxreverb::SetSwapOriginal (float val)
+{
+	SwapOriginal = val;
+	programs[curProgram].SwapOriginal = val;
+}
+
+
+void eaxreverb::SetSwapReverb (float val)
+{
+	SwapReverb = val;
+	programs[curProgram].SwapReverb = val;
+}
+
+
+void eaxreverb::SetSwap (float val)
+{
+	Swap = val;
+	programs[curProgram].Swap = val;
+}
+
+
+void eaxreverb::SetBalanceLOriginal (float val)
+{
+	BalanceLOriginal = val;
+	programs[curProgram].BalanceLOriginal = val;
+}
+
+
+void eaxreverb::SetBalanceROriginal (float val)
+{
+	BalanceROriginal = val;
+	programs[curProgram].BalanceROriginal = val;
+}
+
+
+void eaxreverb::SetBalanceLReverb (float val)
+{
+	BalanceLReverb = val;
+	programs[curProgram].BalanceLReverb = val;
+}
+
+
+void eaxreverb::SetBalanceRReverb (float val)
+{
+	BalanceRReverb = val;
+	programs[curProgram].BalanceRReverb = val;
+}
+
+
+void eaxreverb::SetBalanceL (float val)
+{
+	BalanceL = val;
+	programs[curProgram].BalanceL = val;
+}
+
+
+void eaxreverb::SetBalanceR (float val)
+{
+	BalanceR = val;
+	programs[curProgram].BalanceR = val;
+}
+
+
+void eaxreverb::SetStereoWidthOriginal (float val)
+{
+	StereoWidthOriginal = val;
+	programs[curProgram].StereoWidthOriginal = val;
+}
+
+
+void eaxreverb::SetStereoWidthReverb (float val)
+{
+	StereoWidthReverb = val;
+	programs[curProgram].StereoWidthReverb = val;
+}
+
+
+void eaxreverb::SetStereoWidth (float val)
+{
+	StereoWidth = val;
+	programs[curProgram].StereoWidth = val;
+}
+
+
+void eaxreverb::SetMonoOriginal (float val)
+{
+	MonoOriginal = val;
+	programs[curProgram].MonoOriginal = val;
+}
+
+
+void eaxreverb::SetMonoReverb (float val)
+{
+	MonoReverb = val;
+	programs[curProgram].MonoReverb = val;
+}
+
+
+void eaxreverb::SetMono (float val)
+{
+	Mono = val;
+	programs[curProgram].Mono = val;
+}
+
+
+void eaxreverb::SetOnlyOriginal (float val)
+{
+	OnlyOriginal = val;
+	programs[curProgram].OnlyOriginal = val;
+}
+
+
+void eaxreverb::SetOnlyReverb (float val)
+{
+	OnlyReverb = val;
+	programs[curProgram].OnlyReverb = val;
+}
+
+
+void eaxreverb::SetMixMode (float val)
+{
+	MixMode = val;
+	programs[curProgram].MixMode = val;
+}
+
+
+void eaxreverb::SetDryGain (float val)
+{
+	DryGain = val;
+	programs[curProgram].DryGain = val;
+}
+
+
+void eaxreverb::SetWetGain (float val)
+{
+	WetGain = val;
+	programs[curProgram].WetGain = val;
+}
+
+
+void eaxreverb::SetMasterGain (float val)
+{
+	MasterGain = val;
+	programs[curProgram].MasterGain = val;
+}
+
+
 void eaxreverb::SetReverbPreset(int preset, bool update) {
 	ReverbPreset = float(preset);
 	programs[curProgram].ReverbPreset = float(preset);
@@ -609,6 +791,7 @@ void eaxreverb::SetReverbPreset(int preset, bool update) {
 	}
 }
 
+
 char *eaxreverb::GetPresetName(int preset) {
 	//get the name of a preset
 	if (preset == 0)
@@ -1064,187 +1247,6 @@ char *eaxreverb::GetPresetName(int preset) {
 		return "SMALLWATERROOM";
 	}
 	return "GENERIC";
-}
-
-void eaxreverb::SetDisableEffect (float val)
-{
-	DisableEffect = val;
-	programs[curProgram].DisableEffect = val;
-}
-
-
-void eaxreverb::SetMuteEffect (float val)
-{
-	MuteEffect = val;
-	programs[curProgram].MuteEffect = val;
-}
-
-
-void eaxreverb::SetInvertOriginal (float val)
-{
-	InvertOriginal = val;
-	programs[curProgram].InvertOriginal = val;
-}
-
-
-void eaxreverb::SetInvertReverb (float val)
-{
-	InvertReverb = val;
-	programs[curProgram].InvertReverb = val;
-}
-
-
-void eaxreverb::SetInvert (float val)
-{
-	Invert = val;
-	programs[curProgram].Invert = val;
-}
-
-
-void eaxreverb::SetSwapOriginal (float val)
-{
-	SwapOriginal = val;
-	programs[curProgram].SwapOriginal = val;
-}
-
-
-void eaxreverb::SetSwapReverb (float val)
-{
-	SwapReverb = val;
-	programs[curProgram].SwapReverb = val;
-}
-
-
-void eaxreverb::SetSwap (float val)
-{
-	Swap = val;
-	programs[curProgram].Swap = val;
-}
-
-
-void eaxreverb::SetBalanceLOriginal (float val)
-{
-	BalanceLOriginal = val;
-	programs[curProgram].BalanceLOriginal = val;
-}
-
-
-void eaxreverb::SetBalanceROriginal (float val)
-{
-	BalanceROriginal = val;
-	programs[curProgram].BalanceROriginal = val;
-}
-
-
-void eaxreverb::SetBalanceLReverb (float val)
-{
-	BalanceLReverb = val;
-	programs[curProgram].BalanceLReverb = val;
-}
-
-
-void eaxreverb::SetBalanceRReverb (float val)
-{
-	BalanceRReverb = val;
-	programs[curProgram].BalanceRReverb = val;
-}
-
-
-void eaxreverb::SetBalanceL (float val)
-{
-	BalanceL = val;
-	programs[curProgram].BalanceL = val;
-}
-
-
-void eaxreverb::SetBalanceR (float val)
-{
-	BalanceR = val;
-	programs[curProgram].BalanceR = val;
-}
-
-
-void eaxreverb::SetStereoWidthOriginal (float val)
-{
-	StereoWidthOriginal = val;
-	programs[curProgram].StereoWidthOriginal = val;
-}
-
-
-void eaxreverb::SetStereoWidthReverb (float val)
-{
-	StereoWidthReverb = val;
-	programs[curProgram].StereoWidthReverb = val;
-}
-
-
-void eaxreverb::SetStereoWidth (float val)
-{
-	StereoWidth = val;
-	programs[curProgram].StereoWidth = val;
-}
-
-
-void eaxreverb::SetMonoOriginal (float val)
-{
-	MonoOriginal = val;
-	programs[curProgram].MonoOriginal = val;
-}
-
-
-void eaxreverb::SetMonoReverb (float val)
-{
-	MonoReverb = val;
-	programs[curProgram].MonoReverb = val;
-}
-
-
-void eaxreverb::SetMono (float val)
-{
-	Mono = val;
-	programs[curProgram].Mono = val;
-}
-
-
-void eaxreverb::SetOnlyOriginal (float val)
-{
-	OnlyOriginal = val;
-	programs[curProgram].OnlyOriginal = val;
-}
-
-
-void eaxreverb::SetOnlyReverb (float val)
-{
-	OnlyReverb = val;
-	programs[curProgram].OnlyReverb = val;
-}
-
-
-void eaxreverb::SetMixMode (float val)
-{
-	MixMode = val;
-	programs[curProgram].MixMode = val;
-}
-
-
-void eaxreverb::SetDryGain (float val)
-{
-	DryGain = val;
-	programs[curProgram].DryGain = val;
-}
-
-
-void eaxreverb::SetWetGain (float val)
-{
-	WetGain = val;
-	programs[curProgram].WetGain = val;
-}
-
-
-void eaxreverb::SetMasterGain (float val)
-{
-	MasterGain = val;
-	programs[curProgram].MasterGain = val;
 }
 
 

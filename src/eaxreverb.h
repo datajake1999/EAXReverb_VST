@@ -54,7 +54,6 @@ public:
 	~eaxreverbProgram () {}
 
 private:	
-	float ReverbPreset;
 	float DisableEffect;
 	float MuteEffect;
 	float InvertOriginal;
@@ -81,6 +80,7 @@ private:
 	float DryGain;
 	float WetGain;
 	float MasterGain;
+	float ReverbPreset;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
 	char name[24];
 };
@@ -117,8 +117,6 @@ public:
 	virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
 
 private:
-	void SetReverbPreset(int preset, bool update);
-	char *GetPresetName(int preset);
 	void SetDisableEffect(float val);
 	void SetMuteEffect(float val);
 	void SetInvertOriginal(float val);
@@ -145,6 +143,8 @@ private:
 	void SetDryGain(float val);
 	void SetWetGain(float val);
 	void SetMasterGain(float val);
+	void SetReverbPreset(int preset, bool update);
+	char *GetPresetName(int preset);
 	void SetDensity(float val);
 	void SetDiffusion(float val);
 	void SetGain(float val);
@@ -177,8 +177,6 @@ private:
 	ReverbEffect effect;
 	eaxreverbProgram* programs;
 	
-	float ReverbPreset;
-	int i_ReverbPreset;
 	float DisableEffect;
 	float MuteEffect;
 	float InvertOriginal;
@@ -205,6 +203,8 @@ private:
 	float DryGain;
 	float WetGain;
 	float MasterGain;
+	float ReverbPreset;
+	int i_ReverbPreset;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
 	int i_DecayHFLimit;
 	
