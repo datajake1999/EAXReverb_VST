@@ -12,6 +12,7 @@ compile: $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS)
 
 link: $(OBJS)
+	mkdir EAXReverb.vst/Contents/MacOS
 	$(CC) $(LFLAGS) $(OBJS)
 
 .PHONY: clean help
