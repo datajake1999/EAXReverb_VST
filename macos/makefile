@@ -15,6 +15,9 @@ link: $(OBJS)
 	mkdir dist/EAXReverb.vst/Contents/MacOS
 	$(CC) $(LFLAGS) $(OBJS)
 
+dmg: $(TARGET)
+	hdiutil create -volname EAXReverb -srcfolder dist -ov -format UDZO EAXReverb.dmg
+
 .PHONY: clean help
 
 clean:
