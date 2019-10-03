@@ -4,7 +4,7 @@ LFLAGS = -shared -o $(TARGET)
 VSTSDK = ../VST3_SDK
 SRCS = ../src/eaxreverb.cpp ../src/main.cpp ../src/ReverbEffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffectx.cpp $(VSTSDK)/public.sdk/source/vst2.x/vstplugmain.cpp
 OBJS = audioeffect.o audioeffectx.o eaxreverb.o main.o ReverbEffect.o vstplugmain.o
-TARGET = EAXReverb.vst/Contents/MacOS/EAXReverb
+TARGET = dist/EAXReverb.vst/Contents/MacOS/EAXReverb
 
 all: compile link
 
@@ -12,7 +12,7 @@ compile: $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS)
 
 link: $(OBJS)
-	mkdir EAXReverb.vst/Contents/MacOS
+	mkdir dist/EAXReverb.vst/Contents/MacOS
 	$(CC) $(LFLAGS) $(OBJS)
 
 .PHONY: clean help
