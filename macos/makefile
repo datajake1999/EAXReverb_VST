@@ -30,7 +30,7 @@ clean:
 
 help:
 	@echo supported commands:
-	@echo make: compile and link the library
+	@echo make: build everything
 	@echo make compile: compile source files into object code
 	@echo make link: link object code into shared library
 	@echo make pkg: create installer package
