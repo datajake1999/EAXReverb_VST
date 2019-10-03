@@ -28,5 +28,6 @@ help:
 	@echo make: compile and link the library
 	@echo make compile: compile source files into object code
 	@echo make link: link object code into shared library
+	@echo make dmg: create disk image for distribution
 	@echo make clean: remove object code and compiled library from working directory
 	@echo make help: list supported commands
