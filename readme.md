@@ -33,6 +33,18 @@ To build:
 * Open a command prompt and run compile_msvc.bat.
 * If everything goes well, you should have DLL's that you can load into your favorite VST host, and an installer that you can use to install the plugin to the standard location for VST plugins.
 
+## on MacOS
+To build this effect from source, you will need:
+
+* Xcode
+* VST SDK
+
+To build:
+
+* Copy the VST SDK folder to the location of the source code.
+* Open a terminal window and cd to the macos directory that is inside the directory that contains the source.
+* Type "make" to build the library and its installer.
+
 ## on Linux
 To build this effect from source, you will need:
 
