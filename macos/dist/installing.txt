@@ -1,0 +1,1 @@
+To install the plugin, simply copy the EAXReverb.vst bundle to Library/Audio/Plug-ins/VST.
