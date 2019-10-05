@@ -48,7 +48,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	programs = new eaxreverbProgram[numPrograms];
 
 	if (programs)
-	for (int i = 0; i < kNumPrograms; i++)
+	for (int i = 0; i < numPrograms; i++)
 	{
 		setProgram (i);
 		SetReverbPreset (i, false);
