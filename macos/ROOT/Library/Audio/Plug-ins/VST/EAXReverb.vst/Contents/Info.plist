@@ -6,6 +6,8 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>EAXReverb</string>
+	<key>CFBundleIconFile</key>
+	<string>EAXReverb.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.Datajake.EAXReverb</string>
 	<key>CFBundleInfoDictionaryVersion</key>
