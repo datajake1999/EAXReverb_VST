@@ -12,4 +12,4 @@ link *.obj res\EAXReverb.res bufferoverflowU.lib kernel32.lib user32.lib /dll /d
 del *.obj
 del res\EAXReverb.res
 iscc "install.iss"
-7z a -tzip output\EAXReverb_VST.zip EAXReverb.dll EAXReverb_x64.dll
+7z a -tzip output\EAXReverb_VST.zip EAXReverb.dll EAXReverb_x64.dll LICENSE.TXT

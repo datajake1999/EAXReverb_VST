@@ -21,6 +21,7 @@ pkg: $(TARGET)
 	pkgbuild --root ROOT --identifier com.Datajake.EAXReverb --version 1.0 $(PKG)
 
 dmg: $(PKG)
+	cp ../LICENSE.TXT pkg
 	hdiutil create -volname EAXReverb -srcfolder pkg -ov -format UDZO EAXReverb.dmg
 
 .PHONY: clean help

@@ -4,6 +4,7 @@ AppVerName=EAXReverb VST Plugin
 CreateAppDir=no
 OutputBaseFilename=EAXReverb_VST
 ArchitecturesInstallIn64BitMode=X64
+LicenseFile=LICENSE.TXT
 
 [Languages]
 Name: en; MessagesFile: "compiler:Default.isl"
