@@ -1667,7 +1667,6 @@ void eaxreverb::resume ()
 	effect.Create(rate);
 	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 	effect.Update(rate);
-	i_ReverbPreset = int(ReverbPreset);
 	AudioEffectX::resume();
 }
 
