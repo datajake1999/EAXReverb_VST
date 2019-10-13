@@ -59,6 +59,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
 	setUniqueID ('EAX');
+	canProcessReplacing (true);
 
 }
 
