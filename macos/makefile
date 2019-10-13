@@ -4,7 +4,7 @@ LFLAGS = -shared -o $(TARGET)
 VSTSDK = ../VST3_SDK
 SRCS = ../src/eaxreverb.cpp ../src/main.cpp ../src/ReverbEffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffectx.cpp $(VSTSDK)/public.sdk/source/vst2.x/vstplugmain.cpp
 OBJS = audioeffect.o audioeffectx.o eaxreverb.o main.o ReverbEffect.o vstplugmain.o
-TARGET = ROOT/Library/Audio/Plug-ins/VST/EAXReverb.vst/Contents/MacOS/EAXReverb
+TARGET = EAXReverb.vst/Contents/MacOS/EAXReverb
 PKG = pkg/EAXReverb.pkg
 
 all: compile link pkg dmg
@@ -13,12 +13,12 @@ compile: $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS)
 
 link: $(OBJS)
-	mkdir ROOT/Library/Audio/Plug-ins/VST/EAXReverb.vst/Contents/MacOS
+	mkdir EAXReverb.vst/Contents/MacOS
 	$(CC) $(LFLAGS) $(OBJS)
 
 pkg: $(TARGET)
 	mkdir pkg
-	pkgbuild --root ROOT --identifier com.Datajake.EAXReverb --version 1.0 $(PKG)
+	productbuild --component EAXReverb.vst /Library/Audio/Plug-ins/VST $(PKG)
 
 dmg: $(PKG)
 	cp ../LICENSE.TXT pkg
