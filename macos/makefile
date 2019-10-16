@@ -22,6 +22,7 @@ pkg: $(TARGET)
 
 dmg: $(PKG)
 	cp ../LICENSE.TXT pkg
+	cp ../readme.md pkg
 	hdiutil create -volname EAXReverb -srcfolder pkg -ov -format UDZO EAXReverb.dmg
 
 .PHONY: clean help
