@@ -36,6 +36,8 @@ eaxreverbProgram::eaxreverbProgram ()
 	DryGain = 1;
 	WetGain = 1;
 	MasterGain = 1;
+	IncorrectMode = 0;
+	ReverbRate = 44100;
 }
 
 
@@ -109,6 +111,8 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kDgain, ap->DryGain);	
 	setParameter (kWgain, ap->WetGain);	
 	setParameter (kMgain, ap->MasterGain);	
+	setParameter (kIncorrect, ap->IncorrectMode);	
+	setParameter (kRate, ap->ReverbRate/1000000);	
 	ReverbPreset = ap->ReverbPreset;
 	programs[curProgram].ReverbPreset = ap->ReverbPreset;
 	i_ReverbPreset = int(ap->ReverbPreset);
@@ -321,6 +325,43 @@ void eaxreverb::SetMasterGain (float val)
 {
 	MasterGain = val;
 	programs[curProgram].MasterGain = val;
+}
+
+
+void eaxreverb::SetIncorrectMode (float val)
+{
+	IncorrectMode = val;
+	programs[curProgram].IncorrectMode = val;
+	if (IncorrectMode >= 0.5)	
+	{
+		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effect.Update(int(ReverbRate));
+	}
+	else
+	{
+		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effect.Update(rate);
+	}
+}
+
+
+void eaxreverb::SetReverbRate (float val)
+{
+	if (val > 1000000)
+	{
+		val = 1000000;
+	}
+	else if (val < 1000)
+	{
+		val = 1000;
+	}
+	ReverbRate = val;
+	programs[curProgram].ReverbRate = val;
+	if (IncorrectMode >= 0.5)	
+	{
+		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effect.Update(int(ReverbRate));
+	}
 }
 
 
@@ -787,8 +828,16 @@ void eaxreverb::SetReverbPreset(int preset, bool update) {
 	}
 	if (update == true)
 	{
-		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-		effect.Update(rate);
+		if (IncorrectMode >= 0.5)	
+		{
+			effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+			effect.Update(int(ReverbRate));
+		}
+		else
+		{
+			effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+			effect.Update(rate);
+		}
 	}
 }
 
@@ -1703,6 +1752,8 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
 	case kMgain :    SetMasterGain (value);					break;
+	case kIncorrect :    SetIncorrectMode (value);					break;
+	case kRate :    SetReverbRate (value*1000000);					break;
 	case kPreset :    SetReverbPreset (int(value*1000.f+0.0005f), true);					break;
 	case kDensity :    SetDensity (value*EAXREVERB_MAX_DENSITY);					break;
 	case kDiffusion :    SetDiffusion (value*EAXREVERB_MAX_DIFFUSION);					break;
@@ -1734,8 +1785,16 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	}
 	if (index > kPreset && index < kNumParams)
 	{
-		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
-		effect.Update(rate);
+		if (IncorrectMode >= 0.5)	
+		{
+			effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+			effect.Update(int(ReverbRate));
+		}
+		else
+		{
+			effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+			effect.Update(rate);
+		}
 	}
 }
 
@@ -1778,6 +1837,8 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
 	case kMgain :    v = MasterGain;	break;
+	case kIncorrect :    v = IncorrectMode;	break;
+	case kRate :    v = ReverbRate/1000000;	break;
 	case kPreset :    v = ReverbPreset/1000.f+0.0005f;	break;
 	case kDensity :    v = Density/EAXREVERB_MAX_DENSITY;	break;
 	case kDiffusion :    v = Diffusion/EAXREVERB_MAX_DIFFUSION;	break;
@@ -1827,6 +1888,7 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kDgain :    strcpy (label, "F");		break;
 	case kWgain :    strcpy (label, "F");		break;
 	case kMgain :    strcpy (label, "F");		break;
+	case kRate :    strcpy (label, "Hz");		break;
 	case kDensity :    strcpy (label, "F");		break;
 	case kDiffusion :    strcpy (label, "F");		break;
 	case kGain :    strcpy (label, "F");		break;
@@ -1887,6 +1949,8 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kDgain :    strcpy (text, "DryGain");		break;
 	case kWgain :    strcpy (text, "WetGain");		break;
 	case kMgain :    strcpy (text, "MasterGain");		break;
+	case kIncorrect :    strcpy (text, "IncorrectMode");		break;
+	case kRate :    strcpy (text, "ReverbRate");		break;
 	case kPreset :    strcpy (text, "ReverbPreset");		break;
 	case kDensity :    strcpy (text, "Density");		break;
 	case kDiffusion :    strcpy (text, "Diffusion");		break;
@@ -2075,6 +2139,17 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
 	case kWgain : float2string (WetGain, text, kVstMaxParamStrLen);	break;
 	case kMgain : float2string (MasterGain, text, kVstMaxParamStrLen);	break;
+	case kIncorrect :
+		if (IncorrectMode >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kRate : float2string (ReverbRate, text, kVstMaxParamStrLen);	break;
 	case kPreset : strcpy (text, GetPresetName (i_ReverbPreset));	break;
 	case kDensity : float2string (Density, text, kVstMaxParamStrLen);	break;
 	case kDiffusion : float2string (Diffusion, text, kVstMaxParamStrLen);	break;

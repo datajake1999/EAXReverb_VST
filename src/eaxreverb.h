@@ -37,6 +37,8 @@ enum
 	kDgain,
 	kWgain,
 	kMgain,
+	kIncorrect,
+	kRate,
 	kPreset,
 	kDensity, kDiffusion, kGain, kGainHF, kGainLF, kDecayTime, kDecayHFRatio, kDecayLFRatio, kReflectionsGain, kReflectionsDelay, kReflectionsPanX, kReflectionsPanY, kReflectionsPanZ, kLateReverbGain, kLateReverbDelay, kLateReverbPanX, kLateReverbPanY, kLateReverbPanZ, kEchoTime, kEchoDepth, kModulationTime, kModulationDepth, kAirAbsorptionGainHF, kHFReference, kLFReference, kRoomRolloffFactor, kDecayHFLimit,
 
@@ -80,6 +82,8 @@ private:
 	float DryGain;
 	float WetGain;
 	float MasterGain;
+	float IncorrectMode;
+	float ReverbRate;
 	float ReverbPreset;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
 	char name[24];
@@ -143,6 +147,8 @@ private:
 	void SetDryGain(float val);
 	void SetWetGain(float val);
 	void SetMasterGain(float val);
+	void SetIncorrectMode(float val);
+	void SetReverbRate(float val);
 	void SetReverbPreset(int preset, bool update);
 	char *GetPresetName(int preset);
 	void SetDensity(float val);
@@ -203,6 +209,8 @@ private:
 	float DryGain;
 	float WetGain;
 	float MasterGain;
+	float IncorrectMode;
+	float ReverbRate;
 	float ReverbPreset;
 	int i_ReverbPreset;
 	float Density; float Diffusion; float Gain; float GainHF; float GainLF; float DecayTime; float DecayHFRatio; float DecayLFRatio; float ReflectionsGain; float ReflectionsDelay; float ReflectionsPanX; float ReflectionsPanY; float ReflectionsPanZ; float LateReverbGain; float LateReverbDelay; float LateReverbPanX; float LateReverbPanY; float LateReverbPanZ; float EchoTime; float EchoDepth; float ModulationTime; float ModulationDepth; float AirAbsorptionGainHF; float HFReference; float LFReference; float RoomRolloffFactor; float DecayHFLimit;
