@@ -51,6 +51,7 @@
 		</Unit>
 		<Unit filename="../src/ReverbEffect.cpp" />
 		<Unit filename="../src/eaxreverb.cpp" />
+		<Unit filename="../src/bitcrush.cpp" />
 		<Unit filename="../src/main.cpp" />
 		<Extensions>
 			<code_completion />

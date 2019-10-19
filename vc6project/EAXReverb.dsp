@@ -98,6 +98,10 @@ SOURCE=..\VST3_SDK\public.sdk\source\vst2.x\audioeffectx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\bitcrush.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\eaxreverb.cpp
 # End Source File
 # Begin Source File
