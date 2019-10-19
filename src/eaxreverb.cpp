@@ -2222,7 +2222,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "OFF");					
 		}
 		break;
-	case kRate : float2string (ReverbRate, text, kVstMaxParamStrLen);	break;
+	case kRate : int2string (int(ReverbRate), text, kVstMaxParamStrLen);	break;
 	case kPreset : strcpy (text, GetPresetName (i_ReverbPreset));	break;
 	case kDensity : float2string (Density, text, kVstMaxParamStrLen);	break;
 	case kDiffusion : float2string (Diffusion, text, kVstMaxParamStrLen);	break;
