@@ -3,6 +3,7 @@
 #define __eaxreverb__
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
+#include "bitcrush.h"
 #include "ReverbEffect.h"
 
 enum
@@ -37,6 +38,9 @@ enum
 	kDgain,
 	kWgain,
 	kMgain,
+	kBitcrush,
+	kBitdepth,
+	kDither,
 	kIncorrect,
 	kRate,
 	kPreset,
@@ -82,6 +86,9 @@ private:
 	float DryGain;
 	float WetGain;
 	float MasterGain;
+	float BitCr;
+	float BitDepth;
+	float Dither;
 	float IncorrectMode;
 	float ReverbRate;
 	float ReverbPreset;
@@ -147,6 +154,9 @@ private:
 	void SetDryGain(float val);
 	void SetWetGain(float val);
 	void SetMasterGain(float val);
+	void SetBitCrush(float val);
+	void SetBitDepth(float val);
+	void SetDither(float val);
 	void SetIncorrectMode(float val);
 	void SetReverbRate(float val);
 	void SetReverbPreset(int preset, bool update);
@@ -209,6 +219,9 @@ private:
 	float DryGain;
 	float WetGain;
 	float MasterGain;
+	float BitCr;
+	float BitDepth;
+	float Dither;
 	float IncorrectMode;
 	float ReverbRate;
 	float ReverbPreset;
@@ -217,6 +230,7 @@ private:
 	int i_DecayHFLimit;
 	
 	int rate;
+	int bits;
 };
 
 #endif

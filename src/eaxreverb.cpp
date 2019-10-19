@@ -36,6 +36,9 @@ eaxreverbProgram::eaxreverbProgram ()
 	DryGain = 1;
 	WetGain = 1;
 	MasterGain = 1;
+	BitCr = 0;
+	BitDepth = 8;
+	Dither = 0;
 	IncorrectMode = 0;
 	ReverbRate = 44100;
 }
@@ -111,6 +114,9 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kDgain, ap->DryGain);	
 	setParameter (kWgain, ap->WetGain);	
 	setParameter (kMgain, ap->MasterGain);	
+	setParameter (kBitcrush, ap->BitCr);	
+	setParameter (kBitdepth, ap->BitDepth/16);	
+	setParameter (kDither, ap->Dither);	
 	setParameter (kIncorrect, ap->IncorrectMode);	
 	setParameter (kRate, ap->ReverbRate/1000000);	
 	ReverbPreset = ap->ReverbPreset;
@@ -325,6 +331,29 @@ void eaxreverb::SetMasterGain (float val)
 {
 	MasterGain = val;
 	programs[curProgram].MasterGain = val;
+}
+
+
+void eaxreverb::SetBitCrush (float val)
+{
+	BitCr = val;
+	programs[curProgram].BitCr = val;
+}
+
+
+void eaxreverb::SetBitDepth (float val)
+{
+	BitDepth = val;
+	programs[curProgram].BitDepth = val;
+	bits = int(BitDepth);
+	SetCrushAmount(bits);
+}
+
+
+void eaxreverb::SetDither (float val)
+{
+	Dither = val;
+	programs[curProgram].Dither = val;
 }
 
 
@@ -1750,6 +1779,9 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
 	case kMgain :    SetMasterGain (value);					break;
+	case kBitcrush :    SetBitCrush (value);					break;
+	case kBitdepth :    SetBitDepth (value*16);					break;
+	case kDither :    SetDither (value);					break;
 	case kIncorrect :    SetIncorrectMode (value);					break;
 	case kRate :    SetReverbRate (value*1000000);					break;
 	case kPreset :    SetReverbPreset (int(value*1000.f+0.0005f), true);					break;
@@ -1834,6 +1866,9 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
 	case kMgain :    v = MasterGain;	break;
+	case kBitcrush :    v = BitCr;	break;
+	case kBitdepth :    v = BitDepth/16;	break;
+	case kDither :    v = Dither;	break;
 	case kIncorrect :    v = IncorrectMode;	break;
 	case kRate :    v = ReverbRate/1000000;	break;
 	case kPreset :    v = ReverbPreset/1000.f+0.0005f;	break;
@@ -1885,6 +1920,7 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kDgain :    strcpy (label, "F");		break;
 	case kWgain :    strcpy (label, "F");		break;
 	case kMgain :    strcpy (label, "F");		break;
+	case kBitdepth :    strcpy (label, "Bits");		break;
 	case kRate :    strcpy (label, "Hz");		break;
 	case kDensity :    strcpy (label, "F");		break;
 	case kDiffusion :    strcpy (label, "F");		break;
@@ -1946,6 +1982,9 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kDgain :    strcpy (text, "DryGain");		break;
 	case kWgain :    strcpy (text, "WetGain");		break;
 	case kMgain :    strcpy (text, "MasterGain");		break;
+	case kBitcrush :    strcpy (text, "BitCrush");		break;
+	case kBitdepth :    strcpy (text, "BitDepth");		break;
+	case kDither :    strcpy (text, "Dither");		break;
 	case kIncorrect :    strcpy (text, "IncorrectMode");		break;
 	case kRate :    strcpy (text, "ReverbRate");		break;
 	case kPreset :    strcpy (text, "ReverbPreset");		break;
@@ -2136,6 +2175,35 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
 	case kWgain : float2string (WetGain, text, kVstMaxParamStrLen);	break;
 	case kMgain : float2string (MasterGain, text, kVstMaxParamStrLen);	break;
+	case kBitcrush :
+		if (BitCr >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kBitdepth : int2string (bits, text, kVstMaxParamStrLen);	break;
+	case kDither :
+		if (Dither >= 0.25 && Dither < 0.5)	
+		{
+			strcpy (text, "RECTANGLE");					
+		}
+		else if (Dither >= 0.5 && Dither < 0.75)	
+		{
+			strcpy (text, "TRIANGLE");					
+		}
+		else if (Dither >= 0.75 && Dither <= 1.0)	
+		{
+			strcpy (text, "GAUSSIAN");					
+		}
+		else
+		{
+			strcpy (text, "NONE");					
+		}
+		break;
 	case kIncorrect :
 		if (IncorrectMode >= 0.5)	
 		{
@@ -2437,6 +2505,60 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		}
 		out1 -= workSamples;
 		out2 -= workSamples;
+		//process the bit crusher on the final output if we set BitCr to true
+		if (BitCr >= 0.5)
+		{
+			short samples[4096];
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				long sample = (long) (*out1 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i] = (short)sample;
+				sample = (long) (*out2 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i+1] = (short)sample;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			if (Dither >= 0.25 && Dither < 0.5)	
+			{
+				RectangleDither(samples, workSamples);
+			}
+			else if (Dither >= 0.5 && Dither < 0.75)	
+			{
+				TriangleDither(samples, workSamples);
+			}
+			else if (Dither >= 0.75 && Dither <= 1.0)	
+			{
+				GaussianDither(samples, workSamples);
+			}
+			BitCrush(samples, workSamples);
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				*out1 = float(samples[i] / 32767.0f);
+				*out2 = float(samples[i+1] / 32767.0f);
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+		}
 		//invert the phase of the final output if we set Invert to true
 		if (Invert >= 0.5)
 		{
