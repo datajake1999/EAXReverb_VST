@@ -343,6 +343,14 @@ void eaxreverb::SetBitCrush (float val)
 
 void eaxreverb::SetBitDepth (float val)
 {
+	if (val > 16)
+	{
+		val = 16;
+	}
+	else if (val < 1)
+	{
+		val = 1;
+	}
 	BitDepth = val;
 	programs[curProgram].BitDepth = val;
 	bits = int(BitDepth);
