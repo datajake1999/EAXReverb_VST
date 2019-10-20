@@ -3,6 +3,7 @@
 #define __eaxreverb__
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
+#include "biquad.h"
 #include "bitcrush.h"
 #include "ReverbEffect.h"
 
@@ -41,6 +42,11 @@ enum
 	kBitcrush,
 	kBitdepth,
 	kDither,
+	kBqfilter,
+	kFlttype,
+	kFltfreq,
+	kFltres,
+	kFltgain,
 	kIncorrect,
 	kRate,
 	kPreset,
@@ -89,6 +95,11 @@ private:
 	float BitCr;
 	float BitDepth;
 	float Dither;
+	float BQFilter;
+	float FLTType;
+	float FLTFreq;
+	float FLTRes;
+	float FLTGain;
 	float IncorrectMode;
 	float ReverbRate;
 	float ReverbPreset;
@@ -157,6 +168,11 @@ private:
 	void SetBitCrush(float val);
 	void SetBitDepth(float val);
 	void SetDither(float val);
+	void SetBQFilter(float val);
+	void SetFLTType(float val);
+	void SetFLTFreq(float val);
+	void SetFLTRes(float val);
+	void SetFLTGain(float val);
 	void SetIncorrectMode(float val);
 	void SetReverbRate(float val);
 	void SetReverbPreset(int preset, bool update);
@@ -191,6 +207,7 @@ private:
 	void SetEAXParams(float Density, float Diffusion, float Gain, float GainHF, float GainLF, float DecayTime, float DecayHFRatio, float DecayLFRatio, float ReflectionsGain, float ReflectionsDelay, float ReflectionsPanX, float ReflectionsPanY, float ReflectionsPanZ, float LateReverbGain, float LateReverbDelay, float LateReverbPanX, float LateReverbPanY, float LateReverbPanZ, float EchoTime, float EchoDepth, float ModulationTime, float ModulationDepth, float AirAbsorptionGainHF, float HFReference, float LFReference, float RoomRolloffFactor, float DecayHFLimit);
 
 	ReverbEffect effect;
+	sf_biquad_state_st bq_state;
 	eaxreverbProgram* programs;
 	
 	float DisableEffect;
@@ -222,6 +239,11 @@ private:
 	float BitCr;
 	float BitDepth;
 	float Dither;
+	float BQFilter;
+	float FLTType;
+	float FLTFreq;
+	float FLTRes;
+	float FLTGain;
 	float IncorrectMode;
 	float ReverbRate;
 	float ReverbPreset;

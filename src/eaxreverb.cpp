@@ -39,6 +39,11 @@ eaxreverbProgram::eaxreverbProgram ()
 	BitCr = 0;
 	BitDepth = 8;
 	Dither = 0;
+	BQFilter = 0;
+	FLTType = 0;
+	FLTFreq = 440;
+	FLTRes = 0;
+	FLTGain = 0;
 	IncorrectMode = 0;
 	ReverbRate = 44100;
 }
@@ -117,6 +122,11 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kBitcrush, ap->BitCr);	
 	setParameter (kBitdepth, ap->BitDepth/16);	
 	setParameter (kDither, ap->Dither);	
+	setParameter (kBqfilter, ap->BQFilter);	
+	setParameter (kFlttype, ap->FLTType);	
+	setParameter (kFltfreq, ap->FLTFreq/20000);	
+	setParameter (kFltres, ap->FLTRes/10);	
+	setParameter (kFltgain, ap->FLTGain/10);	
 	setParameter (kIncorrect, ap->IncorrectMode);	
 	setParameter (kRate, ap->ReverbRate/1000000);	
 	ReverbPreset = ap->ReverbPreset;
@@ -362,6 +372,73 @@ void eaxreverb::SetDither (float val)
 {
 	Dither = val;
 	programs[curProgram].Dither = val;
+}
+
+
+void eaxreverb::SetBQFilter (float val)
+{
+	BQFilter = val;
+	programs[curProgram].BQFilter = val;
+}
+
+
+void eaxreverb::SetFLTType (float val)
+{
+	if (val > 8)
+	{
+		val = 8;
+	}
+	else if (val < 0)
+	{
+		val = 0;
+	}
+	FLTType = val;
+	programs[curProgram].FLTType = val;
+}
+
+
+void eaxreverb::SetFLTFreq (float val)
+{
+	if (val > 20000)
+	{
+		val = 20000;
+	}
+	else if (val < 20)
+	{
+		val = 20;
+	}
+	FLTFreq = val;
+	programs[curProgram].FLTFreq = val;
+}
+
+
+void eaxreverb::SetFLTRes (float val)
+{
+	if (val > 10)
+	{
+		val = 10;
+	}
+	else if (val < 0)
+	{
+		val = 0;
+	}
+	FLTRes = val;
+	programs[curProgram].FLTRes = val;
+}
+
+
+void eaxreverb::SetFLTGain (float val)
+{
+	if (val > 10)
+	{
+		val = 10;
+	}
+	else if (val < 0)
+	{
+		val = 0;
+	}
+	FLTGain = val;
+	programs[curProgram].FLTGain = val;
 }
 
 
@@ -1753,6 +1830,38 @@ void eaxreverb::resume ()
 	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 	effect.Update(rate);
 	i_ReverbPreset = int(ReverbPreset);
+	if (FLTType >= 0.0 && FLTType < 0.125)	
+	{
+		sf_lowpass(&bq_state, rate, FLTFreq, FLTRes);
+	}
+	else if (FLTType >= 0.125 && FLTType < 0.25)	
+	{
+		sf_highpass(&bq_state, rate, FLTFreq, FLTRes);
+	}
+	else if (FLTType >= 0.25 && FLTType < 0.375)	
+	{
+		sf_bandpass(&bq_state, rate, FLTFreq, FLTRes);
+	}
+	else if (FLTType >= 0.375 && FLTType < 0.5)	
+	{
+		sf_allpass(&bq_state, rate, FLTFreq, FLTRes);
+	}
+	else if (FLTType >= 0.5 && FLTType < 0.625)	
+	{
+		sf_notch(&bq_state, rate, FLTFreq, FLTRes);
+	}
+	else if (FLTType >= 0.625 && FLTType < 0.75)	
+	{
+		sf_peaking(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+	}
+	else if (FLTType >= 0.75 && FLTType < 0.875)	
+	{
+		sf_lowshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+	}
+	else if (FLTType >= 0.875 && FLTType <= 1.0)	
+	{
+		sf_highshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+	}
 	AudioEffectX::resume();
 }
 
@@ -1790,6 +1899,11 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kBitcrush :    SetBitCrush (value);					break;
 	case kBitdepth :    SetBitDepth (value*16);					break;
 	case kDither :    SetDither (value);					break;
+	case kBqfilter :    SetBQFilter (value);					break;
+	case kFlttype :    SetFLTType (value);					break;
+	case kFltfreq :    SetFLTFreq (value*20000);					break;
+	case kFltres :    SetFLTRes (value*10);					break;
+	case kFltgain :    SetFLTGain (value*10);					break;
 	case kIncorrect :    SetIncorrectMode (value);					break;
 	case kRate :    SetReverbRate (value*1000000);					break;
 	case kPreset :    SetReverbPreset (int(value*1000.f+0.0005f), true);					break;
@@ -1820,6 +1934,41 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kLFReference :    SetLFReference (value*EAXREVERB_MAX_LFREFERENCE);					break;
 	case kRoomRolloffFactor :    SetRoomRolloffFactor (value*EAXREVERB_MAX_ROOM_ROLLOFF_FACTOR);					break;
 	case kDecayHFLimit :    SetDecayHFLimit (value);					break;
+	}
+	if (index >= kFlttype && index <= kFltgain)
+	{
+		if (FLTType >= 0.0 && FLTType < 0.125)	
+		{
+			sf_lowpass(&bq_state, rate, FLTFreq, FLTRes);
+		}
+		else if (FLTType >= 0.125 && FLTType < 0.25)	
+		{
+			sf_highpass(&bq_state, rate, FLTFreq, FLTRes);
+		}
+		else if (FLTType >= 0.25 && FLTType < 0.375)	
+		{
+			sf_bandpass(&bq_state, rate, FLTFreq, FLTRes);
+		}
+		else if (FLTType >= 0.375 && FLTType < 0.5)	
+		{
+			sf_allpass(&bq_state, rate, FLTFreq, FLTRes);
+		}
+		else if (FLTType >= 0.5 && FLTType < 0.625)	
+		{
+			sf_notch(&bq_state, rate, FLTFreq, FLTRes);
+		}
+		else if (FLTType >= 0.625 && FLTType < 0.75)	
+		{
+			sf_peaking(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+		}
+		else if (FLTType >= 0.75 && FLTType < 0.875)	
+		{
+			sf_lowshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+		}
+		else if (FLTType >= 0.875 && FLTType <= 1.0)	
+		{
+			sf_highshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+		}
 	}
 	if (index > kPreset && index < kNumParams)
 	{
@@ -1877,6 +2026,11 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kBitcrush :    v = BitCr;	break;
 	case kBitdepth :    v = BitDepth/16;	break;
 	case kDither :    v = Dither;	break;
+	case kBqfilter :    v = BQFilter;	break;
+	case kFlttype :    v = FLTType;	break;
+	case kFltfreq :    v = FLTFreq/20000;	break;
+	case kFltres :    v = FLTRes/10;	break;
+	case kFltgain :    v = FLTGain/10;	break;
 	case kIncorrect :    v = IncorrectMode;	break;
 	case kRate :    v = ReverbRate/1000000;	break;
 	case kPreset :    v = ReverbPreset/1000.f+0.0005f;	break;
@@ -1929,6 +2083,9 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kWgain :    strcpy (label, "F");		break;
 	case kMgain :    strcpy (label, "F");		break;
 	case kBitdepth :    strcpy (label, "Bits");		break;
+	case kFltfreq :    strcpy (label, "Hz");		break;
+	case kFltres :    strcpy (label, "F");		break;
+	case kFltgain :    strcpy (label, "F");		break;
 	case kRate :    strcpy (label, "Hz");		break;
 	case kDensity :    strcpy (label, "F");		break;
 	case kDiffusion :    strcpy (label, "F");		break;
@@ -1993,6 +2150,11 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kBitcrush :    strcpy (text, "BitCrush");		break;
 	case kBitdepth :    strcpy (text, "BitDepth");		break;
 	case kDither :    strcpy (text, "Dither");		break;
+	case kBqfilter :    strcpy (text, "BiquadFilter");		break;
+	case kFlttype :    strcpy (text, "FilterType");		break;
+	case kFltfreq :    strcpy (text, "FilterFrequency");		break;
+	case kFltres :    strcpy (text, "FilterResonance");		break;
+	case kFltgain :    strcpy (text, "FilterGain");		break;
 	case kIncorrect :    strcpy (text, "IncorrectMode");		break;
 	case kRate :    strcpy (text, "ReverbRate");		break;
 	case kPreset :    strcpy (text, "ReverbPreset");		break;
@@ -2212,6 +2374,53 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "NONE");					
 		}
 		break;
+	case kBqfilter :
+		if (BQFilter >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kFlttype :
+		if (FLTType >= 0.0 && FLTType < 0.125)	
+		{
+			strcpy (text, "LOWPASS");					
+		}
+		else if (FLTType >= 0.125 && FLTType < 0.25)	
+		{
+			strcpy (text, "HIGHPASS");					
+		}
+		else if (FLTType >= 0.25 && FLTType < 0.375)	
+		{
+			strcpy (text, "BANDPASS");					
+		}
+		else if (FLTType >= 0.375 && FLTType < 0.5)	
+		{
+			strcpy (text, "ALLPASS");					
+		}
+		else if (FLTType >= 0.5 && FLTType < 0.625)	
+		{
+			strcpy (text, "NOTCH");					
+		}
+		else if (FLTType >= 0.625 && FLTType < 0.75)	
+		{
+			strcpy (text, "PEAKING");					
+		}
+		else if (FLTType >= 0.75 && FLTType < 0.875)	
+		{
+			strcpy (text, "LOWSHELF");					
+		}
+		else if (FLTType >= 0.875 && FLTType <= 1.0)	
+		{
+			strcpy (text, "HIGHSHELF");					
+		}
+		break;
+	case kFltfreq : float2string (FLTFreq, text, kVstMaxParamStrLen);	break;
+	case kFltres : float2string (FLTRes, text, kVstMaxParamStrLen);	break;
+	case kFltgain : float2string (FLTGain, text, kVstMaxParamStrLen);	break;
 	case kIncorrect :
 		if (IncorrectMode >= 0.5)	
 		{
@@ -2513,6 +2722,31 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		}
 		out1 -= workSamples;
 		out2 -= workSamples;
+		//process a Biquad filter on the final output if we set BQFilter to true
+		if (BQFilter >= 0.5)
+		{
+			sf_sample_st *buf =  new sf_sample_st[workSamples];
+			for (i=0; i<workSamples; i++)
+			{
+				buf[i].L = *out1;
+				buf[i].R = *out2;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			sf_biquad_process(&bq_state, workSamples, buf, buf);
+			for (i=0; i<workSamples; i++)
+			{
+				*out1 = buf[i].L;
+				*out2 = buf[i].R;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			delete[] buf;
+		}
 		//process the bit crusher on the final output if we set BitCr to true
 		if (BitCr >= 0.5)
 		{
