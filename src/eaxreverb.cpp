@@ -2084,8 +2084,8 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kMgain :    strcpy (label, "F");		break;
 	case kBitdepth :    strcpy (label, "Bits");		break;
 	case kFltfreq :    strcpy (label, "Hz");		break;
-	case kFltres :    strcpy (label, "F");		break;
-	case kFltgain :    strcpy (label, "F");		break;
+	case kFltres :    strcpy (label, "Db");		break;
+	case kFltgain :    strcpy (label, "Db");		break;
 	case kRate :    strcpy (label, "Hz");		break;
 	case kDensity :    strcpy (label, "F");		break;
 	case kDiffusion :    strcpy (label, "F");		break;
