@@ -2750,7 +2750,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		//process the bit crusher on the final output if we set BitCr to true
 		if (BitCr >= 0.5)
 		{
-			short samples[4096];
+			short *samples = new short[workSamples*2];
 			for (i=0; i<workSamples*2; i+=2)
 			{
 				long sample = (long) (*out1 * 32767.0f);
@@ -2800,6 +2800,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			}
 			out1 -= workSamples;
 			out2 -= workSamples;
+			delete[] samples;
 		}
 		//invert the phase of the final output if we set Invert to true
 		if (Invert >= 0.5)
