@@ -1832,35 +1832,35 @@ void eaxreverb::resume ()
 	i_ReverbPreset = int(ReverbPreset);
 	if (FLTType >= 0.0 && FLTType < 0.125)	
 	{
-		sf_lowpass(&bq_state, rate, FLTFreq, FLTRes);
+		sf_lowpass(&bq_state, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.125 && FLTType < 0.25)	
 	{
-		sf_highpass(&bq_state, rate, FLTFreq, FLTRes);
+		sf_highpass(&bq_state, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.25 && FLTType < 0.375)	
 	{
-		sf_bandpass(&bq_state, rate, FLTFreq, FLTRes);
+		sf_bandpass(&bq_state, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.375 && FLTType < 0.5)	
 	{
-		sf_allpass(&bq_state, rate, FLTFreq, FLTRes);
+		sf_allpass(&bq_state, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.5 && FLTType < 0.625)	
 	{
-		sf_notch(&bq_state, rate, FLTFreq, FLTRes);
+		sf_notch(&bq_state, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.625 && FLTType < 0.75)	
 	{
-		sf_peaking(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+		sf_peaking(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
 	else if (FLTType >= 0.75 && FLTType < 0.875)	
 	{
-		sf_lowshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+		sf_lowshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
 	else if (FLTType >= 0.875 && FLTType <= 1.0)	
 	{
-		sf_highshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+		sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
 	AudioEffectX::resume();
 }
@@ -1939,35 +1939,35 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	{
 		if (FLTType >= 0.0 && FLTType < 0.125)	
 		{
-			sf_lowpass(&bq_state, rate, FLTFreq, FLTRes);
+			sf_lowpass(&bq_state, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.125 && FLTType < 0.25)	
 		{
-			sf_highpass(&bq_state, rate, FLTFreq, FLTRes);
+			sf_highpass(&bq_state, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.25 && FLTType < 0.375)	
 		{
-			sf_bandpass(&bq_state, rate, FLTFreq, FLTRes);
+			sf_bandpass(&bq_state, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.375 && FLTType < 0.5)	
 		{
-			sf_allpass(&bq_state, rate, FLTFreq, FLTRes);
+			sf_allpass(&bq_state, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.5 && FLTType < 0.625)	
 		{
-			sf_notch(&bq_state, rate, FLTFreq, FLTRes);
+			sf_notch(&bq_state, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.625 && FLTType < 0.75)	
 		{
-			sf_peaking(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+			sf_peaking(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 		}
 		else if (FLTType >= 0.75 && FLTType < 0.875)	
 		{
-			sf_lowshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+			sf_lowshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 		}
 		else if (FLTType >= 0.875 && FLTType <= 1.0)	
 		{
-			sf_highshelf(&bq_state, rate, FLTFreq, FLTRes, FLTGain);
+			sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 		}
 	}
 	if (index > kPreset && index < kNumParams)
