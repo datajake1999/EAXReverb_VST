@@ -363,17 +363,25 @@ void eaxreverb::SetRSMRate (float val)
 {
 	RSMRate = val;
 	programs[curProgram].RSMRate = val;
-	if (RSMRate >= 0.25 && RSMRate < 0.5)	
+	if (RSMRate >= 0.125 && RSMRate < 0.25)	
 	{
 		rsm = 2;
 	}
-	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	else if (RSMRate >= 0.25 && RSMRate < 0.375)	
 	{
 		rsm = 4;
 	}
-	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	else if (RSMRate >= 0.375 && RSMRate < 0.5)	
 	{
 		rsm = 8;
+	}
+	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	{
+		rsm = 16;
+	}
+	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	{
+		rsm = 32;
 	}
 	else
 	{
@@ -1912,17 +1920,25 @@ void eaxreverb::resume ()
 	}
 	resampler1 = resampler_create();
 	resampler2 = resampler_create();
-	if (RSMRate >= 0.25 && RSMRate < 0.5)	
+	if (RSMRate >= 0.125 && RSMRate < 0.25)	
 	{
 		rsm = 2;
 	}
-	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	else if (RSMRate >= 0.25 && RSMRate < 0.375)	
 	{
 		rsm = 4;
 	}
-	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	else if (RSMRate >= 0.375 && RSMRate < 0.5)	
 	{
 		rsm = 8;
+	}
+	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	{
+		rsm = 16;
+	}
+	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	{
+		rsm = 32;
 	}
 	else
 	{
@@ -2432,17 +2448,25 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		}
 		break;
 	case kRsmrate :
-		if (RSMRate >= 0.25 && RSMRate < 0.5)	
+		if (RSMRate >= 0.125 && RSMRate < 0.25)	
 		{
 			strcpy (text, "2");					
 		}
-		else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+		else if (RSMRate >= 0.25 && RSMRate < 0.375)	
 		{
 			strcpy (text, "4");					
 		}
-		else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+		else if (RSMRate >= 0.375 && RSMRate < 0.5)	
 		{
 			strcpy (text, "8");					
+		}
+		else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+		{
+			strcpy (text, "16");					
+		}
+		else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+		{
+			strcpy (text, "32");					
 		}
 		else
 		{
