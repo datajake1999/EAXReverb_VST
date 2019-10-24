@@ -118,6 +118,10 @@ SOURCE=..\src\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\resampler.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\ReverbEffect.cpp
 # End Source File
 # Begin Source File

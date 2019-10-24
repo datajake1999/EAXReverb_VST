@@ -2,8 +2,8 @@ CC = g++
 CFLAGS = -fPIC -c -I$(VSTSDK) -D__cdecl=""
 LFLAGS = -shared -o $(TARGET)
 VSTSDK = ../VST3_SDK
-SRCS = ../src/biquad.cpp ../src/bitcrush.cpp ../src/eaxreverb.cpp ../src/main.cpp ../src/ReverbEffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffectx.cpp $(VSTSDK)/public.sdk/source/vst2.x/vstplugmain.cpp
-OBJS = audioeffect.o audioeffectx.o biquad.o bitcrush.o eaxreverb.o main.o ReverbEffect.o vstplugmain.o
+SRCS = ../src/biquad.cpp ../src/bitcrush.cpp ../src/eaxreverb.cpp ../src/main.cpp ../src/resampler.cpp ../src/ReverbEffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffect.cpp $(VSTSDK)/public.sdk/source/vst2.x/audioeffectx.cpp $(VSTSDK)/public.sdk/source/vst2.x/vstplugmain.cpp
+OBJS = audioeffect.o audioeffectx.o biquad.o bitcrush.o eaxreverb.o main.o resampler.o ReverbEffect.o vstplugmain.o
 TARGET = EAXReverb.vst/Contents/MacOS/EAXReverb
 PKG = pkg/EAXReverb.pkg
 
