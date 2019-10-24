@@ -36,6 +36,8 @@ eaxreverbProgram::eaxreverbProgram ()
 	DryGain = 1;
 	WetGain = 1;
 	MasterGain = 1;
+	Resample = 0;
+	RSMRate = 0;
 	BitCr = 0;
 	BitDepth = 8;
 	Dither = 0;
@@ -77,6 +79,10 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 eaxreverb::~eaxreverb ()
 {
 	effect.Destroy();
+	resampler_clear(resampler1);
+	resampler_destroy(resampler1);
+	resampler_clear(resampler2);
+	resampler_destroy(resampler2);
 	if (programs)
 	delete[] programs;
 }
@@ -119,6 +125,8 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kDgain, ap->DryGain);	
 	setParameter (kWgain, ap->WetGain);	
 	setParameter (kMgain, ap->MasterGain);	
+	setParameter (kResample, ap->Resample);	
+	setParameter (kRsmrate, ap->RSMRate);	
 	setParameter (kBitcrush, ap->BitCr);	
 	setParameter (kBitdepth, ap->BitDepth/16);	
 	setParameter (kDither, ap->Dither);	
@@ -341,6 +349,39 @@ void eaxreverb::SetMasterGain (float val)
 {
 	MasterGain = val;
 	programs[curProgram].MasterGain = val;
+}
+
+
+void eaxreverb::SetResample (float val)
+{
+	Resample = val;
+	programs[curProgram].Resample = val;
+}
+
+
+void eaxreverb::SetRSMRate (float val)
+{
+	RSMRate = val;
+	programs[curProgram].RSMRate = val;
+	if (RSMRate >= 0.25 && RSMRate < 0.5)	
+	{
+		rsm = 2;
+	}
+	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	{
+		rsm = 4;
+	}
+	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	{
+		rsm = 8;
+	}
+	else
+	{
+		rsm = 1;
+	}
+	rate_new = rate/rsm;
+	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
+	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
 }
 
 
@@ -1862,6 +1903,27 @@ void eaxreverb::resume ()
 	{
 		sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
+	resampler1 = resampler_create();
+	resampler2 = resampler_create();
+	if (RSMRate >= 0.25 && RSMRate < 0.5)	
+	{
+		rsm = 2;
+	}
+	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	{
+		rsm = 4;
+	}
+	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	{
+		rsm = 8;
+	}
+	else
+	{
+		rsm = 1;
+	}
+	rate_new = rate/rsm;
+	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
+	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
 	AudioEffectX::resume();
 }
 
@@ -1896,6 +1958,8 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kDgain :    SetDryGain (value);					break;
 	case kWgain :    SetWetGain (value);					break;
 	case kMgain :    SetMasterGain (value);					break;
+	case kResample :    SetResample (value);					break;
+	case kRsmrate :    SetRSMRate (value);					break;
 	case kBitcrush :    SetBitCrush (value);					break;
 	case kBitdepth :    SetBitDepth (value*16);					break;
 	case kDither :    SetDither (value);					break;
@@ -2023,6 +2087,8 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kDgain :    v = DryGain;	break;
 	case kWgain :    v = WetGain;	break;
 	case kMgain :    v = MasterGain;	break;
+	case kResample :    v = Resample;	break;
+	case kRsmrate :    v = RSMRate;	break;
 	case kBitcrush :    v = BitCr;	break;
 	case kBitdepth :    v = BitDepth/16;	break;
 	case kDither :    v = Dither;	break;
@@ -2082,6 +2148,7 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kDgain :    strcpy (label, "F");		break;
 	case kWgain :    strcpy (label, "F");		break;
 	case kMgain :    strcpy (label, "F");		break;
+	case kRsmrate :    strcpy (label, "X");		break;
 	case kBitdepth :    strcpy (label, "Bits");		break;
 	case kFltfreq :    strcpy (label, "Hz");		break;
 	case kFltres :    strcpy (label, "Db");		break;
@@ -2147,6 +2214,8 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kDgain :    strcpy (text, "DryGain");		break;
 	case kWgain :    strcpy (text, "WetGain");		break;
 	case kMgain :    strcpy (text, "MasterGain");		break;
+	case kResample :    strcpy (text, "Resample");		break;
+	case kRsmrate :    strcpy (text, "ResampleRate");		break;
 	case kBitcrush :    strcpy (text, "BitCrush");		break;
 	case kBitdepth :    strcpy (text, "BitDepth");		break;
 	case kDither :    strcpy (text, "Dither");		break;
@@ -2345,6 +2414,34 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 	case kDgain : float2string (DryGain, text, kVstMaxParamStrLen);	break;
 	case kWgain : float2string (WetGain, text, kVstMaxParamStrLen);	break;
 	case kMgain : float2string (MasterGain, text, kVstMaxParamStrLen);	break;
+	case kResample :
+		if (Resample >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
+		}
+		break;
+	case kRsmrate :
+		if (RSMRate >= 0.25 && RSMRate < 0.5)	
+		{
+			strcpy (text, "2");					
+		}
+		else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+		{
+			strcpy (text, "4");					
+		}
+		else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+		{
+			strcpy (text, "8");					
+		}
+		else
+		{
+			strcpy (text, "1");					
+		}
+		break;
 	case kBitcrush :
 		if (BitCr >= 0.5)	
 		{
@@ -2746,6 +2843,84 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			out1 -= workSamples;
 			out2 -= workSamples;
 			delete[] buf;
+		}
+		//process the resampler on the final output if we set Resample to true
+		if (Resample >= 0.5)
+		{
+			short *samples = new short[workSamples*2];
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				long sample = (long) (*out1 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i] = (short)sample;
+				sample = (long) (*out2 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i+1] = (short)sample;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			int j;
+			int samplecount = 0;
+			int numsamples_new = workSamples/rsm;
+			short *samples_new = new short[numsamples_new*2];
+			for(i = 0; i < numsamples_new*2; i+=2)
+			{
+				sample_t ls, rs;
+				for(j = 0; j = resampler_get_min_fill(resampler1); j++)
+				{
+					resampler_write_pair(resampler1, samples[samplecount], samples[samplecount + 1]);
+					samplecount += 2;
+				}
+				resampler_peek_pair(resampler1, &ls, &rs);
+				resampler_read_pair(resampler1, &ls, &rs);
+				if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
+				if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
+				samples_new[i] = (short)ls;
+				samples_new[i + 1] = (short)rs;
+			}
+			samplecount = 0;
+			for(i = 0; i < workSamples*2; i+=2)
+			{
+				sample_t ls, rs;
+				for(j = 0; j = resampler_get_min_fill(resampler2); j++)
+				{
+					resampler_write_pair(resampler2, samples_new[samplecount], samples_new[samplecount + 1]);
+					samplecount += 2;
+				}
+				resampler_peek_pair(resampler2, &ls, &rs);
+				resampler_read_pair(resampler2, &ls, &rs);
+				if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
+				if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
+				samples[i] = (short)ls;
+				samples[i + 1] = (short)rs;
+			}
+			delete[] samples_new;
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				*out1 = float(samples[i] / 32767.0f);
+				*out2 = float(samples[i+1] / 32767.0f);
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			delete[] samples;
 		}
 		//process the bit crusher on the final output if we set BitCr to true
 		if (BitCr >= 0.5)
