@@ -78,6 +78,8 @@ This library is free software; you can redistribute it and/or
 * @kn0ll, for providing the official VST 2.4 examples.
 * Me, for putting all of this together into a VST Plugin.
 * @DannyBoy96, for helping with the read-me.
+* @voidqk, for putting together sndfilter.
+* @kode54, for providing a simple resampler library.
 
 # Useful links
 * [Environmental Audio Extensions on Wikipedia](https://en.wikipedia.org/wiki/Environmental_Audio_Extensions)
