@@ -2879,6 +2879,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		if (Resample >= 0.5)
 		{
 			short *samples = new short[workSamples*2];
+			GenerateSilence(samples, workSamples);
 			for (i=0; i<workSamples*2; i+=2)
 			{
 				long sample = (long) (*out1 * 32767.0f);
@@ -2910,6 +2911,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			int samplecount = 0;
 			int numsamples_new = workSamples/rsm;
 			short *samples_new = new short[numsamples_new*2];
+			GenerateSilence(samples_new, numsamples_new);
 			for(i = 0; i < numsamples_new*2; i+=2)
 			{
 				sample_t ls, rs;
@@ -2957,6 +2959,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		if (BitCr >= 0.5)
 		{
 			short *samples = new short[workSamples*2];
+			GenerateSilence(samples, workSamples);
 			for (i=0; i<workSamples*2; i+=2)
 			{
 				long sample = (long) (*out1 * 32767.0f);

@@ -7,6 +7,7 @@
 #include "bitcrush.h"
 #include "resampler.h"
 #include "ReverbEffect.h"
+#include "silence.h"
 
 enum
 {
