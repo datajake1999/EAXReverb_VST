@@ -49,6 +49,7 @@
 		<Unit filename="../res/EAXReverb.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
+		<Unit filename="../src/silence.cpp" />
 		<Unit filename="../src/ReverbEffect.cpp" />
 		<Unit filename="../src/resampler.cpp" />
 		<Unit filename="../src/eaxreverb.cpp" />

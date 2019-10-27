@@ -126,6 +126,10 @@ SOURCE=..\src\ReverbEffect.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\silence.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\vstplug.def
 # End Source File
 # Begin Source File
