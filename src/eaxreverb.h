@@ -42,6 +42,7 @@ enum
 	kWgain,
 	kMgain,
 	kResample,
+	kRsmmode,
 	kRsmrate,
 	kBitcrush,
 	kBitdepth,
@@ -98,6 +99,7 @@ private:
 	float WetGain;
 	float MasterGain;
 	float Resample;
+	float RSMMode;
 	float RSMRate;
 	float BitCr;
 	float BitDepth;
@@ -174,6 +176,7 @@ private:
 	void SetWetGain(float val);
 	void SetMasterGain(float val);
 	void SetResample(float val);
+	void SetRSMMode(float val);
 	void SetRSMRate(float val);
 	void SetBitCrush(float val);
 	void SetBitDepth(float val);
@@ -250,6 +253,7 @@ private:
 	float WetGain;
 	float MasterGain;
 	float Resample;
+	float RSMMode;
 	float RSMRate;
 	float BitCr;
 	float BitDepth;

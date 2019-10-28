@@ -37,6 +37,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	WetGain = 1;
 	MasterGain = 1;
 	Resample = 0;
+	RSMMode = 0;
 	RSMRate = 0;
 	BitCr = 0;
 	BitDepth = 8;
@@ -127,6 +128,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kWgain, ap->WetGain);	
 	setParameter (kMgain, ap->MasterGain);	
 	setParameter (kResample, ap->Resample);	
+	setParameter (kRsmmode, ap->RSMMode);	
 	setParameter (kRsmrate, ap->RSMRate);	
 	setParameter (kBitcrush, ap->BitCr);	
 	setParameter (kBitdepth, ap->BitDepth/16);	
@@ -361,6 +363,23 @@ void eaxreverb::SetResample (float val)
 }
 
 
+void eaxreverb::SetRSMMode (float val)
+{
+	RSMMode = val;
+	programs[curProgram].RSMMode = val;
+	if (RSMMode >= 0.5)
+	{
+		rate_new = rate*rsm;
+	}
+	else
+	{
+		rate_new = rate/rsm;
+	}
+	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
+	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
+}
+
+
 void eaxreverb::SetRSMRate (float val)
 {
 	RSMRate = val;
@@ -389,7 +408,14 @@ void eaxreverb::SetRSMRate (float val)
 	{
 		rsm = 1;
 	}
-	rate_new = rate/rsm;
+	if (RSMMode >= 0.5)
+	{
+		rate_new = rate*rsm;
+	}
+	else
+	{
+		rate_new = rate/rsm;
+	}
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
 }
@@ -1953,7 +1979,14 @@ void eaxreverb::resume ()
 	{
 		rsm = 1;
 	}
-	rate_new = rate/rsm;
+	if (RSMMode >= 0.5)
+	{
+		rate_new = rate*rsm;
+	}
+	else
+	{
+		rate_new = rate/rsm;
+	}
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
 	AudioEffectX::resume();
@@ -1991,6 +2024,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kWgain :    SetWetGain (value);					break;
 	case kMgain :    SetMasterGain (value);					break;
 	case kResample :    SetResample (value);					break;
+	case kRsmmode :    SetRSMMode (value);					break;
 	case kRsmrate :    SetRSMRate (value);					break;
 	case kBitcrush :    SetBitCrush (value);					break;
 	case kBitdepth :    SetBitDepth (value*16);					break;
@@ -2121,6 +2155,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kWgain :    v = WetGain;	break;
 	case kMgain :    v = MasterGain;	break;
 	case kResample :    v = Resample;	break;
+	case kRsmmode :    v = RSMMode;	break;
 	case kRsmrate :    v = RSMRate;	break;
 	case kBitcrush :    v = BitCr;	break;
 	case kBitdepth :    v = BitDepth/16;	break;
@@ -2250,6 +2285,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kWgain :    strcpy (text, "WetGain");		break;
 	case kMgain :    strcpy (text, "MasterGain");		break;
 	case kResample :    strcpy (text, "Resample");		break;
+	case kRsmmode :    strcpy (text, "ResampleMode");		break;
 	case kRsmrate :    strcpy (text, "ResampleRate");		break;
 	case kBitcrush :    strcpy (text, "BitCrush");		break;
 	case kBitdepth :    strcpy (text, "BitDepth");		break;
@@ -2458,6 +2494,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		else
 		{
 			strcpy (text, "OFF");					
+		}
+		break;
+	case kRsmmode :
+		if (RSMMode >= 0.5)	
+		{
+			strcpy (text, "UP");					
+		}
+		else
+		{
+			strcpy (text, "DOWN");					
 		}
 		break;
 	case kRsmrate :
@@ -2923,7 +2969,15 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			out2 -= workSamples;
 			int j;
 			int samplecount = 0;
-			int numsamples_new = workSamples/rsm;
+			int numsamples_new;
+			if (RSMMode >= 0.5)
+			{
+				numsamples_new = workSamples*rsm;
+			}
+			else
+			{
+				numsamples_new = workSamples/rsm;
+			}
 			short *samples_new = new short[numsamples_new*2];
 			GenerateSilence(samples_new, numsamples_new);
 			for(i = 0; i < numsamples_new*2; i+=2)
