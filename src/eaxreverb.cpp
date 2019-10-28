@@ -41,6 +41,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	BitCr = 0;
 	BitDepth = 8;
 	Dither = 0;
+	Limit = 1;
 	BQFilter = 0;
 	FLTType = 0;
 	FLTFreq = 440;
@@ -130,6 +131,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kBitcrush, ap->BitCr);	
 	setParameter (kBitdepth, ap->BitDepth/16);	
 	setParameter (kDither, ap->Dither);	
+	setParameter (kLimit, ap->Limit);	
 	setParameter (kBqfilter, ap->BQFilter);	
 	setParameter (kFlttype, ap->FLTType);	
 	setParameter (kFltfreq, ap->FLTFreq/20000);	
@@ -421,6 +423,13 @@ void eaxreverb::SetDither (float val)
 {
 	Dither = val;
 	programs[curProgram].Dither = val;
+}
+
+
+void eaxreverb::SetLimit (float val)
+{
+	Limit = val;
+	programs[curProgram].Limit = val;
 }
 
 
@@ -1986,6 +1995,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kBitcrush :    SetBitCrush (value);					break;
 	case kBitdepth :    SetBitDepth (value*16);					break;
 	case kDither :    SetDither (value);					break;
+	case kLimit :    SetLimit (value);					break;
 	case kBqfilter :    SetBQFilter (value);					break;
 	case kFlttype :    SetFLTType (value);					break;
 	case kFltfreq :    SetFLTFreq (value*20000);					break;
@@ -2115,6 +2125,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kBitcrush :    v = BitCr;	break;
 	case kBitdepth :    v = BitDepth/16;	break;
 	case kDither :    v = Dither;	break;
+	case kLimit :    v = Limit;	break;
 	case kBqfilter :    v = BQFilter;	break;
 	case kFlttype :    v = FLTType;	break;
 	case kFltfreq :    v = FLTFreq/20000;	break;
@@ -2173,6 +2184,7 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 	case kMgain :    strcpy (label, "F");		break;
 	case kRsmrate :    strcpy (label, "X");		break;
 	case kBitdepth :    strcpy (label, "Bits");		break;
+	case kLimit :    strcpy (label, "I");		break;
 	case kFltfreq :    strcpy (label, "Hz");		break;
 	case kFltres :    strcpy (label, "Db");		break;
 	case kFltgain :    strcpy (label, "Db");		break;
@@ -2242,6 +2254,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kBitcrush :    strcpy (text, "BitCrush");		break;
 	case kBitdepth :    strcpy (text, "BitDepth");		break;
 	case kDither :    strcpy (text, "Dither");		break;
+	case kLimit :    strcpy (text, "LimitSampleValues");		break;
 	case kBqfilter :    strcpy (text, "BiquadFilter");		break;
 	case kFlttype :    strcpy (text, "FilterType");		break;
 	case kFltfreq :    strcpy (text, "FilterFrequency");		break;
@@ -2502,6 +2515,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "NONE");					
 		}
 		break;
+	case kLimit : int2string (int(Limit*32767.0f), text, kVstMaxParamStrLen);	break;
 	case kBqfilter :
 		if (BQFilter >= 0.5)	
 		{
@@ -3000,6 +3014,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 				GaussianDither(samples, workSamples);
 			}
 			BitCrush(samples, workSamples);
+			LimitOutput(int(Limit*32767.0f), samples, workSamples);
 			for (i=0; i<workSamples*2; i+=2)
 			{
 				*out1 = float(samples[i] / 32767.0f);

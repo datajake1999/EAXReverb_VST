@@ -46,6 +46,7 @@ enum
 	kBitcrush,
 	kBitdepth,
 	kDither,
+	kLimit,
 	kBqfilter,
 	kFlttype,
 	kFltfreq,
@@ -101,6 +102,7 @@ private:
 	float BitCr;
 	float BitDepth;
 	float Dither;
+	float Limit;
 	float BQFilter;
 	float FLTType;
 	float FLTFreq;
@@ -176,6 +178,7 @@ private:
 	void SetBitCrush(float val);
 	void SetBitDepth(float val);
 	void SetDither(float val);
+	void SetLimit(float val);
 	void SetBQFilter(float val);
 	void SetFLTType(float val);
 	void SetFLTFreq(float val);
@@ -251,6 +254,7 @@ private:
 	float BitCr;
 	float BitDepth;
 	float Dither;
+	float Limit;
 	float BQFilter;
 	float FLTType;
 	float FLTFreq;
