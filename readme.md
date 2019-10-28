@@ -16,6 +16,12 @@ When you open the plugin, you will notice there is no UI, so you will have to us
 It is very easy to utilize this plugin. Lets use Reaper as an example.
 In your parameter window, you will see a list of parameters and their values. You can scroll with your mouse or use your keyboard to choose your parameter/value, and if you know which value you want right away, you can type it in the value edit field.
 
+# Additional features
+* Ability to run the reverb engine at a different sample rate than the host
+* Apply EQ after the reverb
+* Resample the output (unstable)
+* Reduce the bit depth of the output
+
 # Building from source
 
 ## on Windows
