@@ -19,7 +19,7 @@ In your parameter window, you will see a list of parameters and their values. Yo
 # Additional features
 * Ability to run the reverb engine at a different sample rate than the host
 * Apply EQ after the reverb
-* Resample the output (unstable)
+* Resample the output
 * Reduce the bit depth of the output
 
 # Building from source
