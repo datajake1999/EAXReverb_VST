@@ -396,13 +396,17 @@ void eaxreverb::SetRSMRate (float val)
 	{
 		rsm = 8;
 	}
-	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	else if (RSMRate >= 0.5 && RSMRate < 0.625)	
 	{
 		rsm = 16;
 	}
-	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	else if (RSMRate >= 0.625 && RSMRate < 0.75)	
 	{
 		rsm = 32;
+	}
+	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	{
+		rsm = 64;
 	}
 	else
 	{
@@ -1967,13 +1971,17 @@ void eaxreverb::resume ()
 	{
 		rsm = 8;
 	}
-	else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+	else if (RSMRate >= 0.5 && RSMRate < 0.625)	
 	{
 		rsm = 16;
 	}
-	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	else if (RSMRate >= 0.625 && RSMRate < 0.75)	
 	{
 		rsm = 32;
+	}
+	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+	{
+		rsm = 64;
 	}
 	else
 	{
@@ -2519,13 +2527,17 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		{
 			strcpy (text, "8");					
 		}
-		else if (RSMRate >= 0.5 && RSMRate < 0.75)	
+		else if (RSMRate >= 0.5 && RSMRate < 0.625)	
 		{
 			strcpy (text, "16");					
 		}
-		else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+		else if (RSMRate >= 0.625 && RSMRate < 0.75)	
 		{
 			strcpy (text, "32");					
+		}
+		else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
+		{
+			strcpy (text, "64");					
 		}
 		else
 		{
