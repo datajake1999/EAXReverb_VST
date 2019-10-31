@@ -37,6 +37,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	WetGain = 1;
 	MasterGain = 1;
 	Resample = 0;
+	RSMQ = 0;
 	RSMMode = 0;
 	RSMRate = 0;
 	BitCr = 0;
@@ -81,6 +82,8 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 eaxreverb::~eaxreverb ()
 {
 	effect.Destroy();
+	LinearResamplerDestroy(linearresampler1);
+	LinearResamplerDestroy(linearresampler2);
 	resampler_clear(resampler1);
 	resampler_destroy(resampler1);
 	resampler_clear(resampler2);
@@ -128,6 +131,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kWgain, ap->WetGain);	
 	setParameter (kMgain, ap->MasterGain);	
 	setParameter (kResample, ap->Resample);	
+	setParameter (kRsmq, ap->RSMQ);	
 	setParameter (kRsmmode, ap->RSMMode);	
 	setParameter (kRsmrate, ap->RSMRate);	
 	setParameter (kBitcrush, ap->BitCr);	
@@ -363,6 +367,13 @@ void eaxreverb::SetResample (float val)
 }
 
 
+void eaxreverb::SetRSMQ (float val)
+{
+	RSMQ = val;
+	programs[curProgram].RSMQ = val;
+}
+
+
 void eaxreverb::SetRSMMode (float val)
 {
 	RSMMode = val;
@@ -375,6 +386,8 @@ void eaxreverb::SetRSMMode (float val)
 	{
 		rate_new = rate/rsm;
 	}
+	LinearResamplerSetup(linearresampler1, rate, rate_new);
+	LinearResamplerSetup(linearresampler2, rate_new, rate);
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
 }
@@ -420,6 +433,8 @@ void eaxreverb::SetRSMRate (float val)
 	{
 		rate_new = rate/rsm;
 	}
+	LinearResamplerSetup(linearresampler1, rate, rate_new);
+	LinearResamplerSetup(linearresampler2, rate_new, rate);
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
 }
@@ -1957,6 +1972,8 @@ void eaxreverb::resume ()
 	{
 		sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
+	linearresampler1 = LinearResamplerCreate();
+	linearresampler2 = LinearResamplerCreate();
 	resampler1 = resampler_create();
 	resampler2 = resampler_create();
 	if (RSMRate >= 0.125 && RSMRate < 0.25)	
@@ -1995,6 +2012,8 @@ void eaxreverb::resume ()
 	{
 		rate_new = rate/rsm;
 	}
+	LinearResamplerSetup(linearresampler1, rate, rate_new);
+	LinearResamplerSetup(linearresampler2, rate_new, rate);
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
 	AudioEffectX::resume();
@@ -2032,6 +2051,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kWgain :    SetWetGain (value);					break;
 	case kMgain :    SetMasterGain (value);					break;
 	case kResample :    SetResample (value);					break;
+	case kRsmq :    SetRSMQ (value);					break;
 	case kRsmmode :    SetRSMMode (value);					break;
 	case kRsmrate :    SetRSMRate (value);					break;
 	case kBitcrush :    SetBitCrush (value);					break;
@@ -2163,6 +2183,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kWgain :    v = WetGain;	break;
 	case kMgain :    v = MasterGain;	break;
 	case kResample :    v = Resample;	break;
+	case kRsmq :    v = RSMQ;	break;
 	case kRsmmode :    v = RSMMode;	break;
 	case kRsmrate :    v = RSMRate;	break;
 	case kBitcrush :    v = BitCr;	break;
@@ -2293,6 +2314,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kWgain :    strcpy (text, "WetGain");		break;
 	case kMgain :    strcpy (text, "MasterGain");		break;
 	case kResample :    strcpy (text, "Resample");		break;
+	case kRsmq :    strcpy (text, "ResampleQuality");		break;
 	case kRsmmode :    strcpy (text, "ResampleMode");		break;
 	case kRsmrate :    strcpy (text, "ResampleRate");		break;
 	case kBitcrush :    strcpy (text, "BitCrush");		break;
@@ -2502,6 +2524,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		else
 		{
 			strcpy (text, "OFF");					
+		}
+		break;
+	case kRsmq :
+		if (RSMQ >= 0.5)	
+		{
+			strcpy (text, "SINC");					
+		}
+		else
+		{
+			strcpy (text, "LINEAR");					
 		}
 		break;
 	case kRsmmode :
@@ -2979,8 +3011,6 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			}
 			out1 -= workSamples;
 			out2 -= workSamples;
-			int j;
-			int samplecount = 0;
 			int numsamples_new;
 			if (RSMMode >= 0.5)
 			{
@@ -2992,44 +3022,54 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			}
 			short *samples_new = new short[numsamples_new*2];
 			GenerateSilence(samples_new, numsamples_new);
-			for(i = 0; i < numsamples_new*2; i+=2)
+			if (RSMQ >= 0.5)
 			{
-				sample_t ls, rs;
-				for(j = 0; j = resampler_get_min_fill(resampler1); j++)
+				int j;
+				int samplecount = 0;
+				for(i = 0; i < numsamples_new*2; i+=2)
 				{
-					if (samplecount >= workSamples*2)
+					sample_t ls, rs;
+					for(j = 0; j = resampler_get_min_fill(resampler1); j++)
 					{
-						break;
+						if (samplecount >= workSamples*2)
+						{
+							break;
+						}
+						resampler_write_pair(resampler1, samples[samplecount], samples[samplecount + 1]);
+						samplecount += 2;
 					}
-					resampler_write_pair(resampler1, samples[samplecount], samples[samplecount + 1]);
-					samplecount += 2;
+					resampler_peek_pair(resampler1, &ls, &rs);
+					resampler_read_pair(resampler1, &ls, &rs);
+					if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
+					if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
+					samples_new[i] = (short)ls;
+					samples_new[i + 1] = (short)rs;
 				}
-				resampler_peek_pair(resampler1, &ls, &rs);
-				resampler_read_pair(resampler1, &ls, &rs);
-				if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
-				if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
-				samples_new[i] = (short)ls;
-				samples_new[i + 1] = (short)rs;
+				samplecount = 0;
+				for(i = 0; i < workSamples*2; i+=2)
+				{
+					sample_t ls, rs;
+					for(j = 0; j = resampler_get_min_fill(resampler2); j++)
+					{
+						if (samplecount >= numsamples_new*2)
+						{
+							break;
+						}
+						resampler_write_pair(resampler2, samples_new[samplecount], samples_new[samplecount + 1]);
+						samplecount += 2;
+					}
+					resampler_peek_pair(resampler2, &ls, &rs);
+					resampler_read_pair(resampler2, &ls, &rs);
+					if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
+					if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
+					samples[i] = (short)ls;
+					samples[i + 1] = (short)rs;
+				}
 			}
-			samplecount = 0;
-			for(i = 0; i < workSamples*2; i+=2)
+			else
 			{
-				sample_t ls, rs;
-				for(j = 0; j = resampler_get_min_fill(resampler2); j++)
-				{
-					if (samplecount >= numsamples_new*2)
-					{
-						break;
-					}
-					resampler_write_pair(resampler2, samples_new[samplecount], samples_new[samplecount + 1]);
-					samplecount += 2;
-				}
-				resampler_peek_pair(resampler2, &ls, &rs);
-				resampler_read_pair(resampler2, &ls, &rs);
-				if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
-				if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
-				samples[i] = (short)ls;
-				samples[i + 1] = (short)rs;
+				LinearResamplerProcess(linearresampler1, samples, workSamples, samples_new, numsamples_new);
+				LinearResamplerProcess(linearresampler2, samples_new, numsamples_new, samples, workSamples);
 			}
 			delete[] samples_new;
 			for (i=0; i<workSamples*2; i+=2)

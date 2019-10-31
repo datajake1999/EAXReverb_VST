@@ -5,6 +5,7 @@
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 #include "biquad.h"
 #include "bitcrush.h"
+#include "LinearResampler.h"
 #include "resampler.h"
 #include "ReverbEffect.h"
 #include "silence.h"
@@ -42,6 +43,7 @@ enum
 	kWgain,
 	kMgain,
 	kResample,
+	kRsmq,
 	kRsmmode,
 	kRsmrate,
 	kBitcrush,
@@ -99,6 +101,7 @@ private:
 	float WetGain;
 	float MasterGain;
 	float Resample;
+	float RSMQ;
 	float RSMMode;
 	float RSMRate;
 	float BitCr;
@@ -176,6 +179,7 @@ private:
 	void SetWetGain(float val);
 	void SetMasterGain(float val);
 	void SetResample(float val);
+	void SetRSMQ(float val);
 	void SetRSMMode(float val);
 	void SetRSMRate(float val);
 	void SetBitCrush(float val);
@@ -222,6 +226,8 @@ private:
 
 	ReverbEffect effect;
 	sf_biquad_state_st bq_state;
+	void *linearresampler1;
+	void *linearresampler2;
 	void *resampler1;
 	void *resampler2;
 	eaxreverbProgram* programs;
@@ -253,6 +259,7 @@ private:
 	float WetGain;
 	float MasterGain;
 	float Resample;
+	float RSMQ;
 	float RSMMode;
 	float RSMRate;
 	float BitCr;
