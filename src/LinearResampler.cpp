@@ -65,8 +65,8 @@ void LinearResamplerProcess(void *_lr, signed short *buffer_in, unsigned int len
 			lr->oldsamples[1] = lr->samples[1];
 			if (samplecount >= length_in*2)
 			{
-				lr->samples[0] = lr->samples[0];
-				lr->samples[1] = lr->samples[1];
+				lr->samples[0] = lr->oldsamples[0];
+				lr->samples[1] = lr->oldsamples[1];
 			}
 			else
 			{
