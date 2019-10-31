@@ -114,6 +114,10 @@ SOURCE=..\res\EAXReverb.rc
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\LinearResampler.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\main.cpp
 # End Source File
 # Begin Source File
