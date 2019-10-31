@@ -18,6 +18,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+/*
+Linear resampling algorithm taken from Nuked OPL3 emulator:
+https://github.com/chocolate-doom/chocolate-doom/blob/master/opl/opl3.c
+https://github.com/chocolate-doom/chocolate-doom/blob/master/opl/opl3.h
+*/
+
 #include <stdlib.h>
 #include "LinearResampler.h"
 #define RSM_FRAC    10
