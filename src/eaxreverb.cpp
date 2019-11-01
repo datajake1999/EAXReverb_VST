@@ -3033,7 +3033,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 					{
 						if (samplecount >= workSamples*2)
 						{
-							break;
+							samplecount = workSamples*2 - 2;
 						}
 						resampler_write_pair(resampler1, samples[samplecount], samples[samplecount + 1]);
 						samplecount += 2;
@@ -3053,7 +3053,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 					{
 						if (samplecount >= numsamples_new*2)
 						{
-							break;
+							samplecount = numsamples_new*2 - 2;
 						}
 						resampler_write_pair(resampler2, samples_new[samplecount], samples_new[samplecount + 1]);
 						samplecount += 2;
