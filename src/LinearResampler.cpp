@@ -39,6 +39,12 @@ typedef struct _linearresampler
 void * LinearResamplerCreate()
 {
 	linearresampler *lr = (linearresampler *) malloc(sizeof(linearresampler));
+	lr->rateratio = 1024;
+	lr->samplecnt = 0;
+	lr->oldsamples[0] = 0;
+	lr->oldsamples[1] = 0;
+	lr->samples[0] = 0;
+	lr->samples[1] = 0;
 	return lr;
 }
 
@@ -51,11 +57,6 @@ void LinearResamplerSetup(void *_lr, unsigned int srcrate, unsigned int dstrate)
 {
 	linearresampler * lr = (linearresampler *)_lr;
 	lr->rateratio = (dstrate << RSM_FRAC) / srcrate;
-	lr->samplecnt = 0;
-	lr->oldsamples[0] = 0;
-	lr->oldsamples[1] = 0;
-	lr->samples[0] = 0;
-	lr->samples[1] = 0;
 }
 
 void LinearResamplerProcess(void *_lr, signed short *buffer_in, unsigned int length_in, signed short *buffer_out, unsigned int length_out)
