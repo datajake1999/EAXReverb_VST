@@ -280,7 +280,6 @@ private:
 	
 	int rate;
 	int rate_new;
-	int rsm;
 	int bits;
 };
 

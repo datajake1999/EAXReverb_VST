@@ -39,7 +39,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	Resample = 0;
 	RSMQ = 0;
 	RSMMode = 0;
-	RSMRate = 0;
+	RSMRate = 1;
 	BitCr = 0;
 	BitDepth = 8;
 	Dither = 0;
@@ -133,7 +133,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kResample, ap->Resample);	
 	setParameter (kRsmq, ap->RSMQ);	
 	setParameter (kRsmmode, ap->RSMMode);	
-	setParameter (kRsmrate, ap->RSMRate);	
+	setParameter (kRsmrate, ap->RSMRate/64);	
 	setParameter (kBitcrush, ap->BitCr);	
 	setParameter (kBitdepth, ap->BitDepth/16);	
 	setParameter (kDither, ap->Dither);	
@@ -380,11 +380,11 @@ void eaxreverb::SetRSMMode (float val)
 	programs[curProgram].RSMMode = val;
 	if (RSMMode >= 0.5)
 	{
-		rate_new = rate*rsm;
+		rate_new = int(rate*RSMRate);
 	}
 	else
 	{
-		rate_new = rate/rsm;
+		rate_new = int(rate/RSMRate);
 	}
 	LinearResamplerSetup(linearresampler1, rate, rate_new);
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
@@ -395,43 +395,23 @@ void eaxreverb::SetRSMMode (float val)
 
 void eaxreverb::SetRSMRate (float val)
 {
+	if (val > 64)
+	{
+		val = 64;
+	}
+	else if (val < 1)
+	{
+		val = 1;
+	}
 	RSMRate = val;
 	programs[curProgram].RSMRate = val;
-	if (RSMRate >= 0.125 && RSMRate < 0.25)	
-	{
-		rsm = 2;
-	}
-	else if (RSMRate >= 0.25 && RSMRate < 0.375)	
-	{
-		rsm = 4;
-	}
-	else if (RSMRate >= 0.375 && RSMRate < 0.5)	
-	{
-		rsm = 8;
-	}
-	else if (RSMRate >= 0.5 && RSMRate < 0.625)	
-	{
-		rsm = 16;
-	}
-	else if (RSMRate >= 0.625 && RSMRate < 0.75)	
-	{
-		rsm = 32;
-	}
-	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
-	{
-		rsm = 64;
-	}
-	else
-	{
-		rsm = 1;
-	}
 	if (RSMMode >= 0.5)
 	{
-		rate_new = rate*rsm;
+		rate_new = int(rate*RSMRate);
 	}
 	else
 	{
-		rate_new = rate/rsm;
+		rate_new = int(rate/RSMRate);
 	}
 	LinearResamplerSetup(linearresampler1, rate, rate_new);
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
@@ -1976,41 +1956,13 @@ void eaxreverb::resume ()
 	linearresampler2 = LinearResamplerCreate();
 	resampler1 = resampler_create();
 	resampler2 = resampler_create();
-	if (RSMRate >= 0.125 && RSMRate < 0.25)	
-	{
-		rsm = 2;
-	}
-	else if (RSMRate >= 0.25 && RSMRate < 0.375)	
-	{
-		rsm = 4;
-	}
-	else if (RSMRate >= 0.375 && RSMRate < 0.5)	
-	{
-		rsm = 8;
-	}
-	else if (RSMRate >= 0.5 && RSMRate < 0.625)	
-	{
-		rsm = 16;
-	}
-	else if (RSMRate >= 0.625 && RSMRate < 0.75)	
-	{
-		rsm = 32;
-	}
-	else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
-	{
-		rsm = 64;
-	}
-	else
-	{
-		rsm = 1;
-	}
 	if (RSMMode >= 0.5)
 	{
-		rate_new = rate*rsm;
+		rate_new = int(rate*RSMRate);
 	}
 	else
 	{
-		rate_new = rate/rsm;
+		rate_new = int(rate/RSMRate);
 	}
 	LinearResamplerSetup(linearresampler1, rate, rate_new);
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
@@ -2053,7 +2005,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kResample :    SetResample (value);					break;
 	case kRsmq :    SetRSMQ (value);					break;
 	case kRsmmode :    SetRSMMode (value);					break;
-	case kRsmrate :    SetRSMRate (value);					break;
+	case kRsmrate :    SetRSMRate (value*64);					break;
 	case kBitcrush :    SetBitCrush (value);					break;
 	case kBitdepth :    SetBitDepth (value*16);					break;
 	case kDither :    SetDither (value);					break;
@@ -2185,7 +2137,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kResample :    v = Resample;	break;
 	case kRsmq :    v = RSMQ;	break;
 	case kRsmmode :    v = RSMMode;	break;
-	case kRsmrate :    v = RSMRate;	break;
+	case kRsmrate :    v = RSMRate/64;	break;
 	case kBitcrush :    v = BitCr;	break;
 	case kBitdepth :    v = BitDepth/16;	break;
 	case kDither :    v = Dither;	break;
@@ -2546,36 +2498,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "DOWN");					
 		}
 		break;
-	case kRsmrate :
-		if (RSMRate >= 0.125 && RSMRate < 0.25)	
-		{
-			strcpy (text, "2");					
-		}
-		else if (RSMRate >= 0.25 && RSMRate < 0.375)	
-		{
-			strcpy (text, "4");					
-		}
-		else if (RSMRate >= 0.375 && RSMRate < 0.5)	
-		{
-			strcpy (text, "8");					
-		}
-		else if (RSMRate >= 0.5 && RSMRate < 0.625)	
-		{
-			strcpy (text, "16");					
-		}
-		else if (RSMRate >= 0.625 && RSMRate < 0.75)	
-		{
-			strcpy (text, "32");					
-		}
-		else if (RSMRate >= 0.75 && RSMRate <= 1.0)	
-		{
-			strcpy (text, "64");					
-		}
-		else
-		{
-			strcpy (text, "1");					
-		}
-		break;
+	case kRsmrate : float2string (RSMRate, text, kVstMaxParamStrLen);	break;
 	case kBitcrush :
 		if (BitCr >= 0.5)	
 		{
@@ -3014,11 +2937,11 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			int numsamples_new;
 			if (RSMMode >= 0.5)
 			{
-				numsamples_new = workSamples*rsm;
+				numsamples_new = int(workSamples*RSMRate);
 			}
 			else
 			{
-				numsamples_new = workSamples/rsm;
+				numsamples_new = int(workSamples/RSMRate);
 			}
 			short *samples_new = new short[numsamples_new*2];
 			GenerateSilence(samples_new, numsamples_new);
