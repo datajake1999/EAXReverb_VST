@@ -26,6 +26,7 @@ extern "C" {
 #endif
 	void * LinearResamplerCreate();
 	void LinearResamplerDestroy(void *);
+	void LinearResamplerReset(void *);
 	void LinearResamplerSetup(void *, unsigned int srcrate, unsigned int dstrate);
 	void LinearResamplerProcess(void *, signed short *buffer_in, unsigned int length_in, signed short *buffer_out, unsigned int length_out);
 #ifdef __cplusplus

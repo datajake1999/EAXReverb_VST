@@ -82,7 +82,9 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 eaxreverb::~eaxreverb ()
 {
 	effect.Destroy();
+	LinearResamplerReset(linearresampler1);
 	LinearResamplerDestroy(linearresampler1);
+	LinearResamplerReset(linearresampler2);
 	LinearResamplerDestroy(linearresampler2);
 	resampler_clear(resampler1);
 	resampler_destroy(resampler1);
