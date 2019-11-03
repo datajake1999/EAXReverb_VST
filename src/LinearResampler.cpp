@@ -25,6 +25,7 @@ https://github.com/chocolate-doom/chocolate-doom/blob/master/opl/opl3.h
 */
 
 #include <stdlib.h>
+#include <string.h>
 #include "LinearResampler.h"
 #define RSM_FRAC    10
 
@@ -41,6 +42,21 @@ void * LinearResamplerCreate()
 	linearresampler *lr = (linearresampler *) malloc(sizeof(linearresampler));
 	if (lr) LinearResamplerReset(lr);
 	return lr;
+}
+
+void * LinearResamplerDuplicate(void *_lr)
+{
+	linearresampler * lr = (linearresampler *)_lr;
+	linearresampler *t = (linearresampler *) malloc(sizeof(linearresampler));
+	if (lr && t)
+	{
+		memcpy(t, lr, sizeof(linearresampler));
+	}
+	else if (t)
+	{
+		LinearResamplerReset(t);
+	}
+	return t;
 }
 
 void LinearResamplerDestroy(void *lr)

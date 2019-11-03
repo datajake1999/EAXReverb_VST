@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 extern "C" {
 #endif
 	void * LinearResamplerCreate();
+	void * LinearResamplerDuplicate(void *);
 	void LinearResamplerDestroy(void *);
 	void LinearResamplerReset(void *);
 	void LinearResamplerSetup(void *, unsigned int srcrate, unsigned int dstrate);
