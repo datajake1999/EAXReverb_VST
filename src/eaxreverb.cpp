@@ -380,13 +380,21 @@ void eaxreverb::SetRSMMode (float val)
 {
 	RSMMode = val;
 	programs[curProgram].RSMMode = val;
-	if (RSMMode >= 0.5)
+	if (RSMRate >= 1.0)
 	{
-		rate_new = int(rate*RSMRate);
+		rsm = int(RSMRate);
 	}
 	else
 	{
-		rate_new = int(rate/RSMRate);
+		rsm = 1;
+	}
+	if (RSMMode >= 0.5)
+	{
+		rate_new = rate*rsm;
+	}
+	else
+	{
+		rate_new = rate/rsm;
 	}
 	LinearResamplerSetup(linearresampler1, rate, rate_new);
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
@@ -407,13 +415,21 @@ void eaxreverb::SetRSMRate (float val)
 	}
 	RSMRate = val;
 	programs[curProgram].RSMRate = val;
-	if (RSMMode >= 0.5)
+	if (RSMRate >= 1.0)
 	{
-		rate_new = int(rate*RSMRate);
+		rsm = int(RSMRate);
 	}
 	else
 	{
-		rate_new = int(rate/RSMRate);
+		rsm = 1;
+	}
+	if (RSMMode >= 0.5)
+	{
+		rate_new = rate*rsm;
+	}
+	else
+	{
+		rate_new = rate/rsm;
 	}
 	LinearResamplerSetup(linearresampler1, rate, rate_new);
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
@@ -1958,13 +1974,21 @@ void eaxreverb::resume ()
 	linearresampler2 = LinearResamplerCreate();
 	resampler1 = resampler_create();
 	resampler2 = resampler_create();
-	if (RSMMode >= 0.5)
+	if (RSMRate >= 1.0)
 	{
-		rate_new = int(rate*RSMRate);
+		rsm = int(RSMRate);
 	}
 	else
 	{
-		rate_new = int(rate/RSMRate);
+		rsm = 1;
+	}
+	if (RSMMode >= 0.5)
+	{
+		rate_new = rate*rsm;
+	}
+	else
+	{
+		rate_new = rate/rsm;
 	}
 	LinearResamplerSetup(linearresampler1, rate, rate_new);
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
@@ -2500,7 +2524,7 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "DOWN");					
 		}
 		break;
-	case kRsmrate : float2string (RSMRate, text, kVstMaxParamStrLen);	break;
+	case kRsmrate : int2string (rsm, text, kVstMaxParamStrLen);	break;
 	case kBitcrush :
 		if (BitCr >= 0.5)	
 		{
@@ -2939,11 +2963,11 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			int numsamples_new;
 			if (RSMMode >= 0.5)
 			{
-				numsamples_new = int(workSamples*RSMRate);
+				numsamples_new = workSamples*rsm;
 			}
 			else
 			{
-				numsamples_new = int(workSamples/RSMRate);
+				numsamples_new = workSamples/rsm;
 			}
 			short *samples_new = new short[numsamples_new*2];
 			GenerateSilence(samples_new, numsamples_new);
