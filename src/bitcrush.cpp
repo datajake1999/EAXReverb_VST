@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #ifndef DISABLE_DSP_SUPPORT
 static unsigned int bits = 8;
+static unsigned int AutoDither = 0;
 
 /*
 Sources for dither noise generators
@@ -123,6 +124,22 @@ unsigned int GetCrushAmount()
 #endif /*DISABLE_DSP_SUPPORT*/
 }
 
+void SetAutoDither(unsigned int val)
+{
+#ifndef DISABLE_DSP_SUPPORT
+	AutoDither = val;
+#endif /*DISABLE_DSP_SUPPORT*/
+}
+
+unsigned int GetAutoDither()
+{
+#ifndef DISABLE_DSP_SUPPORT
+	return AutoDither;
+#else
+	return 0;
+#endif /*DISABLE_DSP_SUPPORT*/
+}
+
 void RectangleDither(signed short *buffer, unsigned int length)
 {
 #ifndef DISABLE_DSP_SUPPORT
@@ -131,6 +148,9 @@ void RectangleDither(signed short *buffer, unsigned int length)
 	signed long add;
 	for(i = 0; i < length; i++)
 	{
+		if (AutoDither == 1 && buffer[0] == 0)
+		noise = 0;
+		else
 		noise = Gen_RectPDF() >> bits;
 		add = buffer[0] + noise;
 		if (add > 32767)
@@ -142,6 +162,9 @@ void RectangleDither(signed short *buffer, unsigned int length)
 			add = -32768;
 		}
 		buffer[0] = (short)add;
+		if (AutoDither == 1 && buffer[1] == 0)
+		noise = 0;
+		else
 		noise = Gen_RectPDF() >> bits;
 		add = buffer[1] + noise;
 		if (add > 32767)
@@ -166,6 +189,9 @@ void TriangleDither(signed short *buffer, unsigned int length)
 	signed long add;
 	for(i = 0; i < length; i++)
 	{
+		if (AutoDither == 1 && buffer[0] == 0)
+		noise = 0;
+		else
 		noise = Gen_TriPDF() >> bits;
 		add = buffer[0] + noise;
 		if (add > 32767)
@@ -177,6 +203,9 @@ void TriangleDither(signed short *buffer, unsigned int length)
 			add = -32768;
 		}
 		buffer[0] = (short)add;
+		if (AutoDither == 1 && buffer[1] == 0)
+		noise = 0;
+		else
 		noise = Gen_TriPDF() >> bits;
 		add = buffer[1] + noise;
 		if (add > 32767)
@@ -206,6 +235,9 @@ void GaussianDither(signed short *buffer, unsigned int length)
 	}
 	for(i = 0; i < length; i++)
 	{
+		if (AutoDither == 1 && buffer[0] == 0)
+		noise = 0;
+		else
 		noise = AWGN_generator() * nmult;
 		add = buffer[0] + noise;
 		if (add > 32767)
@@ -217,6 +249,9 @@ void GaussianDither(signed short *buffer, unsigned int length)
 			add = -32768;
 		}
 		buffer[0] = (short)add;
+		if (AutoDither == 1 && buffer[1] == 0)
+		noise = 0;
+		else
 		noise = AWGN_generator() * nmult;
 		add = buffer[1] + noise;
 		if (add > 32767)

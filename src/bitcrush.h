@@ -27,6 +27,8 @@ extern "C" {
 	void SetCrushAmount(unsigned int amount);
 	void SetCrushAmountEnv();
 	unsigned int GetCrushAmount();
+	void SetAutoDither(unsigned int val);
+	unsigned int GetAutoDither();
 	void RectangleDither(signed short *buffer, unsigned int length);
 	void TriangleDither(signed short *buffer, unsigned int length);
 	void GaussianDither(signed short *buffer, unsigned int length);

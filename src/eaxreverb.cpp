@@ -43,6 +43,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	BitCr = 0;
 	BitDepth = 8;
 	Dither = 0;
+	AutoDither = 0;
 	Limit = 1;
 	BQFilter = 0;
 	FLTType = 0;
@@ -139,6 +140,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kBitcrush, ap->BitCr);	
 	setParameter (kBitdepth, ap->BitDepth/16);	
 	setParameter (kDither, ap->Dither);	
+	setParameter (kAutodither, ap->AutoDither);	
 	setParameter (kLimit, ap->Limit);	
 	setParameter (kBqfilter, ap->BQFilter);	
 	setParameter (kFlttype, ap->FLTType);	
@@ -466,6 +468,21 @@ void eaxreverb::SetDither (float val)
 {
 	Dither = val;
 	programs[curProgram].Dither = val;
+}
+
+
+void eaxreverb::SetAutoD (float val)
+{
+	AutoDither = val;
+	programs[curProgram].AutoDither = val;
+	if (AutoDither >= 0.5)
+	{
+		SetAutoDither(1);
+	}
+	else
+	{
+		SetAutoDither(0);
+	}
 }
 
 
@@ -2035,6 +2052,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kBitcrush :    SetBitCrush (value);					break;
 	case kBitdepth :    SetBitDepth (value*16);					break;
 	case kDither :    SetDither (value);					break;
+	case kAutodither :    SetAutoD (value);					break;
 	case kLimit :    SetLimit (value);					break;
 	case kBqfilter :    SetBQFilter (value);					break;
 	case kFlttype :    SetFLTType (value);					break;
@@ -2167,6 +2185,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kBitcrush :    v = BitCr;	break;
 	case kBitdepth :    v = BitDepth/16;	break;
 	case kDither :    v = Dither;	break;
+	case kAutodither :    v = AutoDither;	break;
 	case kLimit :    v = Limit;	break;
 	case kBqfilter :    v = BQFilter;	break;
 	case kFlttype :    v = FLTType;	break;
@@ -2298,6 +2317,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kBitcrush :    strcpy (text, "BitCrush");		break;
 	case kBitdepth :    strcpy (text, "BitDepth");		break;
 	case kDither :    strcpy (text, "Dither");		break;
+	case kAutodither :    strcpy (text, "AutoDither");		break;
 	case kLimit :    strcpy (text, "LimitSampleValues");		break;
 	case kBqfilter :    strcpy (text, "BiquadFilter");		break;
 	case kFlttype :    strcpy (text, "FilterType");		break;
@@ -2552,6 +2572,16 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		else
 		{
 			strcpy (text, "NONE");					
+		}
+		break;
+	case kAutodither :
+		if (AutoDither >= 0.5)	
+		{
+			strcpy (text, "ON");					
+		}
+		else
+		{
+			strcpy (text, "OFF");					
 		}
 		break;
 	case kLimit : int2string (int(Limit*32767.0f), text, kVstMaxParamStrLen);	break;
