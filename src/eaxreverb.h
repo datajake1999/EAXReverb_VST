@@ -50,6 +50,7 @@ enum
 	kBitdepth,
 	kDither,
 	kAutodither,
+	kOnlyqerror,
 	kLimit,
 	kBqfilter,
 	kFlttype,
@@ -109,6 +110,7 @@ private:
 	float BitDepth;
 	float Dither;
 	float AutoDither;
+	float OnlyQError;
 	float Limit;
 	float BQFilter;
 	float FLTType;
@@ -188,6 +190,7 @@ private:
 	void SetBitDepth(float val);
 	void SetDither(float val);
 	void SetAutoD(float val);
+	void SetOnlyQError(float val);
 	void SetLimit(float val);
 	void SetBQFilter(float val);
 	void SetFLTType(float val);
@@ -269,6 +272,7 @@ private:
 	float BitDepth;
 	float Dither;
 	float AutoDither;
+	float OnlyQError;
 	float Limit;
 	float BQFilter;
 	float FLTType;

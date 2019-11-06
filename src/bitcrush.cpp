@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef DISABLE_DSP_SUPPORT
 static unsigned int bits = 8;
 static unsigned int AutoDither = 0;
+static unsigned int OnlyError = 0;
 
 /*
 Sources for dither noise generators
@@ -135,6 +136,22 @@ unsigned int GetAutoDither()
 {
 #ifndef DISABLE_DSP_SUPPORT
 	return AutoDither;
+#else
+	return 0;
+#endif /*DISABLE_DSP_SUPPORT*/
+}
+
+void SetOnlyError(unsigned int val)
+{
+#ifndef DISABLE_DSP_SUPPORT
+	OnlyError = val;
+#endif /*DISABLE_DSP_SUPPORT*/
+}
+
+unsigned int GetOnlyError()
+{
+#ifndef DISABLE_DSP_SUPPORT
+	return OnlyError;
 #else
 	return 0;
 #endif /*DISABLE_DSP_SUPPORT*/
@@ -275,7 +292,13 @@ void BitCrush(signed short *buffer, unsigned int length)
 	unsigned int crush = 16 - bits;
 	for(i = 0; i < length; i++)
 	{
+		if (OnlyError == 1)
+		buffer[0] = buffer[0] + (buffer[0] >> crush << crush) * -1;
+		else
 		buffer[0] = buffer[0] >> crush << crush;
+		if (OnlyError == 1)
+		buffer[1] = buffer[1] + (buffer[1] >> crush << crush) * -1;
+		else
 		buffer[1] = buffer[1] >> crush << crush;
 		buffer += 2;
 	}
