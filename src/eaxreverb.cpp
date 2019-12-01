@@ -1996,6 +1996,10 @@ void eaxreverb::resume ()
 	{
 		sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
+	else
+	{
+		sf_highpass(&bq_state, rate, 0, 0);
+	}
 	linearresampler1 = LinearResamplerCreate();
 	linearresampler2 = LinearResamplerCreate();
 	resampler1 = resampler_create();
@@ -2133,6 +2137,10 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 		else if (FLTType >= 0.875 && FLTType <= 1.0)	
 		{
 			sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
+		}
+		else
+		{
+			sf_highpass(&bq_state, rate, 0, 0);
 		}
 	}
 	if (index > kPreset && index < kNumParams)
@@ -2649,6 +2657,10 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		else if (FLTType >= 0.875 && FLTType <= 1.0)	
 		{
 			strcpy (text, "HIGHSHELF");					
+		}
+		else
+		{
+			strcpy (text, "NONE");					
 		}
 		break;
 	case kFltfreq : float2string (FLTFreq, text, kVstMaxParamStrLen);	break;
