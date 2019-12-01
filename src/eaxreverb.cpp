@@ -519,14 +519,6 @@ void eaxreverb::SetBQFilter (float val)
 
 void eaxreverb::SetFLTType (float val)
 {
-	if (val > 8)
-	{
-		val = 8;
-	}
-	else if (val < 0)
-	{
-		val = 0;
-	}
 	FLTType = val;
 	programs[curProgram].FLTType = val;
 }
