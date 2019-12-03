@@ -28,7 +28,7 @@ compress: $(TARGET)
 decompress: $(TARGET).gz
 	gzip -d $(TARGET).gz
 
-.PHONY: clean help
+.PHONY: clean help license
 
 clean:
 	rm -f $(OBJS) $(TARGET)
@@ -43,4 +43,11 @@ help:
 	@echo make compress: compress the library into a gzip archive
 	@echo make decompress: decompress the library from a gzip archive
 	@echo make clean: remove object code and compiled library from working directory
+	@echo make license: display license
 	@echo make help: list supported commands
+
+license:
+	@echo "This program is free software; you can redistribute it and/or"
+	@echo "modify it under the terms of the GNU Lesser General Public License"
+	@echo "as published by the Free Software Foundation; either version 2"
+	@echo "of the License, or (at your option) any later version."
