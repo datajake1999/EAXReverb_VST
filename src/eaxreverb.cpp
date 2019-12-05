@@ -1887,11 +1887,11 @@ void eaxreverb::SetDecayHFLimit (float val)
 	programs[curProgram].DecayHFLimit = val;
 	if (DecayHFLimit >= 0.5)
 	{
-		i_DecayHFLimit = 1;
+		i_DecayHFLimit = EAXREVERB_MAX_DECAY_HFLIMIT;
 	}
 	else
 	{
-		i_DecayHFLimit = 0;
+		i_DecayHFLimit = EAXREVERB_MIN_DECAY_HFLIMIT;
 	}
 }
 
