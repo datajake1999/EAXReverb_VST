@@ -534,6 +534,10 @@ void eaxreverb::SetFLTFreq (float val)
 	{
 		val = 20;
 	}
+	if (val > rate/2-2)
+	{
+		val = float(rate/2-2);
+	}
 	FLTFreq = val;
 	programs[curProgram].FLTFreq = val;
 }
