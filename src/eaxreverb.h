@@ -9,6 +9,7 @@
 #include "resampler.h"
 #include "ReverbEffect.h"
 #include "silence.h"
+#include "ZOHResampler.h"
 
 enum
 {
@@ -236,6 +237,8 @@ private:
 	void *linearresampler2;
 	void *resampler1;
 	void *resampler2;
+	void *zohresampler1;
+	void *zohresampler2;
 	eaxreverbProgram* programs;
 	
 	float DisableEffect;

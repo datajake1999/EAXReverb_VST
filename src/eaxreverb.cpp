@@ -92,6 +92,10 @@ eaxreverb::~eaxreverb ()
 	resampler_destroy(resampler1);
 	resampler_clear(resampler2);
 	resampler_destroy(resampler2);
+	ZOHResamplerReset(zohresampler1);
+	ZOHResamplerDestroy(zohresampler1);
+	ZOHResamplerReset(zohresampler2);
+	ZOHResamplerDestroy(zohresampler2);
 	if (programs)
 	delete[] programs;
 }
@@ -404,6 +408,8 @@ void eaxreverb::SetRSMMode (float val)
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
+	ZOHResamplerSetup(zohresampler1, rate, rate_new);
+	ZOHResamplerSetup(zohresampler2, rate_new, rate);
 }
 
 
@@ -439,6 +445,8 @@ void eaxreverb::SetRSMRate (float val)
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
+	ZOHResamplerSetup(zohresampler1, rate, rate_new);
+	ZOHResamplerSetup(zohresampler2, rate_new, rate);
 }
 
 
@@ -2008,6 +2016,8 @@ void eaxreverb::resume ()
 	linearresampler2 = LinearResamplerCreate();
 	resampler1 = resampler_create();
 	resampler2 = resampler_create();
+	zohresampler1 = ZOHResamplerCreate();
+	zohresampler2 = ZOHResamplerCreate();
 	if (RSMRate >= 1.0)
 	{
 		rsm = int(RSMRate);
@@ -2028,6 +2038,8 @@ void eaxreverb::resume ()
 	LinearResamplerSetup(linearresampler2, rate_new, rate);
 	resampler_set_rate(resampler1, (double)rate / (double)rate_new);
 	resampler_set_rate(resampler2, (double)rate_new / (double)rate);
+	ZOHResamplerSetup(zohresampler1, rate, rate_new);
+	ZOHResamplerSetup(zohresampler2, rate_new, rate);
 	AudioEffectX::resume();
 }
 
@@ -2552,6 +2564,10 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		if (RSMQ >= 0.5)	
 		{
 			strcpy (text, "SINC");					
+		}
+		else if (RSMQ >= 0.25 && RSMQ < 0.5)	
+		{
+			strcpy (text, "ZOH");					
 		}
 		else
 		{
@@ -3082,6 +3098,11 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 					samples[i] = (short)ls;
 					samples[i + 1] = (short)rs;
 				}
+			}
+			else if (RSMQ >= 0.25 && RSMQ < 0.5)	
+			{
+				ZOHResamplerProcess(zohresampler1, samples, workSamples, samples_new, numsamples_new);
+				ZOHResamplerProcess(zohresampler2, samples_new, numsamples_new, samples, workSamples);
 			}
 			else
 			{
