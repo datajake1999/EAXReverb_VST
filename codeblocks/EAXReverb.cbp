@@ -53,6 +53,7 @@
 		<Unit filename="../src/ReverbEffect.cpp" />
 		<Unit filename="../src/resampler.cpp" />
 		<Unit filename="../src/LinearResampler.cpp" />
+		<Unit filename="../src/ZOHResampler.cpp" />
 		<Unit filename="../src/eaxreverb.cpp" />
 		<Unit filename="../src/bitcrush.cpp" />
 		<Unit filename="../src/biquad.cpp" />

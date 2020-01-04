@@ -140,6 +140,10 @@ SOURCE=..\src\vstplug.def
 
 SOURCE=..\VST3_SDK\public.sdk\source\vst2.x\vstplugmain.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\src\ZOHResampler.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
