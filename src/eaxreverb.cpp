@@ -1976,6 +1976,10 @@ void eaxreverb::resume ()
 		effect.Update(rate);
 	}
 	i_ReverbPreset = int(ReverbPreset);
+	if (FLTFreq > rate/2-2)
+	{
+		FLTFreq = float(rate/2-2);
+	}
 	if (FLTType >= 0.0 && FLTType < 0.125)	
 	{
 		sf_lowpass(&bq_state, rate, FLTFreq/2, FLTRes);
