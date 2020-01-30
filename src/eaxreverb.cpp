@@ -12,6 +12,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	// default Program Values
 	DisableEffect = 0;
 	MuteEffect = 0;
+	InvertMode = 0;
 	InvertOriginal = 0;
 	InvertReverb = 0;
 	Invert = 0;
@@ -114,6 +115,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	curProgram = program;
 	setParameter (kDisable, ap->DisableEffect);	
 	setParameter (kMute, ap->MuteEffect);	
+	setParameter (kInvertmode, ap->InvertMode);	
 	setParameter (kInvertorig, ap->InvertOriginal);	
 	setParameter (kInvertrev, ap->InvertReverb);	
 	setParameter (kInvert, ap->Invert);	
@@ -199,6 +201,13 @@ void eaxreverb::SetMuteEffect (float val)
 {
 	MuteEffect = val;
 	programs[curProgram].MuteEffect = val;
+}
+
+
+void eaxreverb::SetInvertMode (float val)
+{
+	InvertMode = val;
+	programs[curProgram].InvertMode = val;
 }
 
 
@@ -2054,6 +2063,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	{
 	case kDisable :    SetDisableEffect (value);					break;
 	case kMute :    SetMuteEffect (value);					break;
+	case kInvertmode :    SetInvertMode (value);					break;
 	case kInvertorig :    SetInvertOriginal (value);					break;
 	case kInvertrev :    SetInvertReverb (value);					break;
 	case kInvert :    SetInvert (value);					break;
@@ -2192,6 +2202,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	{
 	case kDisable :    v = DisableEffect;	break;
 	case kMute :    v = MuteEffect;	break;
+	case kInvertmode :    v = InvertMode;	break;
 	case kInvertorig :    v = InvertOriginal;	break;
 	case kInvertrev :    v = InvertReverb;	break;
 	case kInvert :    v = Invert;	break;
@@ -2325,6 +2336,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	{
 	case kDisable :    strcpy (text, "DisableEffect");		break;
 	case kMute :    strcpy (text, "MuteEffect");		break;
+	case kInvertmode :    strcpy (text, "InvertMode");		break;
 	case kInvertorig :    strcpy (text, "InvertOriginal");		break;
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
 	case kInvert :    strcpy (text, "Invert");		break;
@@ -2420,6 +2432,20 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		else
 		{
 			strcpy (text, "OFF");					
+		}
+		break;
+	case kInvertmode :
+		if (InvertMode >= 0.25 && InvertMode < 0.5)	
+		{
+			strcpy (text, "LEFT");					
+		}
+		else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+		{
+			strcpy (text, "RIGHT");					
+		}
+		else
+		{
+			strcpy (text, "BOTH");					
 		}
 		break;
 	case kInvertorig :
@@ -2825,8 +2851,19 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				*in1 = *in1 * -1;
-				*in2 = *in2 * -1;
+				if (InvertMode >= 0.25 && InvertMode < 0.5)	
+				{
+					*in1 = *in1 * -1;
+				}
+				else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+				{
+					*in2 = *in2 * -1;
+				}
+				else
+				{
+					*in1 = *in1 * -1;
+					*in2 = *in2 * -1;
+				}
 				*in1++;
 				*in2++;
 			}
@@ -2838,8 +2875,19 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				floatSamplesOut[i*2 + 0] = floatSamplesOut[i*2 + 0] * -1;
-				floatSamplesOut[i*2 + 1] = floatSamplesOut[i*2 + 1] * -1;
+				if (InvertMode >= 0.25 && InvertMode < 0.5)	
+				{
+					floatSamplesOut[i*2 + 0] = floatSamplesOut[i*2 + 0] * -1;
+				}
+				else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+				{
+					floatSamplesOut[i*2 + 1] = floatSamplesOut[i*2 + 1] * -1;
+				}
+				else
+				{
+					floatSamplesOut[i*2 + 0] = floatSamplesOut[i*2 + 0] * -1;
+					floatSamplesOut[i*2 + 1] = floatSamplesOut[i*2 + 1] * -1;
+				}
 			}
 		}
 		//swap the channels of the original signal if we set SwapOriginal to true
@@ -3187,8 +3235,19 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				*out1 = *out1 * -1;
-				*out2 = *out2 * -1;
+				if (InvertMode >= 0.25 && InvertMode < 0.5)	
+				{
+					*out1 = *out1 * -1;
+				}
+				else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+				{
+					*out2 = *out2 * -1;
+				}
+				else
+				{
+					*out1 = *out1 * -1;
+					*out2 = *out2 * -1;
+				}
 				*out1++;
 				*out2++;
 			}

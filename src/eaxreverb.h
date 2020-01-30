@@ -19,6 +19,7 @@ enum
 	// Parameters Tags
 	kDisable = 0,
 	kMute,
+	kInvertmode,
 	kInvertorig,
 	kInvertrev,
 	kInvert,
@@ -79,6 +80,7 @@ public:
 private:	
 	float DisableEffect;
 	float MuteEffect;
+	float InvertMode;
 	float InvertOriginal;
 	float InvertReverb;
 	float Invert;
@@ -159,6 +161,7 @@ public:
 private:
 	void SetDisableEffect(float val);
 	void SetMuteEffect(float val);
+	void SetInvertMode(float val);
 	void SetInvertOriginal(float val);
 	void SetInvertReverb(float val);
 	void SetInvert(float val);
@@ -243,6 +246,7 @@ private:
 	
 	float DisableEffect;
 	float MuteEffect;
+	float InvertMode;
 	float InvertOriginal;
 	float InvertReverb;
 	float Invert;
