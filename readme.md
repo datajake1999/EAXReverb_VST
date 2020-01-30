@@ -21,6 +21,7 @@ In your parameter window, you will see a list of parameters and their values. Yo
 * Apply EQ after the reverb
 * Resample the output
 * Reduce the bit depth of the output
+* Change some Characteristics of the dry, wet, and master signals. These include gain, balance, width, and polarity
 
 # Building from source
 
