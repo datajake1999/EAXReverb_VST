@@ -78,6 +78,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	setNumOutputs (2);	// stereo output
 	setUniqueID ('EAX');
 	canProcessReplacing ();
+	canDoubleReplacing ();
 
 }
 
@@ -85,6 +86,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 eaxreverb::~eaxreverb ()
 {
 	effect.Destroy();
+	effectDouble.Destroy();
 	LinearResamplerReset(linearresampler1);
 	LinearResamplerDestroy(linearresampler1);
 	LinearResamplerReset(linearresampler2);
@@ -595,13 +597,16 @@ void eaxreverb::SetIncorrectMode (float val)
 	IncorrectMode = val;
 	programs[curProgram].IncorrectMode = val;
 	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+	effectDouble.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 	if (IncorrectMode >= 0.5)	
 	{
 		effect.Update(int(ReverbRate));
+		effectDouble.Update(int(ReverbRate));
 	}
 	else
 	{
 		effect.Update(rate);
+		effectDouble.Update(rate);
 	}
 }
 
@@ -621,7 +626,9 @@ void eaxreverb::SetReverbRate (float val)
 	if (IncorrectMode >= 0.5)	
 	{
 		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effectDouble.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 		effect.Update(int(ReverbRate));
+		effectDouble.Update(int(ReverbRate));
 	}
 }
 
@@ -1090,13 +1097,16 @@ void eaxreverb::SetReverbPreset(int preset, bool update) {
 	if (update == true)
 	{
 		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effectDouble.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 		if (IncorrectMode >= 0.5)	
 		{
 			effect.Update(int(ReverbRate));
+			effectDouble.Update(int(ReverbRate));
 		}
 		else
 		{
 			effect.Update(rate);
+			effectDouble.Update(rate);
 		}
 	}
 }
@@ -1975,14 +1985,18 @@ void eaxreverb::resume ()
 {
 	rate = int(AudioEffectX::updateSampleRate());
 	effect.Create(rate);
+	effectDouble.Create(rate);
 	effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+	effectDouble.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 	if (IncorrectMode >= 0.5)	
 	{
 		effect.Update(int(ReverbRate));
+		effectDouble.Update(int(ReverbRate));
 	}
 	else
 	{
 		effect.Update(rate);
+		effectDouble.Update(rate);
 	}
 	i_ReverbPreset = int(ReverbPreset);
 	if (FLTFreq > rate/2-2)
@@ -1992,38 +2006,47 @@ void eaxreverb::resume ()
 	if (FLTType >= 0.0 && FLTType < 0.125)	
 	{
 		sf_lowpass(&bq_state, rate, FLTFreq/2, FLTRes);
+		sfd_lowpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.125 && FLTType < 0.25)	
 	{
 		sf_highpass(&bq_state, rate, FLTFreq/2, FLTRes);
+		sfd_highpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.25 && FLTType < 0.375)	
 	{
 		sf_bandpass(&bq_state, rate, FLTFreq/2, FLTRes);
+		sfd_bandpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.375 && FLTType < 0.5)	
 	{
 		sf_allpass(&bq_state, rate, FLTFreq/2, FLTRes);
+		sfd_allpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.5 && FLTType < 0.625)	
 	{
 		sf_notch(&bq_state, rate, FLTFreq/2, FLTRes);
+		sfd_notch(&bq_state_double, rate, FLTFreq/2, FLTRes);
 	}
 	else if (FLTType >= 0.625 && FLTType < 0.75)	
 	{
 		sf_peaking(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
+		sfd_peaking(&bq_state_double, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
 	else if (FLTType >= 0.75 && FLTType < 0.875)	
 	{
 		sf_lowshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
+		sfd_lowshelf(&bq_state_double, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
 	else if (FLTType >= 0.875 && FLTType <= 1.0)	
 	{
 		sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
+		sfd_highshelf(&bq_state_double, rate, FLTFreq/2, FLTRes, FLTGain);
 	}
 	else
 	{
 		sf_highpass(&bq_state, rate, 0, 0);
+		sfd_highpass(&bq_state_double, rate, 0, 0);
 	}
 	linearresampler1 = LinearResamplerCreate();
 	linearresampler2 = LinearResamplerCreate();
@@ -2139,50 +2162,62 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 		if (FLTType >= 0.0 && FLTType < 0.125)	
 		{
 			sf_lowpass(&bq_state, rate, FLTFreq/2, FLTRes);
+			sfd_lowpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.125 && FLTType < 0.25)	
 		{
 			sf_highpass(&bq_state, rate, FLTFreq/2, FLTRes);
+			sfd_highpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.25 && FLTType < 0.375)	
 		{
 			sf_bandpass(&bq_state, rate, FLTFreq/2, FLTRes);
+			sfd_bandpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.375 && FLTType < 0.5)	
 		{
 			sf_allpass(&bq_state, rate, FLTFreq/2, FLTRes);
+			sfd_allpass(&bq_state_double, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.5 && FLTType < 0.625)	
 		{
 			sf_notch(&bq_state, rate, FLTFreq/2, FLTRes);
+			sfd_notch(&bq_state_double, rate, FLTFreq/2, FLTRes);
 		}
 		else if (FLTType >= 0.625 && FLTType < 0.75)	
 		{
 			sf_peaking(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
+			sfd_peaking(&bq_state_double, rate, FLTFreq/2, FLTRes, FLTGain);
 		}
 		else if (FLTType >= 0.75 && FLTType < 0.875)	
 		{
 			sf_lowshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
+			sfd_lowshelf(&bq_state_double, rate, FLTFreq/2, FLTRes, FLTGain);
 		}
 		else if (FLTType >= 0.875 && FLTType <= 1.0)	
 		{
 			sf_highshelf(&bq_state, rate, FLTFreq/2, FLTRes, FLTGain);
+			sfd_highshelf(&bq_state_double, rate, FLTFreq/2, FLTRes, FLTGain);
 		}
 		else
 		{
 			sf_highpass(&bq_state, rate, 0, 0);
+			sfd_highpass(&bq_state_double, rate, 0, 0);
 		}
 	}
 	if (index > kPreset && index < kNumParams)
 	{
 		effect.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
+		effectDouble.LoadPreset(Density, Diffusion, Gain, GainHF, GainLF, DecayTime, DecayHFRatio, DecayLFRatio, ReflectionsGain, ReflectionsDelay, ReflectionsPanX, ReflectionsPanY, ReflectionsPanZ, LateReverbGain, LateReverbDelay, LateReverbPanX, LateReverbPanY, LateReverbPanZ, EchoTime, EchoDepth, ModulationTime, ModulationDepth, AirAbsorptionGainHF, HFReference, LFReference, RoomRolloffFactor, i_DecayHFLimit);
 		if (IncorrectMode >= 0.5)	
 		{
 			effect.Update(int(ReverbRate));
+			effectDouble.Update(int(ReverbRate));
 		}
 		else
 		{
 			effect.Update(rate);
+			effectDouble.Update(rate);
 		}
 	}
 }
@@ -3325,4 +3360,542 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 	} while (sampleFrames>0);
 	//delete the mono samples
 	delete[] floatSamplesIn;
+}
+
+void eaxreverb::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
+{
+	double* in1 = inputs[0];
+	double* in2 = inputs[1];
+	double* out1 = outputs[0];
+	double* out2 = outputs[1];
+	int i;
+	//check if we are disabling the effect
+	if (DisableEffect >= 0.5)
+	{
+		for (i=0; i<sampleFrames; i++)
+		{
+			*out1 = *in1;
+			*out2 = *in2;
+			*in1++;
+			*in2++;
+			*out1++;
+			*out2++;
+		}
+		return;
+	}
+	//check if we are muting the effect
+	if (MuteEffect >= 0.5)
+	{
+		for (i=0; i<sampleFrames; i++)
+		{
+			*out1 = 0;
+			*out2 = 0;
+			*out1++;
+			*out2++;
+		}
+		return;
+	}
+	//allocate memory for mono samples
+	double *doubleSamplesIn =  new double[sampleFrames];
+	//convert stereo samples into mono
+	for (i=0; i<sampleFrames; i++)
+	{
+		doubleSamplesIn[i] = (*in1 + *in2) / 2;
+		*in1++;
+		*in2++;
+	}
+	in1 -= sampleFrames;
+	in2 -= sampleFrames;
+	//set the offset for the audio buffer
+	int offset = 0;
+	//allocate memory for reverb output samples
+	double doubleSamplesOut[REVERB_BUFFERSIZE * OUTPUT_CHANNELS];
+	do {
+		//set the amount of samples to process at a time
+		int workSamples = REVERB_BUFFERSIZE / 4;
+		if (workSamples>sampleFrames)
+		{
+			workSamples = sampleFrames;
+		}
+		//process the effect
+		effectDouble.Process(workSamples, &doubleSamplesIn[offset],  doubleSamplesOut);
+		//invert the phase of the original signal if we set InvertOriginal to true
+		if (InvertOriginal >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				if (InvertMode >= 0.25 && InvertMode < 0.5)	
+				{
+					*in1 = *in1 * -1;
+				}
+				else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+				{
+					*in2 = *in2 * -1;
+				}
+				else
+				{
+					*in1 = *in1 * -1;
+					*in2 = *in2 * -1;
+				}
+				*in1++;
+				*in2++;
+			}
+			in1 -= workSamples;
+			in2 -= workSamples;
+		}
+		//invert the phase of the reverb if we set InvertReverb to true
+		if (InvertReverb >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				if (InvertMode >= 0.25 && InvertMode < 0.5)	
+				{
+					doubleSamplesOut[i*2 + 0] = doubleSamplesOut[i*2 + 0] * -1;
+				}
+				else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+				{
+					doubleSamplesOut[i*2 + 1] = doubleSamplesOut[i*2 + 1] * -1;
+				}
+				else
+				{
+					doubleSamplesOut[i*2 + 0] = doubleSamplesOut[i*2 + 0] * -1;
+					doubleSamplesOut[i*2 + 1] = doubleSamplesOut[i*2 + 1] * -1;
+				}
+			}
+		}
+		//swap the channels of the original signal if we set SwapOriginal to true
+		if (SwapOriginal >= 0.5)
+		{
+			double swap[2];
+			for (i=0; i<workSamples; i++)
+			{
+				swap[0] = *in2;
+				swap[1] = *in1;
+				*in1 = swap[0];
+				*in2 = swap[1];
+				*in1++;
+				*in2++;
+			}
+			in1 -= workSamples;
+			in2 -= workSamples;
+		}
+		//swap the channels of the reverb if we set SwapReverb to true
+		if (SwapReverb >= 0.5)
+		{
+			double swap[2];
+			for (i=0; i<workSamples; i++)
+			{
+				swap[0] = doubleSamplesOut[i*2 + 1];
+				swap[1] = doubleSamplesOut[i*2 + 0];
+				doubleSamplesOut[i*2 + 0] = swap[0];
+				doubleSamplesOut[i*2 + 1] = swap[1];
+			}
+		}
+		//adjust balance of dry samples
+		for (i=0; i<workSamples; i++)
+		{
+			*in1 = *in1 * BalanceLOriginal;
+			*in2 = *in2 * BalanceROriginal;
+			*in1++;
+			*in2++;
+		}
+		in1 -= workSamples;
+		in2 -= workSamples;
+		//adjust balance of wet samples
+		for (i=0; i<workSamples; i++)
+		{
+			doubleSamplesOut[i*2 + 0] = doubleSamplesOut[i*2 + 0] * BalanceLReverb;
+			doubleSamplesOut[i*2 + 1] = doubleSamplesOut[i*2 + 1] * BalanceRReverb;
+		}
+		//adjust the stereo width of dry samples
+		double Temp = 1/(1.0f + StereoWidthOriginal);
+		double CoefficientM = 1.0f * Temp;
+		double CoefficientS = StereoWidthOriginal * 0.5f;
+		double ValueM = 0.0;
+		double ValueS = 0.0;
+		for(i = 0; i < workSamples; i++)
+		{
+			ValueM = (*in1 + *in2) * CoefficientM;
+			ValueS = (*in2 - *in1) * CoefficientS;
+			*in1 = ValueM - ValueS;
+			*in2 = ValueM + ValueS;
+			*in1++;
+			*in2++;
+		}
+		in1 -= workSamples;
+		in2 -= workSamples;
+		//adjust the stereo width of wet samples
+		Temp = 1/(1.0f + StereoWidthReverb);
+		CoefficientM = 1.0f * Temp;
+		CoefficientS = StereoWidthReverb * 0.5f;
+		ValueM = 0.0;
+		ValueS = 0.0;
+		for(i = 0; i < workSamples; i++)
+		{
+			ValueM = (doubleSamplesOut[i*2 + 0] + doubleSamplesOut[i*2 + 1]) * CoefficientM;
+			ValueS = (doubleSamplesOut[i*2 + 1] - doubleSamplesOut[i*2 + 0]) * CoefficientS;
+			doubleSamplesOut[i*2 + 0] = ValueM - ValueS;
+			doubleSamplesOut[i*2 + 1] = ValueM + ValueS;
+		}
+		//mixdown the original signal to mono if we set MonoOriginal to true
+		if (MonoOriginal >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				double sample = (*in1 + *in2) / 2;
+				*in1 = sample;
+				*in2 = sample;
+				*in1++;
+				*in2++;
+			}
+			in1 -= workSamples;
+			in2 -= workSamples;
+		}
+		//mixdown the reverb to mono if we set MonoReverb to true
+		if (MonoReverb >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				double sample = (doubleSamplesOut[i*2 + 0] + doubleSamplesOut[i*2 + 1]) / 2;
+				doubleSamplesOut[i*2 + 0] = sample;
+				doubleSamplesOut[i*2 + 1] = sample;
+			}
+		}
+		//apply gain to dry samples
+		for (i=0; i<workSamples; i++)
+		{
+			*in1 = *in1 * DryGain;
+			*in2 = *in2 * DryGain;
+			*in1++;
+			*in2++;
+		}
+		in1 -= workSamples;
+		in2 -= workSamples;
+		//apply gain to wet samples
+		for (i=0; i<workSamples; i++)
+		{
+			doubleSamplesOut[i*2 + 0] = doubleSamplesOut[i*2 + 0] * WetGain;
+			doubleSamplesOut[i*2 + 1] = doubleSamplesOut[i*2 + 1] * WetGain;
+		}
+		//write to the audio buffer
+		for (i=0; i<workSamples; i++)
+		{
+			//check if we are only generating the original signal, the reverb output, or both
+			if (OnlyOriginal >= 0.5)
+			{
+				*out1 = *in1;
+				*out2 = *in2;
+			}
+			else if (OnlyReverb >= 0.5)
+			{
+				*out1 = doubleSamplesOut[i*2 + 0];
+				*out2 = doubleSamplesOut[i*2 + 1];
+			}
+			else
+			{
+				//check if we are adding or multiplying the dry and wet signals
+				if (MixMode >= 0.5)
+				{
+					*out1 = *in1 * doubleSamplesOut[i*2 + 0];
+					*out2 = *in2 * doubleSamplesOut[i*2 + 1];
+				}
+				else
+				{
+					*out1 = *in1 + doubleSamplesOut[i*2 + 0];
+					*out2 = *in2 + doubleSamplesOut[i*2 + 1];
+				}
+			}
+			*in1++;
+			*in2++;
+			*out1++;
+			*out2++;
+		}
+		out1 -= workSamples;
+		out2 -= workSamples;
+		//process a Biquad filter on the final output if we set BQFilter to true
+		if (BQFilter >= 0.5)
+		{
+			sfd_sample_st *buf =  new sfd_sample_st[workSamples];
+			for (i=0; i<workSamples; i++)
+			{
+				buf[i].L = *out1;
+				buf[i].R = *out2;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			sfd_biquad_process(&bq_state_double, workSamples, buf, buf);
+			for (i=0; i<workSamples; i++)
+			{
+				*out1 = buf[i].L;
+				*out2 = buf[i].R;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			delete[] buf;
+		}
+		//process the resampler on the final output if we set Resample to true
+		if (Resample >= 0.5)
+		{
+			short *samples = new short[workSamples*2];
+			GenerateSilence(samples, workSamples);
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				long sample = (long) (*out1 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i] = (short)sample;
+				sample = (long) (*out2 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i+1] = (short)sample;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			int numsamples_new;
+			if (RSMMode >= 0.5)
+			{
+				numsamples_new = workSamples*rsm;
+			}
+			else
+			{
+				numsamples_new = workSamples/rsm;
+			}
+			short *samples_new = new short[numsamples_new*2];
+			GenerateSilence(samples_new, numsamples_new);
+			if (RSMQ >= 0.5)
+			{
+				int j;
+				int samplecount = 0;
+				for(i = 0; i < numsamples_new*2; i+=2)
+				{
+					sample_t ls, rs;
+					for(j = 0; j = resampler_get_min_fill(resampler1); j++)
+					{
+						if (samplecount >= workSamples*2)
+						{
+							samplecount = workSamples*2 - 2;
+						}
+						resampler_write_pair(resampler1, samples[samplecount], samples[samplecount + 1]);
+						samplecount += 2;
+					}
+					resampler_peek_pair(resampler1, &ls, &rs);
+					resampler_read_pair(resampler1, &ls, &rs);
+					if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
+					if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
+					samples_new[i] = (short)ls;
+					samples_new[i + 1] = (short)rs;
+				}
+				samplecount = 0;
+				for(i = 0; i < workSamples*2; i+=2)
+				{
+					sample_t ls, rs;
+					for(j = 0; j = resampler_get_min_fill(resampler2); j++)
+					{
+						if (samplecount >= numsamples_new*2)
+						{
+							samplecount = numsamples_new*2 - 2;
+						}
+						resampler_write_pair(resampler2, samples_new[samplecount], samples_new[samplecount + 1]);
+						samplecount += 2;
+					}
+					resampler_peek_pair(resampler2, &ls, &rs);
+					resampler_read_pair(resampler2, &ls, &rs);
+					if ((ls + 0x8000) & 0xFFFF0000) ls = (ls >> 31) ^ 0x7FFF;
+					if ((rs + 0x8000) & 0xFFFF0000) rs = (rs >> 31) ^ 0x7FFF;
+					samples[i] = (short)ls;
+					samples[i + 1] = (short)rs;
+				}
+			}
+			else if (RSMQ >= 0.25 && RSMQ < 0.5)	
+			{
+				ZOHResamplerProcess(zohresampler1, samples, workSamples, samples_new, numsamples_new);
+				ZOHResamplerProcess(zohresampler2, samples_new, numsamples_new, samples, workSamples);
+			}
+			else
+			{
+				LinearResamplerProcess(linearresampler1, samples, workSamples, samples_new, numsamples_new);
+				LinearResamplerProcess(linearresampler2, samples_new, numsamples_new, samples, workSamples);
+			}
+			delete[] samples_new;
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				*out1 = double(samples[i] / 32767.0f);
+				*out2 = double(samples[i+1] / 32767.0f);
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			delete[] samples;
+		}
+		//process the bit crusher on the final output if we set BitCr to true
+		if (BitCr >= 0.5)
+		{
+			short *samples = new short[workSamples*2];
+			GenerateSilence(samples, workSamples);
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				long sample = (long) (*out1 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i] = (short)sample;
+				sample = (long) (*out2 * 32767.0f);
+				if (sample > 32767)
+				{
+					sample = 32767;
+				}
+				else if (sample < -32768)
+				{
+					sample = -32768;
+				}
+				samples[i+1] = (short)sample;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			if (Dither >= 0.25 && Dither < 0.5)	
+			{
+				RectangleDither(samples, workSamples);
+			}
+			else if (Dither >= 0.5 && Dither < 0.75)	
+			{
+				TriangleDither(samples, workSamples);
+			}
+			else if (Dither >= 0.75 && Dither <= 1.0)	
+			{
+				GaussianDither(samples, workSamples);
+			}
+			BitCrush(samples, workSamples);
+			LimitOutput(int(Limit*32767.0f), samples, workSamples);
+			for (i=0; i<workSamples*2; i+=2)
+			{
+				*out1 = double(samples[i] / 32767.0f);
+				*out2 = double(samples[i+1] / 32767.0f);
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+			delete[] samples;
+		}
+		//invert the phase of the final output if we set Invert to true
+		if (Invert >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				if (InvertMode >= 0.25 && InvertMode < 0.5)	
+				{
+					*out1 = *out1 * -1;
+				}
+				else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+				{
+					*out2 = *out2 * -1;
+				}
+				else
+				{
+					*out1 = *out1 * -1;
+					*out2 = *out2 * -1;
+				}
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+		}
+		//swap the channels of the final output if we set Swap to true
+		if (Swap >= 0.5)
+		{
+			double swap[2];
+			for (i=0; i<workSamples; i++)
+			{
+				swap[0] = *out2;
+				swap[1] = *out1;
+				*out1 = swap[0];
+				*out2 = swap[1];
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+		}
+		//adjust balance of final output
+		for (i=0; i<workSamples; i++)
+		{
+			*out1 = *out1 * BalanceL;
+			*out2 = *out2 * BalanceR;
+			*out1++;
+			*out2++;
+		}
+		out1 -= workSamples;
+		out2 -= workSamples;
+		//adjust the stereo width of final output
+		Temp = 1/(1.0f + StereoWidth);
+		CoefficientM = 1.0f * Temp;
+		CoefficientS = StereoWidth * 0.5f;
+		ValueM = 0.0;
+		ValueS = 0.0;
+		for(i = 0; i < workSamples; i++)
+		{
+			ValueM = (*out1 + *out2) * CoefficientM;
+			ValueS = (*out2 - *out1) * CoefficientS;
+			*out1 = ValueM - ValueS;
+			*out2 = ValueM + ValueS;
+			*out1++;
+			*out2++;
+		}
+		out1 -= workSamples;
+		out2 -= workSamples;
+		//mixdown the final output to mono if we set Mono to true
+		if (Mono >= 0.5)
+		{
+			for (i=0; i<workSamples; i++)
+			{
+				double sample = (*out1 + *out2) / 2;
+				*out1 = sample;
+				*out2 = sample;
+				*out1++;
+				*out2++;
+			}
+			out1 -= workSamples;
+			out2 -= workSamples;
+		}
+		//apply gain to final output
+		for (i=0; i<workSamples; i++)
+		{
+			*out1 = *out1 * MasterGain;
+			*out2 = *out2 * MasterGain;
+			*out1++;
+			*out2++;
+		}
+		//update the sample counters
+		sampleFrames -= workSamples;
+		offset += workSamples;
+	} while (sampleFrames>0);
+	//delete the mono samples
+	delete[] doubleSamplesIn;
 }

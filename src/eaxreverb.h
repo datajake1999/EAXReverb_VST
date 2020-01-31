@@ -4,10 +4,12 @@
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 #include "biquad.h"
+#include "biquadDouble.h"
 #include "bitcrush.h"
 #include "LinearResampler.h"
 #include "resampler.h"
 #include "ReverbEffect.h"
+#include "ReverbEffectDouble.h"
 #include "silence.h"
 #include "ZOHResampler.h"
 
@@ -135,6 +137,7 @@ public:
 	~eaxreverb ();
 
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
+	virtual void processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames);
 
 	virtual VstInt32 getProgram ();
 	virtual void setProgram (VstInt32 program);
@@ -235,7 +238,9 @@ private:
 	void SetEAXParams(float Density, float Diffusion, float Gain, float GainHF, float GainLF, float DecayTime, float DecayHFRatio, float DecayLFRatio, float ReflectionsGain, float ReflectionsDelay, float ReflectionsPanX, float ReflectionsPanY, float ReflectionsPanZ, float LateReverbGain, float LateReverbDelay, float LateReverbPanX, float LateReverbPanY, float LateReverbPanZ, float EchoTime, float EchoDepth, float ModulationTime, float ModulationDepth, float AirAbsorptionGainHF, float HFReference, float LFReference, float RoomRolloffFactor, float DecayHFLimit);
 
 	ReverbEffect effect;
+	ReverbEffectDouble effectDouble;
 	sf_biquad_state_st bq_state;
+	sfd_biquad_state_st bq_state_double;
 	void *linearresampler1;
 	void *linearresampler2;
 	void *resampler1;
