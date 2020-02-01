@@ -119,10 +119,10 @@ void sfd_lowpass(sfd_biquad_state_st *state, int rate, double cutoff, double res
 	else if (cutoff <= 0.0f)
 		state_zero(state);
 	else{
-		resonance = powf(10.0f, resonance * 0.05f); // convert resonance from dB to linear
+		resonance = pow(10.0f, resonance * 0.05f); // convert resonance from dB to linear
 		double theta = (double)M_PI * 2.0f * cutoff;
-		double alpha = sinf(theta) / (2.0f * resonance);
-		double cosw  = cosf(theta);
+		double alpha = sin(theta) / (2.0f * resonance);
+		double cosw  = cos(theta);
 		double beta  = (1.0f - cosw) * 0.5f;
 		double a0inv = 1.0f / (1.0f + alpha);
 		state->b0 = a0inv * beta;
@@ -143,10 +143,10 @@ void sfd_highpass(sfd_biquad_state_st *state, int rate, double cutoff, double re
 	else if (cutoff <= 0.0f)
 		state_passthrough(state);
 	else{
-		resonance = powf(10.0f, resonance * 0.05f); // convert resonance from dB to linear
+		resonance = pow(10.0f, resonance * 0.05f); // convert resonance from dB to linear
 		double theta = (double)M_PI * 2.0f * cutoff;
-		double alpha = sinf(theta) / (2.0f * resonance);
-		double cosw  = cosf(theta);
+		double alpha = sin(theta) / (2.0f * resonance);
+		double cosw  = cos(theta);
 		double beta  = (1.0f + cosw) * 0.5f;
 		double a0inv = 1.0f / (1.0f + alpha);
 		state->b0 = a0inv * beta;
@@ -168,8 +168,8 @@ void sfd_bandpass(sfd_biquad_state_st *state, int rate, double freq, double Q){
 		state_passthrough(state);
 	else{
 		double w0    = (double)M_PI * 2.0f * freq;
-		double alpha = sinf(w0) / (2.0f * Q);
-		double k     = cosf(w0);
+		double alpha = sin(w0) / (2.0f * Q);
+		double k     = cos(w0);
 		double a0inv = 1.0f / (1.0f + alpha);
 		state->b0 = a0inv * alpha;
 		state->b1 = 0;
@@ -190,8 +190,8 @@ void sfd_notch(sfd_biquad_state_st *state, int rate, double freq, double Q){
 		state_zero(state);
 	else{
 		double w0    = (double)M_PI * 2.0f * freq;
-		double alpha = sinf(w0) / (2.0f * Q);
-		double k     = cosf(w0);
+		double alpha = sin(w0) / (2.0f * Q);
+		double k     = cos(w0);
 		double a0inv = 1.0f / (1.0f + alpha);
 		state->b0 = a0inv;
 		state->b1 = a0inv * -2.0f * k;
@@ -211,7 +211,7 @@ void sfd_peaking(sfd_biquad_state_st *state, int rate, double freq, double Q, do
 		return;
 	}
 
-	double A = powf(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	double A = pow(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
 
 	if (Q <= 0.0f){
 		state_scale(state, A * A); // scale by A squared
@@ -219,8 +219,8 @@ void sfd_peaking(sfd_biquad_state_st *state, int rate, double freq, double Q, do
 	}
 
 	double w0    = (double)M_PI * 2.0f * freq;
-	double alpha = sinf(w0) / (2.0f * Q);
-	double k     = cosf(w0);
+	double alpha = sin(w0) / (2.0f * Q);
+	double k     = cos(w0);
 	double a0inv = 1.0f / (1.0f + alpha / A);
 	state->b0 = a0inv * (1.0f + alpha * A);
 	state->b1 = a0inv * -2.0f * k;
@@ -240,8 +240,8 @@ void sfd_allpass(sfd_biquad_state_st *state, int rate, double freq, double Q){
 		state_scale(state, -1.0f); // invert the sample
 	else{
 		double w0    = (double)M_PI * 2.0f * freq;
-		double alpha = sinf(w0) / (2.0f * Q);
-		double k     = cosf(w0);
+		double alpha = sin(w0) / (2.0f * Q);
+		double k     = cos(w0);
 		double a0inv = 1.0f / (1.0f + alpha);
 		state->b0 = a0inv * (1.0f - alpha);
 		state->b1 = a0inv * -2.0f * k;
@@ -262,7 +262,7 @@ void sfd_lowshelf(sfd_biquad_state_st *state, int rate, double freq, double Q, d
 		return;
 	}
 
-	double A = powf(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	double A = pow(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
 
 	if (freq >= 1.0f){
 		state_scale(state, A * A); // scale by A squared
@@ -273,9 +273,9 @@ void sfd_lowshelf(sfd_biquad_state_st *state, int rate, double freq, double Q, d
 	double ainn  = (A + 1.0f / A) * (1.0f / Q - 1.0f) + 2.0f;
 	if (ainn < 0)
 		ainn = 0;
-	double alpha = 0.5f * sinf(w0) * sqrtf(ainn);
-	double k     = cosf(w0);
-	double k2    = 2.0f * sqrtf(A) * alpha;
+	double alpha = 0.5f * sin(w0) * sqrt(ainn);
+	double k     = cos(w0);
+	double k2    = 2.0f * sqrt(A) * alpha;
 	double Ap1   = A + 1.0f;
 	double Am1   = A - 1.0f;
 	double a0inv = 1.0f / (Ap1 + Am1 * k + k2);
@@ -297,7 +297,7 @@ void sfd_highshelf(sfd_biquad_state_st *state, int rate, double freq, double Q, 
 		return;
 	}
 
-	double A = powf(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	double A = pow(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
 
 	if (freq <= 0.0f){
 		state_scale(state, A * A); // scale by A squared
@@ -308,9 +308,9 @@ void sfd_highshelf(sfd_biquad_state_st *state, int rate, double freq, double Q, 
 	double ainn  = (A + 1.0f / A) * (1.0f / Q - 1.0f) + 2.0f;
 	if (ainn < 0)
 		ainn = 0;
-	double alpha = 0.5f * sinf(w0) * sqrtf(ainn);
-	double k     = cosf(w0);
-	double k2    = 2.0f * sqrtf(A) * alpha;
+	double alpha = 0.5f * sin(w0) * sqrt(ainn);
+	double k     = cos(w0);
+	double k2    = 2.0f * sqrt(A) * alpha;
 	double Ap1   = A + 1.0f;
 	double Am1   = A - 1.0f;
 	double a0inv = 1.0f / (Ap1 - Am1 * k + k2);

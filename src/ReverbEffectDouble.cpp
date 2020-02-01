@@ -138,22 +138,22 @@ void FilterStateDouble_setParams(FilterStateDouble *filter, FilterTypeDouble typ
     switch(type)
     {
         case Filter_HighShelf_Double:
-            alpha = sinf(w0)/2.0f*sqrtf((gain + 1.0f/gain)*(1.0f/0.75f - 1.0f) + 2.0f);
-            filter->b[0] =       gain*((gain+1.0f) + (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha);
-            filter->b[1] = -2.0f*gain*((gain-1.0f) + (gain+1.0f)*cosf(w0)                         );
-            filter->b[2] =       gain*((gain+1.0f) + (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha);
-            filter->a[0] =             (gain+1.0f) - (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha;
-            filter->a[1] =  2.0f*     ((gain-1.0f) - (gain+1.0f)*cosf(w0)                         );
-            filter->a[2] =             (gain+1.0f) - (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha;
+            alpha = sin(w0)/2.0f*sqrt((gain + 1.0f/gain)*(1.0f/0.75f - 1.0f) + 2.0f);
+            filter->b[0] =       gain*((gain+1.0f) + (gain-1.0f)*cos(w0) + 2.0f*sqrt(gain)*alpha);
+            filter->b[1] = -2.0f*gain*((gain-1.0f) + (gain+1.0f)*cos(w0)                         );
+            filter->b[2] =       gain*((gain+1.0f) + (gain-1.0f)*cos(w0) - 2.0f*sqrt(gain)*alpha);
+            filter->a[0] =             (gain+1.0f) - (gain-1.0f)*cos(w0) + 2.0f*sqrt(gain)*alpha;
+            filter->a[1] =  2.0f*     ((gain-1.0f) - (gain+1.0f)*cos(w0)                         );
+            filter->a[2] =             (gain+1.0f) - (gain-1.0f)*cos(w0) - 2.0f*sqrt(gain)*alpha;
             break;
         case Filter_LowShelf_Double:
-            alpha = sinf(w0)/2.0f*sqrtf((gain + 1.0f/gain)*(1.0f/0.75f - 1.0f) + 2.0f);
-            filter->b[0] =       gain*((gain+1.0f) - (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha);
-            filter->b[1] =  2.0f*gain*((gain-1.0f) - (gain+1.0f)*cosf(w0)                         );
-            filter->b[2] =       gain*((gain+1.0f) - (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha);
-            filter->a[0] =             (gain+1.0f) + (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha;
-            filter->a[1] = -2.0f*     ((gain-1.0f) + (gain+1.0f)*cosf(w0)                         );
-            filter->a[2] =             (gain+1.0f) + (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha;
+            alpha = sin(w0)/2.0f*sqrt((gain + 1.0f/gain)*(1.0f/0.75f - 1.0f) + 2.0f);
+            filter->b[0] =       gain*((gain+1.0f) - (gain-1.0f)*cos(w0) + 2.0f*sqrt(gain)*alpha);
+            filter->b[1] =  2.0f*gain*((gain-1.0f) - (gain+1.0f)*cos(w0)                         );
+            filter->b[2] =       gain*((gain+1.0f) - (gain-1.0f)*cos(w0) - 2.0f*sqrt(gain)*alpha);
+            filter->a[0] =             (gain+1.0f) + (gain-1.0f)*cos(w0) + 2.0f*sqrt(gain)*alpha;
+            filter->a[1] = -2.0f*     ((gain-1.0f) + (gain+1.0f)*cos(w0)                         );
+            filter->a[2] =             (gain+1.0f) + (gain-1.0f)*cos(w0) - 2.0f*sqrt(gain)*alpha;
             break;
     }
 
@@ -176,7 +176,7 @@ void ReverbEffectDouble::ComputeAmbientGains(double ingain, double gains[OUTPUT_
         // scaling the W channel input by sqrt(0.5). The square root of the
         // base average provides for a more perceptual average volume, better
         // suited to non-directional gains.
-        gains[i] = sqrtf(ambiCoeffs[i][0]/1.4142f) * ingain;
+        gains[i] = sqrt(ambiCoeffs[i][0]/1.4142f) * ingain;
     }
 }
 
@@ -248,7 +248,7 @@ inline double ReverbEffectDouble::EAXModulation(double in)
     // Calculate the sinus rythm (dependent on modulation time and the
     // sampling rate).  The center of the sinus is moved to reduce the delay
     // of the effect when the time or depth are low.
-    sinus = 1.0f - cosf(F_2PI * this->Mod.Index / this->Mod.Range);
+    sinus = 1.0f - cos(F_2PI * this->Mod.Index / this->Mod.Range);
 
     // The depth determines the range over which to read the input samples
     // from, so it must be filtered to reduce the distortion caused by even
@@ -506,7 +506,7 @@ void ReverbEffectDouble::Process(uint32_t SamplesToDo, const double *SamplesIn, 
         double earlyGain, lateGain;
 
         earlyGain = this->Early.PanGain[c];
-        if(fabsf(earlyGain) > GAIN_SILENCE_THRESHOLD)
+        if(fabs(earlyGain) > GAIN_SILENCE_THRESHOLD)
         {
             for(index = 0;index < SamplesToDo;index++)
                 SamplesOut[index * 2 + c] = earlyGain*early[index][c&3];
@@ -514,7 +514,7 @@ void ReverbEffectDouble::Process(uint32_t SamplesToDo, const double *SamplesIn, 
 
 
         lateGain = this->Late.PanGain[c];
-        if(fabsf(lateGain) > GAIN_SILENCE_THRESHOLD)
+        if(fabs(lateGain) > GAIN_SILENCE_THRESHOLD)
         {
             for(index = 0;index < SamplesToDo;index++)
                 SamplesOut[index * 2 + c] = lateGain*late[index][c&3];
@@ -612,13 +612,13 @@ void ReverbEffectDouble::AllocLines(uint32_t frequency)
 // Calculate a decay coefficient given the length of each cycle and the time until the decay reaches -60 dB.
 static inline double CalcDecayCoeff(double length, double decayTime)
 {
-    return powf(0.001f/*-60 dB*/, length/decayTime);
+    return pow(0.001f/*-60 dB*/, length/decayTime);
 }
 
 // Calculate a decay length from a coefficient and the time until the decay reaches -60 dB.
 static inline double CalcDecayLength(double coeff, double decayTime)
 {
-    return log10f(coeff) * decayTime / log10f(0.001f)/*-60 dB*/;
+    return log10(coeff) * decayTime / log10(0.001f)/*-60 dB*/;
 }
 
 // Calculate an attenuation to be applied to the input of any echo models to
@@ -638,7 +638,7 @@ static inline double CalcDensityGain(double a)
      * calculated by inverting the square root of this approximation,
      * yielding:  1 / sqrt(1 / (1 - a^2)), simplified to: sqrt(1 - a^2).
      */
-    return sqrtf(1.0f - (a * a));
+    return sqrt(1.0f - (a * a));
 }
 
 // Calculate the mixing matrix coefficients given a diffusion factor.
@@ -647,13 +647,13 @@ static inline void CalcMatrixCoeffs(double diffusion, double *x, double *y)
     double n, t;
 
     // The matrix is of order 4, so n is sqrt (4 - 1).
-    n = sqrtf(3.0f);
-    t = diffusion * atanf(n);
+    n = sqrt(3.0f);
+    t = diffusion * atan(n);
 
     // Calculate the first mixing matrix coefficient.
-    *x = cosf(t);
+    *x = cos(t);
     // Calculate the second mixing matrix coefficient.
-    *y = sinf(t) / n;
+    *y = sin(t) / n;
 }
 
 // Calculate the limited HF ratio for use with the late reverb low-pass filters.
@@ -694,7 +694,7 @@ static inline double CalcDampingCoeff(double hfRatio, double length, double deca
             /* Be careful with gains < 0.001, as that causes the coefficient
              * head towards 1, which will flatten the signal. */
             g = maxf(g, 0.001f);
-            coeff = (1 - g*cw - sqrtf(2*g*(1-cw) - g*g*(1 - cw*cw))) /
+            coeff = (1 - g*cw - sqrt(2*g*(1-cw) - g*g*(1 - cw*cw))) /
                     (1 - g);
         }
 
@@ -776,7 +776,7 @@ void ReverbEffectDouble::UpdateDecorrelator(double density, uint32_t frequency)
      */
     for(index = 0;index < 3;index++)
     {
-        length = (DECO_FRACTION * powf(DECO_MULTIPLIER, (double)index)) *
+        length = (DECO_FRACTION * pow(DECO_MULTIPLIER, (double)index)) *
                  LATE_LINE_LENGTH[0] * (1.0f + (density * LATE_LINE_MULTIPLIER));
         this->DecoTap[index] = Truncate(length * frequency);
     }
@@ -810,7 +810,7 @@ void ReverbEffectDouble::UpdateLateLines(double reverbGain, double lateGain, dou
                                                              decayTime));
 
     // Calculate the all-pass feed-back and feed-forward coefficient.
-    this->Late.ApFeedCoeff = 0.5f * powf(diffusion, 2.0f);
+    this->Late.ApFeedCoeff = 0.5f * pow(diffusion, 2.0f);
 
     for(index = 0;index < 4;index++)
     {
@@ -853,7 +853,7 @@ void ReverbEffectDouble::UpdateEchoLine(double reverbGain, double lateGain, doub
     this->Echo.DensityGain = CalcDensityGain(this->Echo.Coeff);
 
     // Calculate the echo all-pass feed coefficient.
-    this->Echo.ApFeedCoeff = 0.5f * powf(diffusion, 2.0f);
+    this->Echo.ApFeedCoeff = 0.5f * pow(diffusion, 2.0f);
 
     // Calculate the echo all-pass attenuation coefficient.
     this->Echo.ApCoeff = CalcDecayCoeff(ECHO_ALLPASS_LENGTH, decayTime);
@@ -891,7 +891,7 @@ void ReverbEffectDouble::Update3DPanning(const double *ReflectionsPan, const dou
     }
     else
     {
-        invlen = 1.0f / sqrtf(length);
+        invlen = 1.0f / sqrt(length);
         earlyPan[0] *= invlen;
         earlyPan[1] *= invlen;
         earlyPan[2] *= invlen;
@@ -910,7 +910,7 @@ void ReverbEffectDouble::Update3DPanning(const double *ReflectionsPan, const dou
     }
     else
     {
-        invlen = 1.0f / sqrtf(length);
+        invlen = 1.0f / sqrt(length);
         latePan[0] *= invlen;
         latePan[1] *= invlen;
         latePan[2] *= invlen;
@@ -963,7 +963,7 @@ void ReverbEffectDouble::Update(int frequency)
     if(this->settings.DecayHFLimit && this->settings.AirAbsorptionGainHF < 1.0f)
             hfRatio = CalcLimitedHfRatio(hfRatio, this->settings.AirAbsorptionGainHF, this->settings.DecayTime);
 
-    cw = cosf(F_2PI * hfscale);
+    cw = cos(F_2PI * hfscale);
     // Update the late lines.
     this->UpdateLateLines(this->settings.Gain, this->settings.LateReverbGain, x, this->settings.Density, this->settings.DecayTime, this->settings.Diffusion, hfRatio, cw, frequency);
 
@@ -1109,7 +1109,7 @@ void ReverbEffectDouble::Create(uint32_t frequency)
     // is calculated given the current sample rate.  This ensures that the
     // resulting filter response over time is consistent across all sample
     // rates.
-    this->Mod.Coeff = powf(MODULATION_FILTER_COEFF,
+    this->Mod.Coeff = pow(MODULATION_FILTER_COEFF,
                             MODULATION_FILTER_CONST / frequency);
 
     // The early reflection and late all-pass filter line lengths are static,
