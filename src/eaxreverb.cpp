@@ -481,7 +481,7 @@ void eaxreverb::SetBitDepth (float val)
 	BitDepth = val;
 	programs[curProgram].BitDepth = val;
 	bits = int(BitDepth);
-	SetCrushAmount(bits);
+	SetCrushAmount(&bc, bits);
 }
 
 
@@ -498,11 +498,11 @@ void eaxreverb::SetAutoD (float val)
 	programs[curProgram].AutoDither = val;
 	if (AutoDither >= 0.5)
 	{
-		SetAutoDither(1);
+		SetAutoDither(&bc, 1);
 	}
 	else
 	{
-		SetAutoDither(0);
+		SetAutoDither(&bc, 0);
 	}
 }
 
@@ -513,11 +513,11 @@ void eaxreverb::SetOnlyQError (float val)
 	programs[curProgram].OnlyQError = val;
 	if (OnlyQError >= 0.5)
 	{
-		SetOnlyError(1);
+		SetOnlyError(&bc, 1);
 	}
 	else
 	{
-		SetOnlyError(0);
+		SetOnlyError(&bc, 0);
 	}
 }
 
@@ -3242,17 +3242,17 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 			out2 -= workSamples;
 			if (Dither >= 0.25 && Dither < 0.5)	
 			{
-				RectangleDither(samples, workSamples);
+				RectangleDither(&bc, samples, workSamples);
 			}
 			else if (Dither >= 0.5 && Dither < 0.75)	
 			{
-				TriangleDither(samples, workSamples);
+				TriangleDither(&bc, samples, workSamples);
 			}
 			else if (Dither >= 0.75 && Dither <= 1.0)	
 			{
-				GaussianDither(samples, workSamples);
+				GaussianDither(&bc, samples, workSamples);
 			}
-			BitCrush(samples, workSamples);
+			BitCrush(&bc, samples, workSamples);
 			LimitOutput(int(Limit*32767.0f), samples, workSamples);
 			for (i=0; i<workSamples*2; i+=2)
 			{
@@ -3780,17 +3780,17 @@ void eaxreverb::processDoubleReplacing (double** inputs, double** outputs, VstIn
 			out2 -= workSamples;
 			if (Dither >= 0.25 && Dither < 0.5)	
 			{
-				RectangleDither(samples, workSamples);
+				RectangleDither(&bc, samples, workSamples);
 			}
 			else if (Dither >= 0.5 && Dither < 0.75)	
 			{
-				TriangleDither(samples, workSamples);
+				TriangleDither(&bc, samples, workSamples);
 			}
 			else if (Dither >= 0.75 && Dither <= 1.0)	
 			{
-				GaussianDither(samples, workSamples);
+				GaussianDither(&bc, samples, workSamples);
 			}
-			BitCrush(samples, workSamples);
+			BitCrush(&bc, samples, workSamples);
 			LimitOutput(int(Limit*32767.0f), samples, workSamples);
 			for (i=0; i<workSamples*2; i+=2)
 			{
