@@ -22,6 +22,7 @@ In your parameter window, you will see a list of parameters and their values. Yo
 * Resample the output
 * Reduce the bit depth of the output
 * Change some Characteristics of the dry, wet, and master signals. These include gain, balance, width, and polarity
+* If your host supports it, process audio at 64 bits of resolution.
 
 # Building from source
 
