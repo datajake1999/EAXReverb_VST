@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifndef __eaxreverb__
@@ -79,6 +80,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	setUniqueID ('EAX');
 	canProcessReplacing ();
 	canDoubleReplacing ();
+	programsAreChunks(true);
 
 }
 
@@ -2079,6 +2081,33 @@ void eaxreverb::resume ()
 	AudioEffectX::resume();
 }
 
+
+VstInt32 eaxreverb::setChunk (void* data, VstInt32 byteSize, bool isPreset)
+{	
+	float *chunkData = (float *)data;
+	for (int i = 0; i < kNumParams; i++)
+	{
+		setParameter(i, chunkData[i]);
+	}
+	/* We're ignoring byteSize as we found it to be a filthy liar */
+	
+	return 0;
+}
+
+VstInt32 eaxreverb::getChunk (void** data, bool isPreset)
+{
+	float *chunkData = (float *)calloc(kNumParams, sizeof(float));
+	for (int i = 0; i < kNumParams; i++)
+	{
+		chunkData[i] = getParameter(i);
+	}
+	/* Note: The way this is set up, it will break if you manage to save settings on an Intel
+	machine and load them on a PPC Mac. However, it's fine if you stick to the machine you 
+	started with. */
+	
+	*data = chunkData;
+	return kNumParams * sizeof(float);
+}
 
 void eaxreverb::setParameter (VstInt32 index, float value)
 {

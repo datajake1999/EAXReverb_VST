@@ -147,6 +147,8 @@ public:
 	
 	virtual void resume ();
 	
+	virtual VstInt32 setChunk (void* data, VstInt32 byteSize, bool isPreset);
+	virtual VstInt32 getChunk (void** data, bool isPreset);
 	virtual void setParameter (VstInt32 index, float value);
 	virtual void setParameterAutomated (VstInt32 index, float value);
 	virtual float getParameter (VstInt32 index);
