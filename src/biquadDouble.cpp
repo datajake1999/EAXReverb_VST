@@ -119,7 +119,7 @@ void sfd_lowpass(sfd_biquad_state_st *state, int rate, double cutoff, double res
 	else if (cutoff <= 0.0f)
 		state_zero(state);
 	else{
-		resonance = pow(10.0f, resonance * 0.05f); // convert resonance from dB to linear
+		resonance = pow(10.0, resonance * 0.05); // convert resonance from dB to linear
 		double theta = (double)M_PI * 2.0f * cutoff;
 		double alpha = sin(theta) / (2.0f * resonance);
 		double cosw  = cos(theta);
@@ -143,7 +143,7 @@ void sfd_highpass(sfd_biquad_state_st *state, int rate, double cutoff, double re
 	else if (cutoff <= 0.0f)
 		state_passthrough(state);
 	else{
-		resonance = pow(10.0f, resonance * 0.05f); // convert resonance from dB to linear
+		resonance = pow(10.0, resonance * 0.05); // convert resonance from dB to linear
 		double theta = (double)M_PI * 2.0f * cutoff;
 		double alpha = sin(theta) / (2.0f * resonance);
 		double cosw  = cos(theta);
@@ -211,7 +211,7 @@ void sfd_peaking(sfd_biquad_state_st *state, int rate, double freq, double Q, do
 		return;
 	}
 
-	double A = pow(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	double A = pow(10.0, gain * 0.025); // square root of gain converted from dB to linear
 
 	if (Q <= 0.0f){
 		state_scale(state, A * A); // scale by A squared
@@ -262,7 +262,7 @@ void sfd_lowshelf(sfd_biquad_state_st *state, int rate, double freq, double Q, d
 		return;
 	}
 
-	double A = pow(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	double A = pow(10.0, gain * 0.025); // square root of gain converted from dB to linear
 
 	if (freq >= 1.0f){
 		state_scale(state, A * A); // scale by A squared
@@ -297,7 +297,7 @@ void sfd_highshelf(sfd_biquad_state_st *state, int rate, double freq, double Q, 
 		return;
 	}
 
-	double A = pow(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	double A = pow(10.0, gain * 0.025); // square root of gain converted from dB to linear
 
 	if (freq <= 0.0f){
 		state_scale(state, A * A); // scale by A squared

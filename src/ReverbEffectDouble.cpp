@@ -612,7 +612,7 @@ void ReverbEffectDouble::AllocLines(uint32_t frequency)
 // Calculate a decay coefficient given the length of each cycle and the time until the decay reaches -60 dB.
 static inline double CalcDecayCoeff(double length, double decayTime)
 {
-    return pow(0.001f/*-60 dB*/, length/decayTime);
+    return pow(0.001/*-60 dB*/, length/decayTime);
 }
 
 // Calculate a decay length from a coefficient and the time until the decay reaches -60 dB.
@@ -810,7 +810,7 @@ void ReverbEffectDouble::UpdateLateLines(double reverbGain, double lateGain, dou
                                                              decayTime));
 
     // Calculate the all-pass feed-back and feed-forward coefficient.
-    this->Late.ApFeedCoeff = 0.5f * pow(diffusion, 2.0f);
+    this->Late.ApFeedCoeff = 0.5f * pow(diffusion, 2.0);
 
     for(index = 0;index < 4;index++)
     {
@@ -853,7 +853,7 @@ void ReverbEffectDouble::UpdateEchoLine(double reverbGain, double lateGain, doub
     this->Echo.DensityGain = CalcDensityGain(this->Echo.Coeff);
 
     // Calculate the echo all-pass feed coefficient.
-    this->Echo.ApFeedCoeff = 0.5f * pow(diffusion, 2.0f);
+    this->Echo.ApFeedCoeff = 0.5f * pow(diffusion, 2.0);
 
     // Calculate the echo all-pass attenuation coefficient.
     this->Echo.ApCoeff = CalcDecayCoeff(ECHO_ALLPASS_LENGTH, decayTime);
