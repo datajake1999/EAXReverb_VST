@@ -14,6 +14,7 @@ eaxreverbProgram::eaxreverbProgram ()
 	DisableEffect = 0;
 	MuteEffect = 0;
 	InvertMode = 0;
+	MonoMode = 0;
 	InvertOriginal = 0;
 	InvertReverb = 0;
 	Invert = 0;
@@ -120,6 +121,7 @@ void eaxreverb::setProgram (VstInt32 program)
 	setParameter (kDisable, ap->DisableEffect);	
 	setParameter (kMute, ap->MuteEffect);	
 	setParameter (kInvertmode, ap->InvertMode);	
+	setParameter (kMonomode, ap->MonoMode);	
 	setParameter (kInvertorig, ap->InvertOriginal);	
 	setParameter (kInvertrev, ap->InvertReverb);	
 	setParameter (kInvert, ap->Invert);	
@@ -212,6 +214,13 @@ void eaxreverb::SetInvertMode (float val)
 {
 	InvertMode = val;
 	programs[curProgram].InvertMode = val;
+}
+
+
+void eaxreverb::SetMonoMode (float val)
+{
+	MonoMode = val;
+	programs[curProgram].MonoMode = val;
 }
 
 
@@ -2119,6 +2128,7 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 	case kDisable :    SetDisableEffect (value);					break;
 	case kMute :    SetMuteEffect (value);					break;
 	case kInvertmode :    SetInvertMode (value);					break;
+	case kMonomode :    SetMonoMode (value);					break;
 	case kInvertorig :    SetInvertOriginal (value);					break;
 	case kInvertrev :    SetInvertReverb (value);					break;
 	case kInvert :    SetInvert (value);					break;
@@ -2270,6 +2280,7 @@ float eaxreverb::getParameter (VstInt32 index)
 	case kDisable :    v = DisableEffect;	break;
 	case kMute :    v = MuteEffect;	break;
 	case kInvertmode :    v = InvertMode;	break;
+	case kMonomode :    v = MonoMode;	break;
 	case kInvertorig :    v = InvertOriginal;	break;
 	case kInvertrev :    v = InvertReverb;	break;
 	case kInvert :    v = Invert;	break;
@@ -2404,6 +2415,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 	case kDisable :    strcpy (text, "DisableEffect");		break;
 	case kMute :    strcpy (text, "MuteEffect");		break;
 	case kInvertmode :    strcpy (text, "InvertMode");		break;
+	case kMonomode :    strcpy (text, "MonoMode");		break;
 	case kInvertorig :    strcpy (text, "InvertOriginal");		break;
 	case kInvertrev :    strcpy (text, "InvertReverb");		break;
 	case kInvert :    strcpy (text, "Invert");		break;
@@ -2507,6 +2519,20 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 			strcpy (text, "LEFT");					
 		}
 		else if (InvertMode >= 0.5 && InvertMode <= 1.0)	
+		{
+			strcpy (text, "RIGHT");					
+		}
+		else
+		{
+			strcpy (text, "BOTH");					
+		}
+		break;
+	case kMonomode :
+		if (MonoMode >= 0.25 && MonoMode < 0.5)	
+		{
+			strcpy (text, "LEFT");					
+		}
+		else if (MonoMode >= 0.5 && MonoMode <= 1.0)	
 		{
 			strcpy (text, "RIGHT");					
 		}
@@ -3036,7 +3062,19 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				float sample = (*in1 + *in2) / 2;
+				float sample;
+				if (MonoMode >= 0.25 && MonoMode < 0.5)	
+				{
+					sample = *in1;
+				}
+				else if (MonoMode >= 0.5 && MonoMode <= 1.0)	
+				{
+					sample = *in2;
+				}
+				else
+				{
+					sample = (*in1 + *in2) / 2;
+				}
 				*in1 = sample;
 				*in2 = sample;
 				*in1++;
@@ -3050,7 +3088,19 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				float sample = (floatSamplesOut[i*2 + 0] + floatSamplesOut[i*2 + 1]) / 2;
+				float sample;
+				if (MonoMode >= 0.25 && MonoMode < 0.5)	
+				{
+					sample = floatSamplesOut[i*2 + 0];
+				}
+				else if (MonoMode >= 0.5 && MonoMode <= 1.0)	
+				{
+					sample = floatSamplesOut[i*2 + 1];
+				}
+				else
+				{
+					sample = (floatSamplesOut[i*2 + 0] + floatSamplesOut[i*2 + 1]) / 2;
+				}
 				floatSamplesOut[i*2 + 0] = sample;
 				floatSamplesOut[i*2 + 1] = sample;
 			}
@@ -3369,7 +3419,19 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				float sample = (*out1 + *out2) / 2;
+				float sample;
+				if (MonoMode >= 0.25 && MonoMode < 0.5)	
+				{
+					sample = *out1;
+				}
+				else if (MonoMode >= 0.5 && MonoMode <= 1.0)	
+				{
+					sample = *out2;
+				}
+				else
+				{
+					sample = (*out1 + *out2) / 2;
+				}
 				*out1 = sample;
 				*out2 = sample;
 				*out1++;
@@ -3575,7 +3637,19 @@ void eaxreverb::processDoubleReplacing (double** inputs, double** outputs, VstIn
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				double sample = (*in1 + *in2) / 2;
+				double sample;
+				if (MonoMode >= 0.25 && MonoMode < 0.5)	
+				{
+					sample = *in1;
+				}
+				else if (MonoMode >= 0.5 && MonoMode <= 1.0)	
+				{
+					sample = *in2;
+				}
+				else
+				{
+					sample = (*in1 + *in2) / 2;
+				}
 				*in1 = sample;
 				*in2 = sample;
 				*in1++;
@@ -3589,7 +3663,19 @@ void eaxreverb::processDoubleReplacing (double** inputs, double** outputs, VstIn
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				double sample = (doubleSamplesOut[i*2 + 0] + doubleSamplesOut[i*2 + 1]) / 2;
+				double sample;
+				if (MonoMode >= 0.25 && MonoMode < 0.5)	
+				{
+					sample = doubleSamplesOut[i*2 + 0];
+				}
+				else if (MonoMode >= 0.5 && MonoMode <= 1.0)	
+				{
+					sample = doubleSamplesOut[i*2 + 1];
+				}
+				else
+				{
+					sample = (doubleSamplesOut[i*2 + 0] + doubleSamplesOut[i*2 + 1]) / 2;
+				}
 				doubleSamplesOut[i*2 + 0] = sample;
 				doubleSamplesOut[i*2 + 1] = sample;
 			}
@@ -3908,7 +3994,19 @@ void eaxreverb::processDoubleReplacing (double** inputs, double** outputs, VstIn
 		{
 			for (i=0; i<workSamples; i++)
 			{
-				double sample = (*out1 + *out2) / 2;
+				double sample;
+				if (MonoMode >= 0.25 && MonoMode < 0.5)	
+				{
+					sample = *out1;
+				}
+				else if (MonoMode >= 0.5 && MonoMode <= 1.0)	
+				{
+					sample = *out2;
+				}
+				else
+				{
+					sample = (*out1 + *out2) / 2;
+				}
 				*out1 = sample;
 				*out2 = sample;
 				*out1++;

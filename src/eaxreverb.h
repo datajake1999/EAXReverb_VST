@@ -22,6 +22,7 @@ enum
 	kDisable = 0,
 	kMute,
 	kInvertmode,
+	kMonomode,
 	kInvertorig,
 	kInvertrev,
 	kInvert,
@@ -83,6 +84,7 @@ private:
 	float DisableEffect;
 	float MuteEffect;
 	float InvertMode;
+	float MonoMode;
 	float InvertOriginal;
 	float InvertReverb;
 	float Invert;
@@ -167,6 +169,7 @@ private:
 	void SetDisableEffect(float val);
 	void SetMuteEffect(float val);
 	void SetInvertMode(float val);
+	void SetMonoMode(float val);
 	void SetInvertOriginal(float val);
 	void SetInvertReverb(float val);
 	void SetInvert(float val);
@@ -255,6 +258,7 @@ private:
 	float DisableEffect;
 	float MuteEffect;
 	float InvertMode;
+	float MonoMode;
 	float InvertOriginal;
 	float InvertReverb;
 	float Invert;
