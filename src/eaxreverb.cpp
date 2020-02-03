@@ -1972,6 +1972,7 @@ void eaxreverb::getProgramName (char *name)
 	strcpy (name, programs[curProgram].name);
 }
 
+
 bool eaxreverb::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
 {
 	if (index < kNumPrograms)
@@ -2094,6 +2095,7 @@ VstInt32 eaxreverb::setChunk (void* data, VstInt32 byteSize, bool isPreset)
 	return 0;
 }
 
+
 VstInt32 eaxreverb::getChunk (void** data, bool isPreset)
 {
 	float *chunkData = (float *)calloc(kNumParams, sizeof(float));
@@ -2108,6 +2110,7 @@ VstInt32 eaxreverb::getChunk (void** data, bool isPreset)
 	*data = chunkData;
 	return kNumParams * sizeof(float);
 }
+
 
 void eaxreverb::setParameter (VstInt32 index, float value)
 {
@@ -3390,6 +3393,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 	//delete the mono samples
 	delete[] floatSamplesIn;
 }
+
 
 void eaxreverb::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
 {
