@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef __eaxreverb__
-#include "eaxreverb.h"
+#ifndef __EAXReverb__
+#include "EAXReverb.h"
 #endif
 
 
-eaxreverbProgram::eaxreverbProgram ()
+EAXReverbProgram::EAXReverbProgram ()
 {
 	// default Program Values
 	DisableEffect = 0;
@@ -59,13 +59,13 @@ eaxreverbProgram::eaxreverbProgram ()
 }
 
 
-eaxreverb::eaxreverb (audioMasterCallback audioMaster)
+EAXReverb::EAXReverb (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, kNumPrograms, kNumParams)
 {
 	// init
 	resume ();
 	
-	programs = new eaxreverbProgram[numPrograms];
+	programs = new EAXReverbProgram[numPrograms];
 
 	if (programs)
 	for (int i = 0; i < numPrograms; i++)
@@ -89,7 +89,7 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 }
 
 
-eaxreverb::~eaxreverb ()
+EAXReverb::~EAXReverb ()
 {
 	effect.Destroy();
 	effectDouble.Destroy();
@@ -110,15 +110,15 @@ eaxreverb::~eaxreverb ()
 }
 
 
-VstInt32 eaxreverb::getProgram ()
+VstInt32 EAXReverb::getProgram ()
 {
 	return curProgram;
 }
 
 
-void eaxreverb::setProgram (VstInt32 program)
+void EAXReverb::setProgram (VstInt32 program)
 {
-	eaxreverbProgram* ap = &programs[program];
+	EAXReverbProgram* ap = &programs[program];
 
 	curProgram = program;
 	setParameter (kDisable, ap->DisableEffect);	
@@ -199,217 +199,217 @@ void eaxreverb::setProgram (VstInt32 program)
 }
 
 
-void eaxreverb::SetDisableEffect (float val)
+void EAXReverb::SetDisableEffect (float val)
 {
 	DisableEffect = val;
 	programs[curProgram].DisableEffect = val;
 }
 
 
-void eaxreverb::SetMuteEffect (float val)
+void EAXReverb::SetMuteEffect (float val)
 {
 	MuteEffect = val;
 	programs[curProgram].MuteEffect = val;
 }
 
 
-void eaxreverb::SetInvertMode (float val)
+void EAXReverb::SetInvertMode (float val)
 {
 	InvertMode = val;
 	programs[curProgram].InvertMode = val;
 }
 
 
-void eaxreverb::SetMonoMode (float val)
+void EAXReverb::SetMonoMode (float val)
 {
 	MonoMode = val;
 	programs[curProgram].MonoMode = val;
 }
 
 
-void eaxreverb::SetInvertOriginal (float val)
+void EAXReverb::SetInvertOriginal (float val)
 {
 	InvertOriginal = val;
 	programs[curProgram].InvertOriginal = val;
 }
 
 
-void eaxreverb::SetInvertReverb (float val)
+void EAXReverb::SetInvertReverb (float val)
 {
 	InvertReverb = val;
 	programs[curProgram].InvertReverb = val;
 }
 
 
-void eaxreverb::SetInvert (float val)
+void EAXReverb::SetInvert (float val)
 {
 	Invert = val;
 	programs[curProgram].Invert = val;
 }
 
 
-void eaxreverb::SetSwapOriginal (float val)
+void EAXReverb::SetSwapOriginal (float val)
 {
 	SwapOriginal = val;
 	programs[curProgram].SwapOriginal = val;
 }
 
 
-void eaxreverb::SetSwapReverb (float val)
+void EAXReverb::SetSwapReverb (float val)
 {
 	SwapReverb = val;
 	programs[curProgram].SwapReverb = val;
 }
 
 
-void eaxreverb::SetSwap (float val)
+void EAXReverb::SetSwap (float val)
 {
 	Swap = val;
 	programs[curProgram].Swap = val;
 }
 
 
-void eaxreverb::SetBalanceLOriginal (float val)
+void EAXReverb::SetBalanceLOriginal (float val)
 {
 	BalanceLOriginal = val;
 	programs[curProgram].BalanceLOriginal = val;
 }
 
 
-void eaxreverb::SetBalanceROriginal (float val)
+void EAXReverb::SetBalanceROriginal (float val)
 {
 	BalanceROriginal = val;
 	programs[curProgram].BalanceROriginal = val;
 }
 
 
-void eaxreverb::SetBalanceLReverb (float val)
+void EAXReverb::SetBalanceLReverb (float val)
 {
 	BalanceLReverb = val;
 	programs[curProgram].BalanceLReverb = val;
 }
 
 
-void eaxreverb::SetBalanceRReverb (float val)
+void EAXReverb::SetBalanceRReverb (float val)
 {
 	BalanceRReverb = val;
 	programs[curProgram].BalanceRReverb = val;
 }
 
 
-void eaxreverb::SetBalanceL (float val)
+void EAXReverb::SetBalanceL (float val)
 {
 	BalanceL = val;
 	programs[curProgram].BalanceL = val;
 }
 
 
-void eaxreverb::SetBalanceR (float val)
+void EAXReverb::SetBalanceR (float val)
 {
 	BalanceR = val;
 	programs[curProgram].BalanceR = val;
 }
 
 
-void eaxreverb::SetStereoWidthOriginal (float val)
+void EAXReverb::SetStereoWidthOriginal (float val)
 {
 	StereoWidthOriginal = val;
 	programs[curProgram].StereoWidthOriginal = val;
 }
 
 
-void eaxreverb::SetStereoWidthReverb (float val)
+void EAXReverb::SetStereoWidthReverb (float val)
 {
 	StereoWidthReverb = val;
 	programs[curProgram].StereoWidthReverb = val;
 }
 
 
-void eaxreverb::SetStereoWidth (float val)
+void EAXReverb::SetStereoWidth (float val)
 {
 	StereoWidth = val;
 	programs[curProgram].StereoWidth = val;
 }
 
 
-void eaxreverb::SetMonoOriginal (float val)
+void EAXReverb::SetMonoOriginal (float val)
 {
 	MonoOriginal = val;
 	programs[curProgram].MonoOriginal = val;
 }
 
 
-void eaxreverb::SetMonoReverb (float val)
+void EAXReverb::SetMonoReverb (float val)
 {
 	MonoReverb = val;
 	programs[curProgram].MonoReverb = val;
 }
 
 
-void eaxreverb::SetMono (float val)
+void EAXReverb::SetMono (float val)
 {
 	Mono = val;
 	programs[curProgram].Mono = val;
 }
 
 
-void eaxreverb::SetOnlyOriginal (float val)
+void EAXReverb::SetOnlyOriginal (float val)
 {
 	OnlyOriginal = val;
 	programs[curProgram].OnlyOriginal = val;
 }
 
 
-void eaxreverb::SetOnlyReverb (float val)
+void EAXReverb::SetOnlyReverb (float val)
 {
 	OnlyReverb = val;
 	programs[curProgram].OnlyReverb = val;
 }
 
 
-void eaxreverb::SetMixMode (float val)
+void EAXReverb::SetMixMode (float val)
 {
 	MixMode = val;
 	programs[curProgram].MixMode = val;
 }
 
 
-void eaxreverb::SetDryGain (float val)
+void EAXReverb::SetDryGain (float val)
 {
 	DryGain = val;
 	programs[curProgram].DryGain = val;
 }
 
 
-void eaxreverb::SetWetGain (float val)
+void EAXReverb::SetWetGain (float val)
 {
 	WetGain = val;
 	programs[curProgram].WetGain = val;
 }
 
 
-void eaxreverb::SetMasterGain (float val)
+void EAXReverb::SetMasterGain (float val)
 {
 	MasterGain = val;
 	programs[curProgram].MasterGain = val;
 }
 
 
-void eaxreverb::SetResample (float val)
+void EAXReverb::SetResample (float val)
 {
 	Resample = val;
 	programs[curProgram].Resample = val;
 }
 
 
-void eaxreverb::SetRSMQ (float val)
+void EAXReverb::SetRSMQ (float val)
 {
 	RSMQ = val;
 	programs[curProgram].RSMQ = val;
 }
 
 
-void eaxreverb::SetRSMMode (float val)
+void EAXReverb::SetRSMMode (float val)
 {
 	RSMMode = val;
 	programs[curProgram].RSMMode = val;
@@ -438,7 +438,7 @@ void eaxreverb::SetRSMMode (float val)
 }
 
 
-void eaxreverb::SetRSMRate (float val)
+void EAXReverb::SetRSMRate (float val)
 {
 	if (val > 64)
 	{
@@ -475,14 +475,14 @@ void eaxreverb::SetRSMRate (float val)
 }
 
 
-void eaxreverb::SetBitCrush (float val)
+void EAXReverb::SetBitCrush (float val)
 {
 	BitCr = val;
 	programs[curProgram].BitCr = val;
 }
 
 
-void eaxreverb::SetBitDepth (float val)
+void EAXReverb::SetBitDepth (float val)
 {
 	if (val > 16)
 	{
@@ -499,14 +499,14 @@ void eaxreverb::SetBitDepth (float val)
 }
 
 
-void eaxreverb::SetDither (float val)
+void EAXReverb::SetDither (float val)
 {
 	Dither = val;
 	programs[curProgram].Dither = val;
 }
 
 
-void eaxreverb::SetAutoD (float val)
+void EAXReverb::SetAutoD (float val)
 {
 	AutoDither = val;
 	programs[curProgram].AutoDither = val;
@@ -521,7 +521,7 @@ void eaxreverb::SetAutoD (float val)
 }
 
 
-void eaxreverb::SetOnlyQError (float val)
+void EAXReverb::SetOnlyQError (float val)
 {
 	OnlyQError = val;
 	programs[curProgram].OnlyQError = val;
@@ -536,28 +536,28 @@ void eaxreverb::SetOnlyQError (float val)
 }
 
 
-void eaxreverb::SetLimit (float val)
+void EAXReverb::SetLimit (float val)
 {
 	Limit = val;
 	programs[curProgram].Limit = val;
 }
 
 
-void eaxreverb::SetBQFilter (float val)
+void EAXReverb::SetBQFilter (float val)
 {
 	BQFilter = val;
 	programs[curProgram].BQFilter = val;
 }
 
 
-void eaxreverb::SetFLTType (float val)
+void EAXReverb::SetFLTType (float val)
 {
 	FLTType = val;
 	programs[curProgram].FLTType = val;
 }
 
 
-void eaxreverb::SetFLTFreq (float val)
+void EAXReverb::SetFLTFreq (float val)
 {
 	if (val > 20000)
 	{
@@ -576,7 +576,7 @@ void eaxreverb::SetFLTFreq (float val)
 }
 
 
-void eaxreverb::SetFLTRes (float val)
+void EAXReverb::SetFLTRes (float val)
 {
 	if (val > 10)
 	{
@@ -591,7 +591,7 @@ void eaxreverb::SetFLTRes (float val)
 }
 
 
-void eaxreverb::SetFLTGain (float val)
+void EAXReverb::SetFLTGain (float val)
 {
 	if (val > 10)
 	{
@@ -606,7 +606,7 @@ void eaxreverb::SetFLTGain (float val)
 }
 
 
-void eaxreverb::SetIncorrectMode (float val)
+void EAXReverb::SetIncorrectMode (float val)
 {
 	IncorrectMode = val;
 	programs[curProgram].IncorrectMode = val;
@@ -625,7 +625,7 @@ void eaxreverb::SetIncorrectMode (float val)
 }
 
 
-void eaxreverb::SetReverbRate (float val)
+void EAXReverb::SetReverbRate (float val)
 {
 	if (val > 1000000)
 	{
@@ -647,7 +647,7 @@ void eaxreverb::SetReverbRate (float val)
 }
 
 
-void eaxreverb::SetReverbPreset(int preset, bool update) {
+void EAXReverb::SetReverbPreset(int preset, bool update) {
 	ReverbPreset = float(preset);
 	programs[curProgram].ReverbPreset = float(preset);
 	i_ReverbPreset = preset;
@@ -1126,7 +1126,7 @@ void eaxreverb::SetReverbPreset(int preset, bool update) {
 }
 
 
-char *eaxreverb::GetPresetName(int preset) {
+char *EAXReverb::GetPresetName(int preset) {
 	//get the name of a preset
 	if (preset == 0)
 	{
@@ -1584,7 +1584,7 @@ char *eaxreverb::GetPresetName(int preset) {
 }
 
 
-void eaxreverb::SetDensity (float val)
+void EAXReverb::SetDensity (float val)
 {
 	if (val > EAXREVERB_MAX_DENSITY)
 	{
@@ -1599,7 +1599,7 @@ void eaxreverb::SetDensity (float val)
 }
 
 
-void eaxreverb::SetDiffusion (float val)
+void EAXReverb::SetDiffusion (float val)
 {
 	if (val > EAXREVERB_MAX_DIFFUSION)
 	{
@@ -1614,7 +1614,7 @@ void eaxreverb::SetDiffusion (float val)
 }
 
 
-void eaxreverb::SetGain (float val)
+void EAXReverb::SetGain (float val)
 {
 	if (val > EAXREVERB_MAX_GAIN)
 	{
@@ -1629,7 +1629,7 @@ void eaxreverb::SetGain (float val)
 }
 
 
-void eaxreverb::SetGainHF (float val)
+void EAXReverb::SetGainHF (float val)
 {
 	if (val > EAXREVERB_MAX_GAINHF)
 	{
@@ -1644,7 +1644,7 @@ void eaxreverb::SetGainHF (float val)
 }
 
 
-void eaxreverb::SetGainLF (float val)
+void EAXReverb::SetGainLF (float val)
 {
 	if (val > EAXREVERB_MAX_GAINLF)
 	{
@@ -1659,7 +1659,7 @@ void eaxreverb::SetGainLF (float val)
 }
 
 
-void eaxreverb::SetDecayTime (float val)
+void EAXReverb::SetDecayTime (float val)
 {
 	if (val > EAXREVERB_MAX_DECAY_TIME)
 	{
@@ -1674,7 +1674,7 @@ void eaxreverb::SetDecayTime (float val)
 }
 
 
-void eaxreverb::SetDecayHFRatio (float val)
+void EAXReverb::SetDecayHFRatio (float val)
 {
 	if (val > EAXREVERB_MAX_DECAY_HFRATIO)
 	{
@@ -1689,7 +1689,7 @@ void eaxreverb::SetDecayHFRatio (float val)
 }
 
 
-void eaxreverb::SetDecayLFRatio (float val)
+void EAXReverb::SetDecayLFRatio (float val)
 {
 	if (val > EAXREVERB_MAX_DECAY_LFRATIO)
 	{
@@ -1704,7 +1704,7 @@ void eaxreverb::SetDecayLFRatio (float val)
 }
 
 
-void eaxreverb::SetReflectionsGain (float val)
+void EAXReverb::SetReflectionsGain (float val)
 {
 	if (val > EAXREVERB_MAX_REFLECTIONS_GAIN)
 	{
@@ -1719,7 +1719,7 @@ void eaxreverb::SetReflectionsGain (float val)
 }
 
 
-void eaxreverb::SetReflectionsDelay (float val)
+void EAXReverb::SetReflectionsDelay (float val)
 {
 	if (val > EAXREVERB_MAX_REFLECTIONS_DELAY)
 	{
@@ -1734,28 +1734,28 @@ void eaxreverb::SetReflectionsDelay (float val)
 }
 
 
-void eaxreverb::SetReflectionsPanX (float val)
+void EAXReverb::SetReflectionsPanX (float val)
 {
 	ReflectionsPanX = val;
 	programs[curProgram].ReflectionsPanX = val;
 }
 
 
-void eaxreverb::SetReflectionsPanY (float val)
+void EAXReverb::SetReflectionsPanY (float val)
 {
 	ReflectionsPanY = val;
 	programs[curProgram].ReflectionsPanY = val;
 }
 
 
-void eaxreverb::SetReflectionsPanZ (float val)
+void EAXReverb::SetReflectionsPanZ (float val)
 {
 	ReflectionsPanZ = val;
 	programs[curProgram].ReflectionsPanZ = val;
 }
 
 
-void eaxreverb::SetLateReverbGain (float val)
+void EAXReverb::SetLateReverbGain (float val)
 {
 	if (val > EAXREVERB_MAX_LATE_REVERB_GAIN)
 	{
@@ -1770,7 +1770,7 @@ void eaxreverb::SetLateReverbGain (float val)
 }
 
 
-void eaxreverb::SetLateReverbDelay (float val)
+void EAXReverb::SetLateReverbDelay (float val)
 {
 	if (val > EAXREVERB_MAX_LATE_REVERB_DELAY)
 	{
@@ -1785,28 +1785,28 @@ void eaxreverb::SetLateReverbDelay (float val)
 }
 
 
-void eaxreverb::SetLateReverbPanX (float val)
+void EAXReverb::SetLateReverbPanX (float val)
 {
 	LateReverbPanX = val;
 	programs[curProgram].LateReverbPanX = val;
 }
 
 
-void eaxreverb::SetLateReverbPanY (float val)
+void EAXReverb::SetLateReverbPanY (float val)
 {
 	LateReverbPanY = val;
 	programs[curProgram].LateReverbPanY = val;
 }
 
 
-void eaxreverb::SetLateReverbPanZ (float val)
+void EAXReverb::SetLateReverbPanZ (float val)
 {
 	LateReverbPanZ = val;
 	programs[curProgram].LateReverbPanZ = val;
 }
 
 
-void eaxreverb::SetEchoTime (float val)
+void EAXReverb::SetEchoTime (float val)
 {
 	if (val > EAXREVERB_MAX_ECHO_TIME)
 	{
@@ -1821,7 +1821,7 @@ void eaxreverb::SetEchoTime (float val)
 }
 
 
-void eaxreverb::SetEchoDepth (float val)
+void EAXReverb::SetEchoDepth (float val)
 {
 	if (val > EAXREVERB_MAX_ECHO_DEPTH)
 	{
@@ -1836,7 +1836,7 @@ void eaxreverb::SetEchoDepth (float val)
 }
 
 
-void eaxreverb::SetModulationTime (float val)
+void EAXReverb::SetModulationTime (float val)
 {
 	if (val > EAXREVERB_MAX_MODULATION_TIME)
 	{
@@ -1851,7 +1851,7 @@ void eaxreverb::SetModulationTime (float val)
 }
 
 
-void eaxreverb::SetModulationDepth (float val)
+void EAXReverb::SetModulationDepth (float val)
 {
 	if (val > EAXREVERB_MAX_MODULATION_DEPTH)
 	{
@@ -1866,7 +1866,7 @@ void eaxreverb::SetModulationDepth (float val)
 }
 
 
-void eaxreverb::SetAirAbsorptionGainHF (float val)
+void EAXReverb::SetAirAbsorptionGainHF (float val)
 {
 	if (val > EAXREVERB_MAX_AIR_ABSORPTION_GAINHF)
 	{
@@ -1881,7 +1881,7 @@ void eaxreverb::SetAirAbsorptionGainHF (float val)
 }
 
 
-void eaxreverb::SetHFReference (float val)
+void EAXReverb::SetHFReference (float val)
 {
 	if (val > EAXREVERB_MAX_HFREFERENCE)
 	{
@@ -1896,7 +1896,7 @@ void eaxreverb::SetHFReference (float val)
 }
 
 
-void eaxreverb::SetLFReference (float val)
+void EAXReverb::SetLFReference (float val)
 {
 	if (val > EAXREVERB_MAX_LFREFERENCE)
 	{
@@ -1911,7 +1911,7 @@ void eaxreverb::SetLFReference (float val)
 }
 
 
-void eaxreverb::SetRoomRolloffFactor (float val)
+void EAXReverb::SetRoomRolloffFactor (float val)
 {
 	if (val > EAXREVERB_MAX_ROOM_ROLLOFF_FACTOR)
 	{
@@ -1926,7 +1926,7 @@ void eaxreverb::SetRoomRolloffFactor (float val)
 }
 
 
-void eaxreverb::SetDecayHFLimit (float val)
+void EAXReverb::SetDecayHFLimit (float val)
 {
 	DecayHFLimit = val;
 	programs[curProgram].DecayHFLimit = val;
@@ -1941,7 +1941,7 @@ void eaxreverb::SetDecayHFLimit (float val)
 }
 
 
-void eaxreverb::SetEAXParams(float Density, float Diffusion, float Gain, float GainHF, float GainLF, float DecayTime, float DecayHFRatio, float DecayLFRatio, float ReflectionsGain, float ReflectionsDelay, float ReflectionsPanX, float ReflectionsPanY, float ReflectionsPanZ, float LateReverbGain, float LateReverbDelay, float LateReverbPanX, float LateReverbPanY, float LateReverbPanZ, float EchoTime, float EchoDepth, float ModulationTime, float ModulationDepth, float AirAbsorptionGainHF, float HFReference, float LFReference, float RoomRolloffFactor, float DecayHFLimit)
+void EAXReverb::SetEAXParams(float Density, float Diffusion, float Gain, float GainHF, float GainLF, float DecayTime, float DecayHFRatio, float DecayLFRatio, float ReflectionsGain, float ReflectionsDelay, float ReflectionsPanX, float ReflectionsPanY, float ReflectionsPanZ, float LateReverbGain, float LateReverbDelay, float LateReverbPanX, float LateReverbPanY, float LateReverbPanZ, float EchoTime, float EchoDepth, float ModulationTime, float ModulationDepth, float AirAbsorptionGainHF, float HFReference, float LFReference, float RoomRolloffFactor, float DecayHFLimit)
 {
 	SetDensity(Density);
 	SetDiffusion(Diffusion);
@@ -1973,19 +1973,19 @@ void eaxreverb::SetEAXParams(float Density, float Diffusion, float Gain, float G
 }
 
 
-void eaxreverb::setProgramName (char *name)
+void EAXReverb::setProgramName (char *name)
 {
 	strcpy (programs[curProgram].name, name);
 }
 
 
-void eaxreverb::getProgramName (char *name)
+void EAXReverb::getProgramName (char *name)
 {
 	strcpy (name, programs[curProgram].name);
 }
 
 
-bool eaxreverb::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool EAXReverb::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
 {
 	if (index < kNumPrograms)
 	{
@@ -1996,7 +1996,7 @@ bool eaxreverb::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* 
 }
 
 
-void eaxreverb::resume ()
+void EAXReverb::resume ()
 {
 	rate = int(AudioEffectX::updateSampleRate());
 	effect.Create(rate);
@@ -2095,7 +2095,7 @@ void eaxreverb::resume ()
 }
 
 
-VstInt32 eaxreverb::setChunk (void* data, VstInt32 byteSize, bool isPreset)
+VstInt32 EAXReverb::setChunk (void* data, VstInt32 byteSize, bool isPreset)
 {	
 	float *chunkData = (float *)data;
 	for (int i = 0; i < kNumParams; i++)
@@ -2108,7 +2108,7 @@ VstInt32 eaxreverb::setChunk (void* data, VstInt32 byteSize, bool isPreset)
 }
 
 
-VstInt32 eaxreverb::getChunk (void** data, bool isPreset)
+VstInt32 EAXReverb::getChunk (void** data, bool isPreset)
 {
 	float *chunkData = (float *)calloc(kNumParams, sizeof(float));
 	for (int i = 0; i < kNumParams; i++)
@@ -2124,7 +2124,7 @@ VstInt32 eaxreverb::getChunk (void** data, bool isPreset)
 }
 
 
-void eaxreverb::setParameter (VstInt32 index, float value)
+void EAXReverb::setParameter (VstInt32 index, float value)
 {
 	switch (index)
 	{
@@ -2268,13 +2268,13 @@ void eaxreverb::setParameter (VstInt32 index, float value)
 }
 
 
-void eaxreverb::setParameterAutomated (VstInt32 index, float value)
+void EAXReverb::setParameterAutomated (VstInt32 index, float value)
 {
 	setParameter(index, value);
 }
 
 
-float eaxreverb::getParameter (VstInt32 index)
+float EAXReverb::getParameter (VstInt32 index)
 {
 	float v = 0;
 
@@ -2358,7 +2358,7 @@ float eaxreverb::getParameter (VstInt32 index)
 }
 
 
-void eaxreverb::getParameterLabel (VstInt32 index, char *label)
+void EAXReverb::getParameterLabel (VstInt32 index, char *label)
 {
 	switch (index)
 	{
@@ -2411,7 +2411,7 @@ void eaxreverb::getParameterLabel (VstInt32 index, char *label)
 }
 
 
-void eaxreverb::getParameterName (VstInt32 index, char *text)
+void EAXReverb::getParameterName (VstInt32 index, char *text)
 {
 	switch (index)
 	{
@@ -2492,7 +2492,7 @@ void eaxreverb::getParameterName (VstInt32 index, char *text)
 }
 
 
-void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
+void EAXReverb::getParameterDisplay (VstInt32 index, char *text)
 {
 	switch (index)
 	{
@@ -2864,32 +2864,32 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 }
 
 
-VstInt32 eaxreverb::canDo(char *text) 
+VstInt32 EAXReverb::canDo(char *text) 
 { return (_canDo.find(text) == _canDo.end()) ? -1: 1; } // 1 = yes, -1 = no, 0 = don't know
 
 
-bool eaxreverb::getEffectName (char* name)
+bool EAXReverb::getEffectName (char* name)
 {
 	strcpy (name, "EAXReverb");
 	return true;
 }
 
 
-bool eaxreverb::getProductString (char* text)
+bool EAXReverb::getProductString (char* text)
 {
 	strcpy (text, "EAXReverb");
 	return true;
 }
 
 
-bool eaxreverb::getVendorString (char* text)
+bool EAXReverb::getVendorString (char* text)
 {
 	strcpy (text, "Datajake");
 	return true;
 }
 
 
-void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
+void EAXReverb::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
 {
 	float* in1 = inputs[0];
 	float* in2 = inputs[1];
@@ -3464,7 +3464,7 @@ void eaxreverb::processReplacing (float** inputs, float** outputs, VstInt32 samp
 }
 
 
-void eaxreverb::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
+void EAXReverb::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
 {
 	double* in1 = inputs[0];
 	double* in2 = inputs[1];

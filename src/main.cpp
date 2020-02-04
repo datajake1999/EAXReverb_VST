@@ -1,11 +1,11 @@
 
-#ifndef __eaxreverb__
-#include "eaxreverb.h"
+#ifndef __EAXReverb__
+#include "EAXReverb.h"
 #endif
 
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 {
-    return new eaxreverb (audioMaster);
+    return new EAXReverb (audioMaster);
 }
 

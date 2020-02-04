@@ -1,6 +1,6 @@
 
-#ifndef __eaxreverb__
-#define __eaxreverb__
+#ifndef __EAXReverb__
+#define __EAXReverb__
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 #include <set>
@@ -72,15 +72,15 @@ enum
 	kNumParams
 };
 
-class eaxreverb;
+class EAXReverb;
 
 
-class eaxreverbProgram
+class EAXReverbProgram
 {
-	friend class eaxreverb;
+	friend class EAXReverb;
 public:
-	eaxreverbProgram ();
-	~eaxreverbProgram () {}
+	EAXReverbProgram ();
+	~EAXReverbProgram () {}
 
 private:	
 	float DisableEffect;
@@ -134,11 +134,11 @@ private:
 };
 
 
-class eaxreverb : public AudioEffectX
+class EAXReverb : public AudioEffectX
 {
 public:
-	eaxreverb (audioMasterCallback audioMaster);
-	~eaxreverb ();
+	EAXReverb (audioMasterCallback audioMaster);
+	~EAXReverb ();
 
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 	virtual void processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames);
@@ -256,7 +256,7 @@ private:
 	void *resampler2;
 	void *zohresampler1;
 	void *zohresampler2;
-	eaxreverbProgram* programs;
+	EAXReverbProgram* programs;
 	
 	float DisableEffect;
 	float MuteEffect;
