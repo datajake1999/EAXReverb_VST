@@ -3,6 +3,8 @@
 #define __eaxreverb__
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
+#include <set>
+#include <string>
 #include "biquad.h"
 #include "biquadDouble.h"
 #include "bitcrush.h"
@@ -157,6 +159,7 @@ public:
 	virtual void getParameterDisplay (VstInt32 index, char* text);
 	virtual void getParameterLabel (VstInt32 index, char* label);
 	virtual void getParameterName (VstInt32 index, char* text);
+	virtual VstInt32 canDo(char *text);
 
 	virtual bool getEffectName (char* name);
 	virtual bool getVendorString (char* text);
@@ -309,6 +312,7 @@ private:
 	int rate_new;
 	int rsm;
 	int bits;
+	std::set< std::string > _canDo;
 };
 
 #endif

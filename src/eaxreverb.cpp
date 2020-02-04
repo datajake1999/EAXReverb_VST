@@ -79,6 +79,9 @@ eaxreverb::eaxreverb (audioMasterCallback audioMaster)
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
 	setUniqueID ('EAX');
+	_canDo.insert("plugAsChannelInsert"); // plug-in can be used as a channel insert effect.
+	_canDo.insert("plugAsSend"); // plug-in can be used as a send effect.
+	_canDo.insert("x2in2out"); 
 	canProcessReplacing ();
 	canDoubleReplacing ();
 	programsAreChunks(true);
@@ -2859,6 +2862,10 @@ void eaxreverb::getParameterDisplay (VstInt32 index, char *text)
 		break;
 	}
 }
+
+
+VstInt32 eaxreverb::canDo(char *text) 
+{ return (_canDo.find(text) == _canDo.end()) ? -1: 1; } // 1 = yes, -1 = no, 0 = don't know
 
 
 bool eaxreverb::getEffectName (char* name)
