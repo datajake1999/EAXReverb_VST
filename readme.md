@@ -88,6 +88,7 @@ To build:
 * @DannyBoy96, for helping with the read-me.
 * @voidqk, for putting together sndfilter.
 * @kode54, for providing a simple resampler library.
+* @airwindows, for providing the canDo, getChunk, and setChunk implementations.
 
 # Useful links
 * [Environmental Audio Extensions on Wikipedia](https://en.wikipedia.org/wiki/Environmental_Audio_Extensions)
